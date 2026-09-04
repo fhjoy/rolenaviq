@@ -37,3 +37,30 @@ export const createApplicationSchema = z.object({
 });
 
 export const updateApplicationSchema = createApplicationSchema.partial();
+
+export const applicationQuerySchema = z.object({
+  search: z.string().trim().max(100).optional(),
+
+  status: z.enum(applicationStatuses).optional(),
+
+  workplaceType: z.enum(workplaceTypes).optional(),
+
+  employmentType: z.enum(employmentTypes).optional(),
+
+  page: z.coerce.number().int().min(1).default(1),
+
+  limit: z.coerce.number().int().min(1).max(100).default(10),
+
+  sort: z
+    .enum([
+      "-createdAt",
+      "createdAt",
+      "-appliedAt",
+      "appliedAt",
+      "company",
+      "-company",
+      "position",
+      "-position",
+    ])
+    .default("-createdAt"),
+});

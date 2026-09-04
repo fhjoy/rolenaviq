@@ -1,11 +1,13 @@
 import { type Request, type Response } from "express";
-import { isValidObjectId } from "mongoose";
+import { type QueryFilter, isValidObjectId } from "mongoose";
 
-import Application from "../models/Application.js";
+import Application, { type IApplication } from "../models/Application.js";
 import {
   createApplicationSchema,
   updateApplicationSchema,
+  applicationQuerySchema,
 } from "../validators/application.validator.js";
+import { escapeRegex } from "../utils/regex.js";
 
 export const createApplication = async (
   req: Request,
@@ -62,15 +64,84 @@ export const getApplications = async (
       return;
     }
 
-    const applications = await Application.find({
+    const result = applicationQuerySchema.safeParse(req.query);
+
+    if (!result.success) {
+      res.status(400).json({
+        message: "Invalid query parameters",
+        errors: result.error.flatten().fieldErrors,
+      });
+
+      return;
+    }
+
+    const { search, status, workplaceType, employmentType, page, limit, sort } =
+      result.data;
+
+    const filter: QueryFilter<IApplication> = {
       userId: req.userId,
-    }).sort({
-      createdAt: -1,
-    });
+    };
+
+    if (status) {
+      filter.status = status;
+    }
+
+    if (workplaceType) {
+      filter.workplaceType = workplaceType;
+    }
+
+    if (employmentType) {
+      filter.employmentType = employmentType;
+    }
+
+    if (search) {
+      const searchRegex = new RegExp(escapeRegex(search), "i");
+
+      filter.$or = [
+        {
+          company: searchRegex,
+        },
+        {
+          position: searchRegex,
+        },
+        {
+          location: searchRegex,
+        },
+        {
+          technologies: searchRegex,
+        },
+      ];
+    }
+
+    const sortDescending = sort.startsWith("-");
+
+    const sortField = sortDescending ? sort.substring(1) : sort;
+
+    const sortOption = {
+      [sortField]: sortDescending ? -1 : 1,
+    } as Record<string, 1 | -1>;
+
+    const skip = (page - 1) * limit;
+
+    const [applications, total] = await Promise.all([
+      Application.find(filter).sort(sortOption).skip(skip).limit(limit),
+
+      Application.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
 
     res.status(200).json({
-      count: applications.length,
       applications,
+
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
     });
   } catch (error) {
     console.error("Get applications error:", error);
