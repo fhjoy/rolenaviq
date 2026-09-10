@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router";
 
+import { ProtectedRoute } from "@/features/auth/ProtectedRoute";
 import { ApplicationsPage } from "@/pages/ApplicationsPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { LoginPage } from "@/pages/LoginPage";
@@ -14,9 +15,23 @@ function App() {
 
       <Route path="/register" element={<RegisterPage />} />
 
-      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
 
-      <Route path="/applications" element={<ApplicationsPage />} />
+      <Route
+        path="/applications"
+        element={
+          <ProtectedRoute>
+            <ApplicationsPage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }

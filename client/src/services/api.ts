@@ -1,10 +1,18 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-type ApiOptions = RequestInit;
+export class ApiError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
 
 export async function apiRequest<T>(
   endpoint: string,
-  options: ApiOptions = {},
+  options: RequestInit = {},
 ): Promise<T> {
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
@@ -18,11 +26,11 @@ export async function apiRequest<T>(
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({
+    const errorData = await response.json().catch(() => ({
       message: "Something went wrong",
     }));
 
-    throw new Error(error.message || "Request failed");
+    throw new ApiError(errorData.message || "Request failed", response.status);
   }
 
   return response.json() as Promise<T>;

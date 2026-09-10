@@ -1,33 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { apiRequest } from "@/services/api";
-
-interface HealthResponse {
-  status: string;
-  service: string;
-}
+import { LogoutButton } from "@/features/auth/LogoutButton";
+import { useCurrentUser } from "@/features/auth/useCurrentUser";
 
 export function DashboardPage() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["health"],
-    queryFn: () => apiRequest<HealthResponse>("/health"),
-  });
-
-  if (isLoading) {
-    return <p className="p-8">Loading...</p>;
-  }
-
-  if (isError) {
-    return <p className="p-8">Backend connection failed</p>;
-  }
+  const { data } = useCurrentUser();
 
   return (
     <main className="p-8">
-      <h1 className="text-3xl font-bold">RoleNaviq Dashboard</h1>
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-sm text-muted-foreground">Welcome back</p>
 
-      <p className="mt-4">API status: {data?.status}</p>
+          <h1 className="text-3xl font-bold">{data?.user.firstName}</h1>
+        </div>
 
-      <p>Service: {data?.service}</p>
+        <LogoutButton />
+      </div>
     </main>
   );
 }
