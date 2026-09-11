@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
-import { Navigate } from "react-router";
+import { Navigate, Outlet } from "react-router";
 
 import { useCurrentUser } from "./useCurrentUser";
 import { ApiError } from "@/services/api";
 
 interface ProtectedRouteProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
@@ -35,5 +35,5 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return children ?? <Outlet />;
 }
