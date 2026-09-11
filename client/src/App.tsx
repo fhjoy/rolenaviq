@@ -10,6 +10,7 @@ import { DashboardPage } from "@/pages/DashboardPage";
 import { LoginPage } from "@/pages/LoginPage";
 import { RegisterPage } from "@/pages/RegisterPage";
 import { SettingsPage } from "@/pages/SettingsPage";
+import { NewApplicationPage } from "@/pages/NewApplicationPage";
 
 function App() {
   return (
@@ -22,16 +23,12 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
-
           <Route path="/dashboard" element={<DashboardPage />} />
-
           <Route path="/applications" element={<ApplicationsPage />} />
-
           <Route path="/board" element={<BoardPage />} />
-
           <Route path="/calendar" element={<CalendarPage />} />
-
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/applications/new" element={<NewApplicationPage />} />
         </Route>
       </Route>
 
