@@ -4,6 +4,9 @@ import type {
   Application,
   ApplicationsResponse,
   ApplicationQueryParams,
+  ApplicationStatus,
+  EmploymentType,
+  WorkplaceType,
 } from "@/types/application";
 
 export function getApplications(
@@ -53,16 +56,18 @@ export interface CreateApplicationData {
   jobUrl?: string;
   location?: string;
 
-  workplaceType?: string;
-  employmentType?: string;
+  workplaceType?: WorkplaceType;
+  employmentType?: EmploymentType;
 
-  status: string;
+  status: ApplicationStatus;
 
   technologies: string[];
 
   appliedAt?: string;
   notes?: string;
 }
+
+export type UpdateApplicationData = Partial<CreateApplicationData>;
 
 export function createApplication(data: CreateApplicationData): Promise<{
   message: string;
@@ -71,5 +76,32 @@ export function createApplication(data: CreateApplicationData): Promise<{
   return apiRequest("/applications", {
     method: "POST",
     body: JSON.stringify(data),
+  });
+}
+
+export function getApplicationById(id: string): Promise<{
+  application: Application;
+}> {
+  return apiRequest(`/applications/${id}`);
+}
+
+export function updateApplication(
+  id: string,
+  data: UpdateApplicationData,
+): Promise<{
+  message: string;
+  application: Application;
+}> {
+  return apiRequest(`/applications/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+export function deleteApplication(id: string): Promise<{
+  message: string;
+}> {
+  return apiRequest(`/applications/${id}`, {
+    method: "DELETE",
   });
 }
