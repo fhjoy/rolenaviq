@@ -59,3 +59,25 @@ export interface ApplicationsResponse {
   applications: Application[];
   pagination: Pagination;
 }
+
+export type ApplicationSort =
+  | "-createdAt"
+  | "createdAt"
+  | "-appliedAt"
+  | "appliedAt"
+  | "company"
+  | "-company"
+  | "position"
+  | "-position";
+
+export interface ApplicationQueryParams {
+  search?: string;
+  status?: ApplicationStatus;
+  workplaceType?: WorkplaceType;
+  employmentType?: EmploymentType;
+
+  page?: number;
+  limit?: number;
+
+  sort?: ApplicationSort;
+}
