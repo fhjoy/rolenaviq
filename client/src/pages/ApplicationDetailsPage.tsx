@@ -42,9 +42,15 @@ export function ApplicationDetailsPage() {
     mutationFn: () => deleteApplication(id),
 
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["applications"],
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["applications"],
+        }),
+
+        queryClient.invalidateQueries({
+          queryKey: ["dashboard"],
+        }),
+      ]);
 
       navigate("/applications");
     },

@@ -35,9 +35,15 @@ export function NewApplicationPage() {
     mutationFn: createApplication,
 
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["applications"],
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["applications"],
+        }),
+
+        queryClient.invalidateQueries({
+          queryKey: ["dashboard"],
+        }),
+      ]);
 
       navigate("/applications");
     },
@@ -56,6 +62,10 @@ export function NewApplicationPage() {
       jobUrl: data.jobUrl || undefined,
 
       location: data.location || undefined,
+
+      workplaceType: data.workplaceType || undefined,
+
+      employmentType: data.employmentType || undefined,
 
       appliedAt: data.appliedAt || undefined,
 

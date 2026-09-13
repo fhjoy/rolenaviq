@@ -95,9 +95,15 @@ function EditForm({ application }: EditFormProps) {
     },
 
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["applications"],
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["applications"],
+        }),
+
+        queryClient.invalidateQueries({
+          queryKey: ["dashboard"],
+        }),
+      ]);
 
       navigate(`/applications/${application._id}`);
     },
