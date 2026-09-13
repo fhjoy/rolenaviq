@@ -29,6 +29,17 @@ function formatDate(value?: string) {
   return new Date(value).toLocaleDateString();
 }
 
+function formatDateTime(value?: string) {
+  if (!value) {
+    return "—";
+  }
+
+  return new Date(value).toLocaleString(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+}
+
 export function ApplicationDetailsPage() {
   const { id = "" } = useParams();
 
@@ -146,6 +157,14 @@ export function ApplicationDetailsPage() {
             {formatDate(application.appliedAt)}
           </p>
         </div>
+      </div>
+
+      <div>
+        <p className="text-sm text-muted-foreground">Interview</p>
+
+        <p className="mt-1 font-medium">
+          {formatDateTime(application.interviewDate)}
+        </p>
       </div>
 
       {application.technologies.length > 0 && (

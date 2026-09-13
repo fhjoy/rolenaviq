@@ -37,6 +37,8 @@ export const applicationFormSchema = z.object({
 
   appliedAt: z.string().optional(),
 
+  interviewDate: z.string().optional(),
+
   notes: z.string().max(5000).optional(),
 });
 

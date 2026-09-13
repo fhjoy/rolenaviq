@@ -69,6 +69,10 @@ export function NewApplicationPage() {
 
       appliedAt: data.appliedAt || undefined,
 
+      interviewDate: data.interviewDate
+        ? new Date(data.interviewDate).toISOString()
+        : undefined,
+
       notes: data.notes || undefined,
 
       technologies,
@@ -209,6 +213,16 @@ export function NewApplicationPage() {
           <Label htmlFor="appliedAt">Application date</Label>
 
           <Input id="appliedAt" type="date" {...register("appliedAt")} />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="interviewDate">Interview date & time</Label>
+
+          <Input
+            id="interviewDate"
+            type="datetime-local"
+            {...register("interviewDate")}
+          />
         </div>
 
         <div className="space-y-2">

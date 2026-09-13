@@ -25,7 +25,7 @@ export function DashboardPage() {
 
   const { data: recentApplicationsData } = useApplications({
     page: 1,
-    limit: 5,
+    limit: 10,
     sort: "-createdAt",
   });
 

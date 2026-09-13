@@ -64,6 +64,8 @@ export interface CreateApplicationData {
   technologies: string[];
 
   appliedAt?: string;
+  interviewDate?: string;
+
   notes?: string;
 }
 

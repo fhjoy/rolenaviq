@@ -26,11 +26,21 @@ interface EditFormProps {
   application: Application;
 }
 
+function toDateTimeLocal(value?: string): string {
+  if (!value) {
+    return "";
+  }
+
+  const date = new Date(value);
+
+  const offset = date.getTimezoneOffset() * 60 * 1000;
+
+  return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+}
+
 function EditForm({ application }: EditFormProps) {
   const navigate = useNavigate();
-
   const queryClient = useQueryClient();
-
   const {
     register,
     handleSubmit,
@@ -58,6 +68,8 @@ function EditForm({ application }: EditFormProps) {
       appliedAt: application.appliedAt
         ? application.appliedAt.slice(0, 10)
         : "",
+
+      interviewDate: toDateTimeLocal(application.interviewDate),
 
       notes: application.notes ?? "",
     },
@@ -89,6 +101,10 @@ function EditForm({ application }: EditFormProps) {
         employmentType: data.employmentType || undefined,
 
         appliedAt: data.appliedAt || undefined,
+
+        interviewDate: data.interviewDate
+          ? new Date(data.interviewDate).toISOString()
+          : undefined,
 
         notes: data.notes || undefined,
       });
@@ -234,6 +250,16 @@ function EditForm({ application }: EditFormProps) {
         <Label htmlFor="appliedAt">Application date</Label>
 
         <Input id="appliedAt" type="date" {...register("appliedAt")} />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="interviewDate">Interview date & time</Label>
+
+        <Input
+          id="interviewDate"
+          type="datetime-local"
+          {...register("interviewDate")}
+        />
       </div>
 
       <div className="space-y-2">
