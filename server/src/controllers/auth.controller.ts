@@ -7,6 +7,10 @@ import { generateToken } from "../utils/token.js";
 import User from "../models/User.js";
 import { updateProfileSchema } from "../validators/auth.validator.js";
 import { env } from "../config/env.js";
+import {
+  authCookieOptions,
+  clearAuthCookieOptions,
+} from "../config/auth-cookie.js";
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -105,12 +109,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     const token = generateToken(user._id.toString());
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie("token", token, authCookieOptions);
 
     res.status(200).json({
       message: "Login successful",
@@ -246,11 +245,7 @@ export const updateProfile = async (
 };
 
 export const logout = (_req: Request, res: Response): void => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: "lax",
-  });
+  res.clearCookie("token", clearAuthCookieOptions);
 
   res.status(200).json({
     message: "Logout successful",

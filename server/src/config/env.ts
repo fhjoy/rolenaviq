@@ -16,6 +16,8 @@ const envSchema = z.object({
     .min(32, "JWT_SECRET must contain at least 32 characters"),
 
   CLIENT_URL: z.string().url("CLIENT_URL must be a valid URL"),
+
+  COOKIE_SAME_SITE: z.enum(["lax", "strict", "none"]).default("lax"),
 });
 
 const result = envSchema.safeParse(process.env);
