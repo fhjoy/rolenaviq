@@ -160,10 +160,6 @@ export function AppLayout() {
           </div>
         </header>
 
-        {/* Page content */}
-        {/* <main className="p-4 md:p-6 lg:p-8">
-          <Outlet />
-        </main> */}
         <main
           id="main-content"
           tabIndex={-1}

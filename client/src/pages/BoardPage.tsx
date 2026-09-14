@@ -135,12 +135,6 @@ export function BoardPage() {
         </p>
       </div>
 
-      {/* {updateStatusMutation.isError && (
-        <p role="alert" className="mt-4 text-sm text-destructive">
-          Unable to update application status.
-        </p>
-      )} */}
-
       <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
         <div className="mt-8 overflow-x-auto pb-6">
           <div className="flex min-w-max items-start gap-4">

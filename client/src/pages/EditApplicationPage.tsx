@@ -270,12 +270,6 @@ function EditForm({ application }: EditFormProps) {
         <Textarea id="notes" rows={5} {...register("notes")} />
       </div>
 
-      {/* {mutation.isError && (
-        <p role="alert" className="text-sm text-destructive">
-          Unable to update application.
-        </p>
-      )} */}
-
       <div className="flex gap-3">
         <Button type="submit" disabled={mutation.isPending}>
           {mutation.isPending ? "Saving..." : "Save changes"}
