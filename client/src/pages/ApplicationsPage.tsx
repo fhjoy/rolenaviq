@@ -1,5 +1,8 @@
+import { SearchX } from "lucide-react";
+import { EmptyState } from "@/components/common/EmptyState";
+import { PageError } from "@/components/common/PageError";
+import { ApplicationListSkeleton } from "@/features/applications/ApplicationListSkeleton";
 import { useState } from "react";
-
 import { Link } from "react-router";
 
 import { Button } from "@/components/ui/button";
@@ -7,7 +10,6 @@ import { Input } from "@/components/ui/input";
 
 import { ApplicationCard } from "@/features/applications/ApplicationCard";
 import { useApplications } from "@/features/applications/useApplications";
-
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 import type {
@@ -164,23 +166,30 @@ export function ApplicationsPage() {
       )}
 
       {/* Loading */}
-      {isLoading && <p className="mt-8">Loading applications...</p>}
+      {isLoading && <ApplicationListSkeleton />}
 
       {/* Error */}
       {isError && (
-        <p className="mt-8 text-destructive" role="alert">
-          Unable to load applications.
-        </p>
+        <div className="mt-8">
+          <PageError
+            title="Unable to load applications"
+            message="We could not retrieve your applications. Please try again."
+          />
+        </div>
       )}
 
       {/* Empty state */}
       {!isLoading && !isError && applications.length === 0 && (
-        <div className="mt-10 rounded-xl border border-dashed p-10 text-center">
-          <h2 className="font-semibold">No applications found</h2>
-
-          <p className="mt-2 text-sm text-muted-foreground">
-            Try changing your search or filters.
-          </p>
+        <div className="mt-10">
+          <EmptyState
+            icon={SearchX}
+            title="No applications found"
+            description={
+              search || status || workplaceType || employmentType
+                ? "Try changing your search or filters."
+                : "Add your first job application to start tracking your job search."
+            }
+          />
         </div>
       )}
 

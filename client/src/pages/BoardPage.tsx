@@ -6,17 +6,16 @@ import {
   useSensors,
   type DragEndEvent,
 } from "@dnd-kit/core";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { BoardColumn } from "@/features/board/BoardColumn";
 import { boardColumns } from "@/features/board/board.constants";
-
 import { updateApplication } from "@/features/applications/application.api";
-
 import { useApplications } from "@/features/applications/useApplications";
-
 import type { ApplicationStatus } from "@/types/application";
+import { PageError } from "@/components/common/PageError";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function BoardPage() {
   const queryClient = useQueryClient();
@@ -43,7 +42,7 @@ export function BoardPage() {
         status,
       }),
 
-    onSuccess: async () => {
+    onSuccess: async (_data, variables) => {
       await Promise.all([
         queryClient.invalidateQueries({
           queryKey: ["applications"],
@@ -53,6 +52,16 @@ export function BoardPage() {
           queryKey: ["dashboard"],
         }),
       ]);
+
+      const statusLabel = variables.status
+        .replaceAll("_", " ")
+        .replace(/\b\w/g, (letter) => letter.toUpperCase());
+
+      toast.success(`Moved to ${statusLabel}`);
+    },
+
+    onError: () => {
+      toast.error("Unable to update application status");
     },
   });
 
@@ -82,14 +91,35 @@ export function BoardPage() {
   };
 
   if (isLoading) {
-    return <p>Loading board...</p>;
+    return (
+      <div>
+        <Skeleton className="h-9 w-40" />
+        <Skeleton className="mt-3 h-4 w-80" />
+
+        <div className="mt-8 flex gap-4 overflow-hidden">
+          {Array.from({
+            length: 4,
+          }).map((_, index) => (
+            <div key={index} className="w-72 shrink-0 rounded-xl border p-4">
+              <Skeleton className="h-5 w-24" />
+
+              <div className="mt-5 space-y-3">
+                <Skeleton className="h-28 w-full" />
+                <Skeleton className="h-28 w-full" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (isError) {
     return (
-      <p role="alert" className="text-destructive">
-        Unable to load board.
-      </p>
+      <PageError
+        title="Unable to load board"
+        message="Your application board could not be loaded."
+      />
     );
   }
 
@@ -105,11 +135,11 @@ export function BoardPage() {
         </p>
       </div>
 
-      {updateStatusMutation.isError && (
+      {/* {updateStatusMutation.isError && (
         <p role="alert" className="mt-4 text-sm text-destructive">
           Unable to update application status.
         </p>
-      )}
+      )} */}
 
       <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
         <div className="mt-8 overflow-x-auto pb-6">

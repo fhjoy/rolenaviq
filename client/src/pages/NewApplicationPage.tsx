@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,7 +46,13 @@ export function NewApplicationPage() {
         }),
       ]);
 
+      toast.success("Application created");
+
       navigate("/applications");
+    },
+
+    onError: () => {
+      toast.error("Unable to create application");
     },
   });
 

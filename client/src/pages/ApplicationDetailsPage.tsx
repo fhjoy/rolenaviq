@@ -1,15 +1,16 @@
 import { ArrowLeft, ExternalLink } from "lucide-react";
-
 import { Link, useNavigate, useParams } from "react-router";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
 import { deleteApplication } from "@/features/applications/application.api";
-
 import { useApplication } from "@/features/applications/useApplication";
+import { DeleteApplicationDialog } from "@/features/applications/DeleteApplicationDialog";
+import { PageError } from "@/components/common/PageError";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function formatValue(value?: string) {
   if (!value) {
@@ -42,13 +43,10 @@ function formatDateTime(value?: string) {
 
 export function ApplicationDetailsPage() {
   const { id = "" } = useParams();
-
   const navigate = useNavigate();
-
   const queryClient = useQueryClient();
-
   const { data, isLoading, isError } = useApplication(id);
-
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const deleteMutation = useMutation({
     mutationFn: () => deleteApplication(id),
 
@@ -63,29 +61,60 @@ export function ApplicationDetailsPage() {
         }),
       ]);
 
+      toast.success("Application deleted");
+
       navigate("/applications");
+    },
+
+    onError: () => {
+      toast.error("Unable to delete application");
     },
   });
 
   if (isLoading) {
-    return <p>Loading application...</p>;
+    return (
+      <div className="mx-auto max-w-4xl">
+        <Skeleton className="h-9 w-40" />
+
+        <div className="mt-8">
+          <Skeleton className="h-10 w-2/3" />
+          <Skeleton className="mt-3 h-5 w-1/3" />
+        </div>
+
+        <div className="mt-8 grid gap-6 rounded-xl border p-6 sm:grid-cols-2">
+          {Array.from({
+            length: 6,
+          }).map((_, index) => (
+            <div key={index}>
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="mt-2 h-5 w-32" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (isError || !data?.application) {
-    return <p role="alert">Application not found.</p>;
+    return (
+      <PageError
+        title="Application not found"
+        message="This application may have been deleted or you may not have access to it."
+      />
+    );
   }
 
   const application = data.application;
 
-  const handleDelete = () => {
-    const confirmed = window.confirm(
-      `Delete your application for ${application.position} at ${application.company}?`,
-    );
+  // const handleDelete = () => {
+  //   const confirmed = window.confirm(
+  //     `Delete your application for ${application.position} at ${application.company}?`,
+  //   );
 
-    if (confirmed) {
-      deleteMutation.mutate();
-    }
-  };
+  //   if (confirmed) {
+  //     deleteMutation.mutate();
+  //   }
+  // };
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -119,10 +148,9 @@ export function ApplicationDetailsPage() {
 
           <Button
             variant="destructive"
-            onClick={handleDelete}
-            disabled={deleteMutation.isPending}
+            onClick={() => setDeleteDialogOpen(true)}
           >
-            {deleteMutation.isPending ? "Deleting..." : "Delete"}
+            Delete
           </Button>
         </div>
       </div>
@@ -210,6 +238,14 @@ export function ApplicationDetailsPage() {
           Unable to delete application.
         </p>
       )}
+      <DeleteApplicationDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        company={application.company}
+        position={application.position}
+        isDeleting={deleteMutation.isPending}
+        onConfirm={() => deleteMutation.mutate()}
+      />
     </div>
   );
 }

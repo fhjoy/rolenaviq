@@ -1,10 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { Link, useNavigate, useParams } from "react-router";
-
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,12 +13,11 @@ import {
   applicationFormSchema,
   type ApplicationFormData,
 } from "@/features/applications/application.schemas";
-
 import { updateApplication } from "@/features/applications/application.api";
-
 import { useApplication } from "@/features/applications/useApplication";
-
 import type { Application } from "@/types/application";
+import { PageError } from "@/components/common/PageError";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface EditFormProps {
   application: Application;
@@ -109,7 +106,6 @@ function EditForm({ application }: EditFormProps) {
         notes: data.notes || undefined,
       });
     },
-
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({
@@ -121,7 +117,13 @@ function EditForm({ application }: EditFormProps) {
         }),
       ]);
 
+      toast.success("Application updated");
+
       navigate(`/applications/${application._id}`);
+    },
+
+    onError: () => {
+      toast.error("Unable to update application");
     },
   });
 
@@ -268,11 +270,11 @@ function EditForm({ application }: EditFormProps) {
         <Textarea id="notes" rows={5} {...register("notes")} />
       </div>
 
-      {mutation.isError && (
+      {/* {mutation.isError && (
         <p role="alert" className="text-sm text-destructive">
           Unable to update application.
         </p>
-      )}
+      )} */}
 
       <div className="flex gap-3">
         <Button type="submit" disabled={mutation.isPending}>
@@ -297,11 +299,37 @@ export function EditApplicationPage() {
   const { data, isLoading, isError } = useApplication(id);
 
   if (isLoading) {
-    return <p>Loading application...</p>;
+    return (
+      <div className="mx-auto max-w-2xl">
+        <Skeleton className="h-9 w-48" />
+        <Skeleton className="mt-3 h-4 w-80" />
+
+        <div className="mt-8 space-y-6">
+          {Array.from({
+            length: 7,
+          }).map((_, index) => (
+            <div key={index} className="space-y-2">
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="h-9 w-full" />
+            </div>
+          ))}
+
+          <div className="flex gap-3">
+            <Skeleton className="h-9 w-32" />
+            <Skeleton className="h-9 w-24" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (isError || !data?.application) {
-    return <p role="alert">Application not found.</p>;
+    return (
+      <PageError
+        title="Application not found"
+        message="The application could not be loaded for editing."
+      />
+    );
   }
 
   return (

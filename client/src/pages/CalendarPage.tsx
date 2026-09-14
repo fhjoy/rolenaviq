@@ -1,15 +1,15 @@
 import { addMonths, format, subMonths } from "date-fns";
-
-import { ChevronLeft, ChevronRight } from "lucide-react";
-
+import { CalendarX, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
 import { useApplications } from "@/features/applications/useApplications";
-
 import { InterviewCard } from "@/features/calendar/InterviewCard";
 import { MonthlyCalendar } from "@/features/calendar/MonthlyCalendar";
+import { EmptyState } from "@/components/common/EmptyState";
+import { PageError } from "@/components/common/PageError";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function CalendarPage() {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
@@ -21,14 +21,22 @@ export function CalendarPage() {
   });
 
   if (isLoading) {
-    return <p>Loading interviews...</p>;
+    return (
+      <div>
+        <Skeleton className="h-9 w-40" />
+        <Skeleton className="mt-3 h-4 w-96" />
+
+        <Skeleton className="mt-8 h-125 w-full rounded-xl" />
+      </div>
+    );
   }
 
   if (isError) {
     return (
-      <p role="alert" className="text-destructive">
-        Unable to load interviews.
-      </p>
+      <PageError
+        title="Unable to load calendar"
+        message="Your interview schedule could not be loaded."
+      />
     );
   }
 
@@ -118,12 +126,12 @@ export function CalendarPage() {
         </div>
 
         {upcomingInterviews.length === 0 ? (
-          <div className="mt-4 rounded-xl border border-dashed p-10 text-center">
-            <h3 className="font-semibold">No upcoming interviews</h3>
-
-            <p className="mt-2 text-sm text-muted-foreground">
-              Add an interview date to an application and it will appear here.
-            </p>
+          <div className="mt-4">
+            <EmptyState
+              icon={CalendarX}
+              title="No upcoming interviews"
+              description="Add an interview date to an application and it will appear here."
+            />
           </div>
         ) : (
           <div className="mt-4 grid gap-4 xl:grid-cols-2">

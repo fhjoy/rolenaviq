@@ -8,15 +8,14 @@ import {
 } from "lucide-react";
 
 import { useCurrentUser } from "@/features/auth/useCurrentUser";
-
 import { useApplications } from "@/features/applications/useApplications";
-
 import { MonthlyActivityChart } from "@/features/dashboard/MonthlyActivityChart";
 import { RecentApplications } from "@/features/dashboard/RecentApplications";
 import { StatsCard } from "@/features/dashboard/StatsCard";
 import { StatusChart } from "@/features/dashboard/StatusChart";
-
 import { useDashboardStats } from "@/features/dashboard/useDashboardStats";
+import { PageError } from "@/components/common/PageError";
+import { DashboardSkeleton } from "@/features/dashboard/DashboardSkeleton";
 
 export function DashboardPage() {
   const { data: userData } = useCurrentUser();
@@ -45,12 +44,15 @@ export function DashboardPage() {
         </p>
       </div>
 
-      {isLoading && <p className="mt-8">Loading dashboard...</p>}
+      {isLoading && <DashboardSkeleton />}
 
       {isError && (
-        <p className="mt-8 text-destructive" role="alert">
-          Unable to load dashboard statistics.
-        </p>
+        <div className="mt-8">
+          <PageError
+            title="Unable to load dashboard"
+            message="Dashboard statistics could not be loaded."
+          />
+        </div>
       )}
 
       {stats && data && (
