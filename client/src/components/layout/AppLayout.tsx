@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { LogoutButton } from "@/features/auth/LogoutButton";
 import { useCurrentUser } from "@/features/auth/useCurrentUser";
+import { SkipLink } from "@/components/common/SkipLink";
 
 const navigation = [
   {
@@ -112,6 +113,8 @@ export function AppLayout() {
 
   return (
     <div className="min-h-screen bg-muted/30">
+      <SkipLink />
+
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 hidden w-64 border-r bg-background md:block">
         <SidebarContent />
@@ -158,7 +161,14 @@ export function AppLayout() {
         </header>
 
         {/* Page content */}
-        <main className="p-4 md:p-6 lg:p-8">
+        {/* <main className="p-4 md:p-6 lg:p-8">
+          <Outlet />
+        </main> */}
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8"
+        >
           <Outlet />
         </main>
       </div>

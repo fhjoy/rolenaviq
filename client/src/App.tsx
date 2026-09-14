@@ -13,6 +13,7 @@ import { SettingsPage } from "@/pages/SettingsPage";
 import { NewApplicationPage } from "@/pages/NewApplicationPage";
 import { ApplicationDetailsPage } from "@/pages/ApplicationDetailsPage";
 import { EditApplicationPage } from "@/pages/EditApplicationPage";
+import { NotFoundPage } from "@/pages/NotFoundPage";
 
 function App() {
   return (
@@ -43,7 +44,7 @@ function App() {
       </Route>
 
       {/* Not found */}
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

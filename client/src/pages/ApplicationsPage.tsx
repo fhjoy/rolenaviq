@@ -160,7 +160,7 @@ export function ApplicationsPage() {
 
       {/* Fetch indicator */}
       {isFetching && !isLoading && (
-        <p className="mt-4 text-sm text-muted-foreground">
+        <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
           Updating results...
         </p>
       )}
