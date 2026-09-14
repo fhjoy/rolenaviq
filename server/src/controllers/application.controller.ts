@@ -234,12 +234,47 @@ export const updateApplication = async (
       return;
     }
 
+    // const application = await Application.findOneAndUpdate(
+    //   {
+    //     _id: id,
+    //     userId: req.userId,
+    //   },
+    //   result.data,
+    //   {
+    //     new: true,
+    //     runValidators: true,
+    //   },
+    // );
+
+    const fieldsToSet = Object.fromEntries(
+      Object.entries(result.data).filter(([, value]) => value !== null),
+    );
+
+    const fieldsToUnset = Object.fromEntries(
+      Object.entries(result.data)
+        .filter(([, value]) => value === null)
+        .map(([key]) => [key, 1]),
+    );
+
+    const updateOperations: {
+      $set?: Record<string, unknown>;
+      $unset?: Record<string, number>;
+    } = {};
+
+    if (Object.keys(fieldsToSet).length > 0) {
+      updateOperations.$set = fieldsToSet;
+    }
+
+    if (Object.keys(fieldsToUnset).length > 0) {
+      updateOperations.$unset = fieldsToUnset;
+    }
+
     const application = await Application.findOneAndUpdate(
       {
         _id: id,
         userId: req.userId,
       },
-      result.data,
+      updateOperations,
       {
         new: true,
         runValidators: true,

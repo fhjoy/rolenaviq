@@ -36,7 +36,28 @@ export const createApplicationSchema = z.object({
   notes: z.string().trim().max(5000).optional(),
 });
 
-export const updateApplicationSchema = createApplicationSchema.partial();
+export const updateApplicationSchema = createApplicationSchema
+  .partial()
+  .extend({
+    jobUrl: z
+      .string()
+      .trim()
+      .url("Please provide a valid URL")
+      .nullable()
+      .optional(),
+
+    location: z.string().trim().max(150).nullable().optional(),
+
+    workplaceType: z.enum(workplaceTypes).nullable().optional(),
+
+    employmentType: z.enum(employmentTypes).nullable().optional(),
+
+    appliedAt: z.union([z.coerce.date(), z.null()]).optional(),
+
+    interviewDate: z.union([z.coerce.date(), z.null()]).optional(),
+
+    notes: z.string().trim().max(5000).nullable().optional(),
+  });
 
 export const applicationQuerySchema = z.object({
   search: z.string().trim().max(100).optional(),

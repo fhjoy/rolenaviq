@@ -89,21 +89,21 @@ function EditForm({ application }: EditFormProps) {
 
         technologies,
 
-        jobUrl: data.jobUrl || undefined,
+        jobUrl: data.jobUrl || null,
 
-        location: data.location || undefined,
+        location: data.location || null,
 
-        workplaceType: data.workplaceType || undefined,
+        workplaceType: data.workplaceType || null,
 
-        employmentType: data.employmentType || undefined,
+        employmentType: data.employmentType || null,
 
-        appliedAt: data.appliedAt || undefined,
+        appliedAt: data.appliedAt || null,
 
         interviewDate: data.interviewDate
           ? new Date(data.interviewDate).toISOString()
-          : undefined,
+          : null,
 
-        notes: data.notes || undefined,
+        notes: data.notes || null,
       });
     },
     onSuccess: async () => {

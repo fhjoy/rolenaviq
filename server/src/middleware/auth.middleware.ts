@@ -1,5 +1,6 @@
 import { type NextFunction, type Request, type Response } from "express";
 import jwt from "jsonwebtoken";
+import { env } from "../config/env.js";
 
 interface JwtPayload {
   userId: string;
@@ -20,14 +21,8 @@ export const authenticate = (
     return;
   }
 
-  const jwtSecret = process.env.JWT_SECRET;
-
-  if (!jwtSecret) {
-    throw new Error("JWT_SECRET is not defined");
-  }
-
   try {
-    const decoded = jwt.verify(token, jwtSecret) as JwtPayload;
+    const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
 
     req.userId = decoded.userId;
 

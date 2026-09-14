@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
+import { env } from "./config/env.js";
 import authRoutes from "./routes/auth.routes.js";
 import applicationRoutes from "./routes/application.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
@@ -10,7 +11,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: env.CLIENT_URL,
     credentials: true,
   }),
 );

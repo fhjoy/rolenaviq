@@ -6,6 +6,7 @@ import { loginSchema } from "../validators/auth.validator.js";
 import { generateToken } from "../utils/token.js";
 import User from "../models/User.js";
 import { updateProfileSchema } from "../validators/auth.validator.js";
+import { env } from "../config/env.js";
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -106,7 +107,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -247,7 +248,7 @@ export const updateProfile = async (
 export const logout = (_req: Request, res: Response): void => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: env.NODE_ENV === "production",
     sameSite: "lax",
   });
 

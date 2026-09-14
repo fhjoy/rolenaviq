@@ -69,7 +69,26 @@ export interface CreateApplicationData {
   notes?: string;
 }
 
-export type UpdateApplicationData = Partial<CreateApplicationData>;
+export type UpdateApplicationData = Partial<
+  Omit<
+    CreateApplicationData,
+    | "jobUrl"
+    | "location"
+    | "workplaceType"
+    | "employmentType"
+    | "appliedAt"
+    | "interviewDate"
+    | "notes"
+  >
+> & {
+  jobUrl?: string | null;
+  location?: string | null;
+  workplaceType?: WorkplaceType | null;
+  employmentType?: EmploymentType | null;
+  appliedAt?: string | null;
+  interviewDate?: string | null;
+  notes?: string | null;
+};
 
 export function createApplication(data: CreateApplicationData): Promise<{
   message: string;
