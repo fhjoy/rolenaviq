@@ -5,6 +5,7 @@ import { registerSchema } from "../validators/auth.validator.js";
 import { loginSchema } from "../validators/auth.validator.js";
 import { generateToken } from "../utils/token.js";
 import User from "../models/User.js";
+import { updateProfileSchema } from "../validators/auth.validator.js";
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -153,6 +154,89 @@ export const getCurrentUser = async (
     });
   } catch (error) {
     console.error("Get current user error:", error);
+
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+export const updateProfile = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    if (!req.userId) {
+      res.status(401).json({
+        message: "Authentication required",
+      });
+
+      return;
+    }
+
+    const result = updateProfileSchema.safeParse(req.body);
+
+    if (!result.success) {
+      res.status(400).json({
+        message: result.error.issues[0]?.message || "Invalid profile data",
+      });
+
+      return;
+    }
+
+    const { firstName, lastName, email } = result.data;
+
+    const normalizedEmail = email.toLowerCase();
+
+    const existingUser = await User.findOne({
+      email: normalizedEmail,
+
+      _id: {
+        $ne: req.userId,
+      },
+    });
+
+    if (existingUser) {
+      res.status(409).json({
+        message: "An account with this email already exists",
+      });
+
+      return;
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        firstName,
+        lastName,
+        email: normalizedEmail,
+      },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!user) {
+      res.status(404).json({
+        message: "User not found",
+      });
+
+      return;
+    }
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+
+      user: {
+        id: user._id.toString(),
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
 
     res.status(500).json({
       message: "Internal server error",

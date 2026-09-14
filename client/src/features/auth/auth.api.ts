@@ -3,6 +3,12 @@ import { apiRequest } from "@/services/api";
 import type { AuthResponse, CurrentUserResponse } from "@/types/auth";
 import type { LoginFormData, RegisterFormData } from "./auth.schemas";
 
+export interface UpdateProfileData {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 export function loginUser(data: LoginFormData): Promise<AuthResponse> {
   return apiRequest<AuthResponse>("/auth/login", {
     method: "POST",
@@ -26,5 +32,12 @@ export function getCurrentUser(): Promise<CurrentUserResponse> {
 export function logoutUser(): Promise<{ message: string }> {
   return apiRequest<{ message: string }>("/auth/logout", {
     method: "POST",
+  });
+}
+
+export function updateProfile(data: UpdateProfileData): Promise<AuthResponse> {
+  return apiRequest<AuthResponse>("/auth/profile", {
+    method: "PATCH",
+    body: JSON.stringify(data),
   });
 }
