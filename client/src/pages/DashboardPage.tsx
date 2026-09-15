@@ -41,11 +41,11 @@ export function DashboardPage() {
       <section className="relative overflow-hidden rounded-2xl border bg-linear-to-br from-primary/8 via-background to-cyan-500/6 p-6 sm:p-8">
         <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
 
-        <div className="relative flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
-          <div>
+        <div className="relative flex flex-col justify-between gap-6 2xl:flex-row 2xl:items-center">
+          <div className="min-w-0">
             <p className="text-sm font-medium text-primary">Welcome back</p>
 
-            <h1 className="mt-2 max-w-3xl text-2xl font-bold leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+            <h1 className="mt-2 max-w-3xl text-2xl font-bold leading-tight tracking-tight sm:text-3xl 2xl:text-4xl">
               {userData?.user.firstName
                 ? `${userData.user.firstName}, here's your job search at a glance.`
                 : "Your job search at a glance."}
@@ -57,7 +57,7 @@ export function DashboardPage() {
             </p>
           </div>
 
-          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row xl:shrink-0">
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row 2xl:shrink-0">
             <Button
               className="w-full sm:w-auto"
               variant="outline"
