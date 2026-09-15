@@ -35,12 +35,24 @@ function toDateTimeLocal(value?: string): string {
   return new Date(date.getTime() - offset).toISOString().slice(0, 16);
 }
 
+function todayForDateInput(): string {
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60 * 1000;
+
+  return new Date(now.getTime() - offset).toISOString().slice(0, 10);
+}
+
+function nowForDateTimeInput(): string {
+  return toDateTimeLocal(new Date().toISOString());
+}
+
 function EditForm({ application }: EditFormProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<ApplicationFormData>({
     resolver: zodResolver(applicationFormSchema),
@@ -252,6 +264,36 @@ function EditForm({ application }: EditFormProps) {
         <Label htmlFor="appliedAt">Application date</Label>
 
         <Input id="appliedAt" type="date" {...register("appliedAt")} />
+
+        <div className="flex flex-wrap gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              setValue("appliedAt", todayForDateInput(), {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
+            }
+          >
+            Today
+          </Button>
+
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() =>
+              setValue("appliedAt", "", {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
+            }
+          >
+            Clear
+          </Button>
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -262,6 +304,36 @@ function EditForm({ application }: EditFormProps) {
           type="datetime-local"
           {...register("interviewDate")}
         />
+
+        <div className="flex flex-wrap gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              setValue("interviewDate", nowForDateTimeInput(), {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
+            }
+          >
+            Now
+          </Button>
+
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() =>
+              setValue("interviewDate", "", {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
+            }
+          >
+            Clear
+          </Button>
+        </div>
       </div>
 
       <div className="space-y-2">
