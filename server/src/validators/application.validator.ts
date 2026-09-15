@@ -52,9 +52,9 @@ export const updateApplicationSchema = createApplicationSchema
 
     employmentType: z.enum(employmentTypes).nullable().optional(),
 
-    appliedAt: z.union([z.coerce.date(), z.null()]).optional(),
+    appliedAt: z.union([z.null(), z.coerce.date()]).optional(),
 
-    interviewDate: z.union([z.coerce.date(), z.null()]).optional(),
+    interviewDate: z.union([z.null(), z.coerce.date()]).optional(),
 
     notes: z.string().trim().max(5000).nullable().optional(),
   });
