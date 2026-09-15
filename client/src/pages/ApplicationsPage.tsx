@@ -1,4 +1,4 @@
-import { SearchX } from "lucide-react";
+import { Search, SearchX } from "lucide-react";
 import { EmptyState } from "@/components/common/EmptyState";
 import { PageError } from "@/components/common/PageError";
 import { ApplicationListSkeleton } from "@/features/applications/ApplicationListSkeleton";
@@ -49,6 +49,13 @@ export function ApplicationsPage() {
     setPage(1);
   };
 
+  const hasActiveFilters =
+    Boolean(search) ||
+    Boolean(status) ||
+    Boolean(workplaceType) ||
+    Boolean(employmentType) ||
+    sort !== "-createdAt";
+
   return (
     <div>
       {/* Header */}
@@ -66,104 +73,115 @@ export function ApplicationsPage() {
       </div>
 
       {/* Search */}
-      <div className="mt-8">
-        <Input
-          type="search"
-          placeholder="Search company, position, location or technology..."
-          value={search}
-          onChange={(event) => {
-            setSearch(event.target.value);
-            setPage(1);
-          }}
-          className="max-w-xl"
-          aria-label="Search applications"
-        />
-      </div>
+      <div className="mt-8 rounded-xl border bg-background p-4">
+        <div className="relative">
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden="true"
+          />
 
-      {/* Filters */}
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        <select
-          value={status}
-          onChange={(event) => {
-            setStatus(event.target.value as ApplicationStatus | "");
-            setPage(1);
-          }}
-          className="h-9 rounded-md border bg-background px-3 text-sm"
-          aria-label="Filter by status"
-        >
-          <option value="">All statuses</option>
-          <option value="saved">Saved</option>
-          <option value="applied">Applied</option>
-          <option value="screening">Screening</option>
-          <option value="interview">Interview</option>
-          <option value="technical_interview">Technical Interview</option>
-          <option value="offer">Offer</option>
-          <option value="rejected">Rejected</option>
-          <option value="withdrawn">Withdrawn</option>
-        </select>
+          <Input
+            type="search"
+            placeholder="Search company, position, location or technology..."
+            value={search}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              setPage(1);
+            }}
+            className="pl-9"
+            aria-label="Search applications"
+          />
+        </div>
 
-        <select
-          value={workplaceType}
-          onChange={(event) => {
-            setWorkplaceType(event.target.value as WorkplaceType | "");
-            setPage(1);
-          }}
-          className="h-9 rounded-md border bg-background px-3 text-sm"
-          aria-label="Filter by workplace type"
-        >
-          <option value="">All workplaces</option>
-          <option value="remote">Remote</option>
-          <option value="hybrid">Hybrid</option>
-          <option value="onsite">On-site</option>
-        </select>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <select
+            value={status}
+            onChange={(event) => {
+              setStatus(event.target.value as ApplicationStatus | "");
+              setPage(1);
+            }}
+            className="h-9 rounded-md border bg-background px-3 text-sm"
+            aria-label="Filter by status"
+          >
+            <option value="">All statuses</option>
+            <option value="saved">Saved</option>
+            <option value="applied">Applied</option>
+            <option value="screening">Screening</option>
+            <option value="interview">Interview</option>
+            <option value="technical_interview">Technical Interview</option>
+            <option value="offer">Offer</option>
+            <option value="rejected">Rejected</option>
+            <option value="withdrawn">Withdrawn</option>
+          </select>
 
-        <select
-          value={employmentType}
-          onChange={(event) => {
-            setEmploymentType(event.target.value as EmploymentType | "");
-            setPage(1);
-          }}
-          className="h-9 rounded-md border bg-background px-3 text-sm"
-          aria-label="Filter by employment type"
-        >
-          <option value="">All employment types</option>
-          <option value="full_time">Full-time</option>
-          <option value="part_time">Part-time</option>
-          <option value="contract">Contract</option>
-          <option value="freelance">Freelance</option>
-          <option value="internship">Internship</option>
-        </select>
+          <select
+            value={workplaceType}
+            onChange={(event) => {
+              setWorkplaceType(event.target.value as WorkplaceType | "");
+              setPage(1);
+            }}
+            className="h-9 rounded-md border bg-background px-3 text-sm"
+            aria-label="Filter by workplace type"
+          >
+            <option value="">All workplaces</option>
+            <option value="remote">Remote</option>
+            <option value="hybrid">Hybrid</option>
+            <option value="onsite">On-site</option>
+          </select>
 
-        <select
-          value={sort}
-          onChange={(event) => {
-            setSort(event.target.value as ApplicationSort);
-            setPage(1);
-          }}
-          className="h-9 rounded-md border bg-background px-3 text-sm"
-          aria-label="Sort applications"
-        >
-          <option value="-createdAt">Newest added</option>
-          <option value="createdAt">Oldest added</option>
-          <option value="-appliedAt">Latest application date</option>
-          <option value="appliedAt">Oldest application date</option>
-          <option value="company">Company A–Z</option>
-          <option value="-company">Company Z–A</option>
-          <option value="position">Position A–Z</option>
-          <option value="-position">Position Z–A</option>
-        </select>
+          <select
+            value={employmentType}
+            onChange={(event) => {
+              setEmploymentType(event.target.value as EmploymentType | "");
+              setPage(1);
+            }}
+            className="h-9 rounded-md border bg-background px-3 text-sm"
+            aria-label="Filter by employment type"
+          >
+            <option value="">All employment types</option>
+            <option value="full_time">Full-time</option>
+            <option value="part_time">Part-time</option>
+            <option value="contract">Contract</option>
+            <option value="freelance">Freelance</option>
+            <option value="internship">Internship</option>
+          </select>
 
-        <Button type="button" variant="outline" onClick={clearFilters}>
-          Clear filters
-        </Button>
+          <select
+            value={sort}
+            onChange={(event) => {
+              setSort(event.target.value as ApplicationSort);
+              setPage(1);
+            }}
+            className="h-9 rounded-md border bg-background px-3 text-sm"
+            aria-label="Sort applications"
+          >
+            <option value="-createdAt">Newest added</option>
+            <option value="createdAt">Oldest added</option>
+            <option value="-appliedAt">Latest application date</option>
+            <option value="appliedAt">Oldest application date</option>
+            <option value="company">Company A–Z</option>
+            <option value="-company">Company Z–A</option>
+            <option value="position">Position A–Z</option>
+            <option value="-position">Position Z–A</option>
+          </select>
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={clearFilters}
+            disabled={!hasActiveFilters}
+          >
+            Clear filters
+          </Button>
+        </div>
       </div>
 
       {/* Fetch indicator */}
-      {isFetching && !isLoading && (
+      {/* {isFetching && !isLoading && (
         <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
           Updating results...
         </p>
-      )}
+      )} */}
 
       {/* Loading */}
       {isLoading && <ApplicationListSkeleton />}
@@ -196,7 +214,19 @@ export function ApplicationsPage() {
       {/* Results */}
       {applications.length > 0 && (
         <>
-          <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          <div className="mt-6 flex items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground">
+              {pagination?.total ?? 0}{" "}
+              {(pagination?.total ?? 0) === 1 ? "application" : "applications"}
+            </p>
+
+            {isFetching && !isLoading && (
+              <p className="text-sm text-muted-foreground" aria-live="polite">
+                Updating...
+              </p>
+            )}
+          </div>
+          <div className="mt-4 grid gap-4 xl:grid-cols-2">
             {applications.map((application) => (
               <ApplicationCard
                 key={application._id}
