@@ -1,15 +1,21 @@
 import { addMonths, format, subMonths } from "date-fns";
-import { CalendarX, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  CalendarDays,
+  CalendarX,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+} from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router";
 
+import { EmptyState } from "@/components/common/EmptyState";
+import { PageError } from "@/components/common/PageError";
 import { Button } from "@/components/ui/button";
-
+import { Skeleton } from "@/components/ui/skeleton";
 import { useApplications } from "@/features/applications/useApplications";
 import { InterviewCard } from "@/features/calendar/InterviewCard";
 import { MonthlyCalendar } from "@/features/calendar/MonthlyCalendar";
-import { EmptyState } from "@/components/common/EmptyState";
-import { PageError } from "@/components/common/PageError";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export function CalendarPage() {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
@@ -23,10 +29,9 @@ export function CalendarPage() {
   if (isLoading) {
     return (
       <div>
-        <Skeleton className="h-9 w-40" />
-        <Skeleton className="mt-3 h-4 w-96" />
-
-        <Skeleton className="mt-8 h-125 w-full rounded-xl" />
+        <Skeleton className="h-10 w-48" />
+        <Skeleton className="mt-3 h-4 w-96 max-w-full" />
+        <Skeleton className="mt-8 h-125 w-full rounded-2xl" />
       </div>
     );
   }
@@ -41,7 +46,6 @@ export function CalendarPage() {
   }
 
   const applications = data?.applications ?? [];
-
   const now = new Date();
 
   const interviews = applications
@@ -61,21 +65,40 @@ export function CalendarPage() {
     .reverse();
 
   return (
-    <div>
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Calendar</h1>
+    <div className="w-full">
+      <section className="flex flex-col justify-between gap-5 rounded-2xl border bg-background p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
+        <div className="flex items-start gap-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <CalendarDays className="h-5 w-5" aria-hidden="true" />
+          </div>
 
-        <p className="mt-2 text-muted-foreground">
-          Keep track of interviews and important appointments.
-        </p>
-      </div>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Calendar</h1>
 
-      {/* Monthly calendar */}
-      <section className="mt-8 rounded-xl border bg-background">
-        <header className="flex flex-col gap-4 border-b p-4 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-xl font-semibold">
-            {format(selectedMonth, "MMMM yyyy")}
-          </h2>
+            <p className="mt-2 max-w-2xl text-muted-foreground">
+              Keep interview dates visible and stay prepared for the next
+              conversation in your job search.
+            </p>
+          </div>
+        </div>
+
+        <Button render={<Link to="/applications/new" />}>
+          <Plus className="h-4 w-4" aria-hidden="true" />
+          Add application
+        </Button>
+      </section>
+
+      <section className="mt-6 overflow-hidden rounded-2xl border bg-background shadow-sm">
+        <header className="flex flex-col gap-4 border-b p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Interview schedule
+            </p>
+
+            <h2 className="mt-1 text-xl font-semibold">
+              {format(selectedMonth, "MMMM yyyy")}
+            </h2>
+          </div>
 
           <div className="flex items-center gap-2">
             <Button
@@ -115,10 +138,12 @@ export function CalendarPage() {
         <MonthlyCalendar month={selectedMonth} applications={applications} />
       </section>
 
-      {/* Upcoming */}
-      <section className="mt-10">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Upcoming interviews</h2>
+      <section className="mt-8">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-medium text-primary">Next up</p>
+            <h2 className="mt-1 text-xl font-semibold">Upcoming interviews</h2>
+          </div>
 
           <p className="text-sm text-muted-foreground">
             {upcomingInterviews.length} scheduled
@@ -142,12 +167,16 @@ export function CalendarPage() {
         )}
       </section>
 
-      {/* Past */}
       {pastInterviews.length > 0 && (
-        <section className="mt-10">
-          <h2 className="text-xl font-semibold">Past interviews</h2>
+        <section className="mt-10 border-t pt-8">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="text-xl font-semibold">Past interviews</h2>
+            <p className="text-sm text-muted-foreground">
+              {pastInterviews.length} completed
+            </p>
+          </div>
 
-          <div className="mt-4 grid gap-4 opacity-75 xl:grid-cols-2">
+          <div className="mt-4 grid gap-4 opacity-80 xl:grid-cols-2">
             {pastInterviews.map((application) => (
               <InterviewCard key={application._id} application={application} />
             ))}
