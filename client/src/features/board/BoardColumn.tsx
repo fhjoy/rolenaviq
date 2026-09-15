@@ -12,10 +12,20 @@ interface BoardColumnProps {
   applications: Application[];
 }
 
+const columnAccentStyles: Record<ApplicationStatus, string> = {
+  saved: "bg-slate-400",
+  applied: "bg-blue-500",
+  screening: "bg-cyan-500",
+  interview: "bg-amber-500",
+  technical_interview: "bg-orange-500",
+  offer: "bg-emerald-500",
+  rejected: "bg-rose-500",
+  withdrawn: "bg-zinc-400",
+};
+
 export function BoardColumn({ status, title, applications }: BoardColumnProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: status,
-
     data: {
       status,
     },
@@ -25,19 +35,37 @@ export function BoardColumn({ status, title, applications }: BoardColumnProps) {
     <section
       ref={setNodeRef}
       className={[
-        "flex w-72 shrink-0 flex-col rounded-xl border bg-muted/30 transition-colors",
-        isOver ? "border-primary bg-primary/5" : "",
+        "flex w-[82vw] max-w-80 shrink-0 snap-start flex-col overflow-hidden rounded-2xl border bg-muted/20 shadow-sm transition-all sm:w-80",
+        isOver
+          ? "border-primary bg-primary/5 shadow-md shadow-primary/10"
+          : "border-border/70",
       ].join(" ")}
     >
-      <header className="flex items-center justify-between border-b p-4">
-        <h2 className="font-semibold">{title}</h2>
+      <div className={`h-1 w-full ${columnAccentStyles[status]}`} />
 
-        <Badge variant="secondary">{applications.length}</Badge>
+      <header className="flex items-center justify-between border-b px-4 py-3.5">
+        <div className="flex items-center gap-2.5">
+          <span
+            className={`h-2.5 w-2.5 rounded-full ${columnAccentStyles[status]}`}
+            aria-hidden="true"
+          />
+
+          <h2 className="font-semibold">{title}</h2>
+        </div>
+
+        <Badge variant="secondary" className="min-w-7 justify-center">
+          {applications.length}
+        </Badge>
       </header>
 
-      <div className="min-h-40 space-y-3 p-3">
+      <div className="min-h-44 flex-1 space-y-3 p-3">
         {applications.length === 0 ? (
-          <div className="rounded-lg border border-dashed p-4 text-center text-sm text-muted-foreground">
+          <div
+            className={[
+              "flex min-h-28 items-center justify-center rounded-xl border border-dashed px-4 text-center text-sm text-muted-foreground transition-colors",
+              isOver ? "border-primary/50 bg-primary/5 text-primary" : "",
+            ].join(" ")}
+          >
             Drop application here
           </div>
         ) : (
