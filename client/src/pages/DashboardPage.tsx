@@ -37,7 +37,7 @@ export function DashboardPage() {
   const stats = data?.stats;
 
   return (
-    <div>
+    <div className="w-full">
       <section className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/[0.08] via-background to-cyan-500/[0.06] p-6 sm:p-8">
         <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
 
@@ -91,65 +91,63 @@ export function DashboardPage() {
 
       {stats && data && (
         <>
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              <StatsCard
-                title="Total applications"
-                value={stats.total}
-                description="All opportunities you're tracking"
-                icon={BriefcaseBusiness}
-                tone="primary"
-              />
+          <div className="mt-6 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <StatsCard
+              title="Total applications"
+              value={stats.total}
+              description="All opportunities you're tracking"
+              icon={BriefcaseBusiness}
+              tone="primary"
+            />
 
-              <StatsCard
-                title="Applied"
-                value={stats.applied}
-                description="Applications currently at the applied stage"
-                icon={Send}
-                tone="blue"
-              />
+            <StatsCard
+              title="Applied"
+              value={stats.applied}
+              description="Applications currently at the applied stage"
+              icon={Send}
+              tone="blue"
+            />
 
-              <StatsCard
-                title="Interviews"
-                value={stats.interviews}
-                description="Opportunities in interview stages"
-                icon={CalendarCheck}
-                tone="amber"
-              />
+            <StatsCard
+              title="Interviews"
+              value={stats.interviews}
+              description="Opportunities in interview stages"
+              icon={CalendarCheck}
+              tone="amber"
+            />
 
-              <StatsCard
-                title="Offers"
-                value={stats.offers}
-                description="Offers received so far"
-                icon={Trophy}
-                tone="emerald"
-              />
+            <StatsCard
+              title="Offers"
+              value={stats.offers}
+              description="Offers received so far"
+              icon={Trophy}
+              tone="emerald"
+            />
 
-              <StatsCard
-                title="Rejected"
-                value={stats.rejected}
-                description="Applications that did not move forward"
-                icon={XCircle}
-                tone="rose"
-              />
+            <StatsCard
+              title="Rejected"
+              value={stats.rejected}
+              description="Applications that did not move forward"
+              icon={XCircle}
+              tone="rose"
+            />
 
-              <StatsCard
-                title="Response rate"
-                value={`${stats.responseRate}%`}
-                description="Submitted applications with a response"
-                icon={MessageSquareReply}
-                tone="violet"
-              />
-            </div>
+            <StatsCard
+              title="Response rate"
+              value={`${stats.responseRate}%`}
+              description="Submitted applications with a response"
+              icon={MessageSquareReply}
+              tone="violet"
+            />
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-5 xl:grid-cols-2">
+          <div className="mt-6 grid w-full grid-cols-1 gap-5 xl:grid-cols-2">
             <StatusChart data={data.statusDistribution} />
 
             <MonthlyActivityChart data={data.monthlyActivity} />
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 w-full">
             <RecentApplications
               applications={recentApplicationsData?.applications ?? []}
             />
