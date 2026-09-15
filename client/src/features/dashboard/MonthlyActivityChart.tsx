@@ -8,7 +8,13 @@ import {
   YAxis,
 } from "recharts";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import type { MonthlyActivityItem } from "@/types/dashboard";
 
@@ -30,18 +36,21 @@ function formatMonth(value: string) {
 export function MonthlyActivityChart({ data }: MonthlyActivityChartProps) {
   const formattedData = data.map((item) => ({
     ...item,
-
     label: formatMonth(item.month),
   }));
 
   return (
-    <Card>
+    <Card className="border-border/70 shadow-sm">
       <CardHeader>
-        <CardTitle>Applications over time</CardTitle>
+        <CardTitle>Application activity</CardTitle>
+
+        <CardDescription>
+          Applications added over the last months
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
-        <div className="h-80">
+        <div className="h-72 sm:h-80">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={formattedData}
@@ -52,20 +61,42 @@ export function MonthlyActivityChart({ data }: MonthlyActivityChartProps) {
                 bottom: 10,
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                opacity={0.35}
+              />
 
-              <XAxis dataKey="label" fontSize={12} />
+              <XAxis
+                dataKey="label"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
 
-              <YAxis allowDecimals={false} />
+              <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
 
-              <Tooltip />
+              <Tooltip
+                cursor={{
+                  strokeDasharray: "4 4",
+                }}
+                contentStyle={{
+                  borderRadius: "12px",
+                }}
+              />
 
               <Line
                 type="monotone"
                 dataKey="count"
                 stroke="currentColor"
                 className="text-primary"
-                strokeWidth={2}
+                strokeWidth={3}
+                dot={{
+                  r: 3,
+                }}
+                activeDot={{
+                  r: 5,
+                }}
               />
             </LineChart>
           </ResponsiveContainer>

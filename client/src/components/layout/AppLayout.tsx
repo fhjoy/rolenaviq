@@ -117,11 +117,11 @@ export function AppLayout() {
       <SkipLink />
 
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r bg-sidebar md:block">
+      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r bg-sidebar lg:block">
         <SidebarContent />
       </aside>
 
-      <div className="md:pl-64">
+      <div className="lg:pl-64">
         {/* Header */}
         <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-background/85 px-4 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 md:px-6">
           <div className="flex items-center gap-3">
@@ -132,7 +132,7 @@ export function AppLayout() {
                   <Button
                     variant="outline"
                     size="icon"
-                    className="md:hidden"
+                    className="lg:hidden"
                     aria-label="Open navigation"
                   />
                 }
@@ -145,7 +145,7 @@ export function AppLayout() {
               </SheetContent>
             </Sheet>
 
-            <div className="md:hidden">
+            <div className="lg:hidden">
               <Brand to="/dashboard" />
             </div>
           </div>
@@ -180,7 +180,7 @@ export function AppLayout() {
         <main
           id="main-content"
           tabIndex={-1}
-          className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8"
+          className="min-w-0 w-full p-4 sm:p-6 xl:p-8"
         >
           <Outlet />
         </main>
