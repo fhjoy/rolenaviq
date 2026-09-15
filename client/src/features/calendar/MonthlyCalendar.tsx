@@ -9,7 +9,7 @@ import {
   startOfMonth,
   startOfWeek,
 } from "date-fns";
-
+import { CalendarDays } from "lucide-react";
 import { Link } from "react-router";
 
 import type { Application } from "@/types/application";
@@ -33,23 +33,21 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
   });
 
   const days: Date[] = [];
-
   let currentDay = calendarStart;
 
   while (currentDay <= calendarEnd) {
     days.push(currentDay);
-
     currentDay = addDays(currentDay, 1);
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto [scrollbar-width:thin]">
       <div className="min-w-175">
-        <div className="grid grid-cols-7 border-b">
+        <div className="grid grid-cols-7 border-b bg-muted/20">
           {weekDays.map((day) => (
             <div
               key={day}
-              className="p-3 text-center text-sm font-medium text-muted-foreground"
+              className="p-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground"
             >
               {day}
             </div>
@@ -64,41 +62,57 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
                 isSameDay(new Date(application.interviewDate), day),
             );
 
+            const belongsToMonth = isSameMonth(day, month);
+
             return (
               <div
                 key={day.toISOString()}
                 className={[
-                  "min-h-32 border-b border-r p-2",
-                  !isSameMonth(day, month)
-                    ? "bg-muted/30 text-muted-foreground"
-                    : "bg-background",
+                  "min-h-32 border-b border-r p-2 transition-colors last:border-r-0",
+                  belongsToMonth
+                    ? "bg-background hover:bg-muted/15"
+                    : "bg-muted/20 text-muted-foreground",
                 ].join(" ")}
               >
-                <div
-                  className={[
-                    "flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium",
-                    isToday(day) ? "bg-primary text-primary-foreground" : "",
-                  ].join(" ")}
-                >
-                  {format(day, "d")}
+                <div className="flex items-center justify-between gap-2">
+                  <div
+                    className={[
+                      "flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium",
+                      isToday(day)
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "",
+                    ].join(" ")}
+                  >
+                    {format(day, "d")}
+                  </div>
+
+                  {dayApplications.length > 0 && (
+                    <span className="text-[11px] font-medium text-muted-foreground">
+                      {dayApplications.length}
+                    </span>
+                  )}
                 </div>
 
-                <div className="mt-2 space-y-1">
+                <div className="mt-2 space-y-1.5">
                   {dayApplications.map((application) => (
                     <Link
                       key={application._id}
                       to={`/applications/${application._id}`}
-                      className="block rounded-md bg-primary/10 px-2 py-1 text-xs hover:bg-primary/20"
+                      className="group block rounded-lg border border-primary/15 bg-primary/8 px-2 py-1.5 text-xs transition-colors hover:border-primary/30 hover:bg-primary/12"
                     >
-                      <span className="block font-medium">
+                      <span className="flex items-center gap-1.5 font-semibold text-primary">
+                        <CalendarDays
+                          className="h-3 w-3 shrink-0"
+                          aria-hidden="true"
+                        />
                         {format(new Date(application.interviewDate!), "HH:mm")}
                       </span>
 
-                      <span className="block truncate">
+                      <span className="mt-1 block truncate font-medium">
                         {application.company}
                       </span>
 
-                      <span className="block truncate text-muted-foreground">
+                      <span className="block truncate text-muted-foreground group-hover:text-foreground/70">
                         {application.position}
                       </span>
                     </Link>
