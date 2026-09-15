@@ -16,6 +16,20 @@ import {
 
 import { createApplication } from "@/features/applications/application.api";
 
+function todayForDateInput(): string {
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60 * 1000;
+
+  return new Date(now.getTime() - offset).toISOString().slice(0, 10);
+}
+
+function nowForDateTimeInput(): string {
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60 * 1000;
+
+  return new Date(now.getTime() - offset).toISOString().slice(0, 16);
+}
+
 export function NewApplicationPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -23,6 +37,7 @@ export function NewApplicationPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<ApplicationFormData>({
     resolver: zodResolver(applicationFormSchema),
@@ -220,6 +235,36 @@ export function NewApplicationPage() {
           <Label htmlFor="appliedAt">Application date</Label>
 
           <Input id="appliedAt" type="date" {...register("appliedAt")} />
+
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                setValue("appliedAt", todayForDateInput(), {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+            >
+              Today
+            </Button>
+
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() =>
+                setValue("appliedAt", "", {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+            >
+              Clear
+            </Button>
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -230,6 +275,36 @@ export function NewApplicationPage() {
             type="datetime-local"
             {...register("interviewDate")}
           />
+
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                setValue("interviewDate", nowForDateTimeInput(), {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+            >
+              Now
+            </Button>
+
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() =>
+                setValue("interviewDate", "", {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+            >
+              Clear
+            </Button>
+          </div>
         </div>
 
         <div className="space-y-2">
