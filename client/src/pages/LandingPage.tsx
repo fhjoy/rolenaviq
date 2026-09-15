@@ -261,7 +261,7 @@ export function LandingPage() {
 
               <h1 className="mt-7 max-w-3xl text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
                 Navigate your job search{" "}
-                <span className="bg-gradient-to-r from-primary to-cyan-500 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-primary to-cyan-500 bg-clip-text text-transparent">
                   without losing track.
                 </span>
               </h1>

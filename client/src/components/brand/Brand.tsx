@@ -22,7 +22,7 @@ export function Brand({
           "flex h-10 w-10 items-center justify-center rounded-xl",
           inverse
             ? "border border-white/20 bg-white/10 text-white"
-            : "bg-gradient-to-br from-primary to-cyan-500 text-white shadow-sm shadow-primary/20",
+            : "bg-linear-to-br from-primary to-cyan-500 text-white shadow-sm shadow-primary/20",
         ].join(" ")}
       >
         <Compass className="h-5 w-5" aria-hidden="true" />

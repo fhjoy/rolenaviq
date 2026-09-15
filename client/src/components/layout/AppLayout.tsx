@@ -123,7 +123,7 @@ export function AppLayout() {
 
       <div className="lg:pl-64">
         {/* Header */}
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-background/85 px-4 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 md:px-6">
+        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-background/85 px-4 backdrop-blur-xl supports-backdrop-filter:bg-background/70 md:px-6">
           <div className="flex items-center gap-3">
             {/* Mobile menu */}
             <Sheet>

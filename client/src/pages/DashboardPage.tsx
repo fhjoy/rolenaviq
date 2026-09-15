@@ -38,7 +38,7 @@ export function DashboardPage() {
 
   return (
     <div className="w-full">
-      <section className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/[0.08] via-background to-cyan-500/[0.06] p-6 sm:p-8">
+      <section className="relative overflow-hidden rounded-2xl border bg-linear-to-br from-primary/8 via-background to-cyan-500/6 p-6 sm:p-8">
         <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
 
         <div className="relative flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
