@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
+import { AuthLayout } from "@/components/auth/AuthLayout";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -47,12 +48,16 @@ export function LoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl">Welcome back</CardTitle>
+    <AuthLayout>
+      <Card className="border-border/70 shadow-xl shadow-primary/5">
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-3xl tracking-tight">
+            Welcome back
+          </CardTitle>
 
-          <CardDescription>Sign in to continue to RoleNaviq.</CardDescription>
+          <CardDescription>
+            Sign in to continue managing your job search.
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -64,6 +69,7 @@ export function LoginPage() {
                 id="email"
                 type="email"
                 autoComplete="email"
+                placeholder="you@example.com"
                 {...register("email")}
               />
 
@@ -101,6 +107,7 @@ export function LoginPage() {
 
             <Button
               type="submit"
+              size="lg"
               className="w-full"
               disabled={loginMutation.isPending}
             >
@@ -108,14 +115,17 @@ export function LoginPage() {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm">
+          <p className="mt-6 text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link to="/register" className="font-medium underline">
+            <Link
+              to="/register"
+              className="font-semibold text-foreground underline-offset-4 hover:underline"
+            >
               Create one
             </Link>
           </p>
         </CardContent>
       </Card>
-    </main>
+    </AuthLayout>
   );
 }

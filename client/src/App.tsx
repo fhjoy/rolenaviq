@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router";
+import { Route, Routes } from "react-router";
 
 import { AppLayout } from "@/components/layout/AppLayout";
 import { ProtectedRoute } from "@/features/auth/ProtectedRoute";
@@ -14,18 +14,19 @@ import { NewApplicationPage } from "@/pages/NewApplicationPage";
 import { ApplicationDetailsPage } from "@/pages/ApplicationDetailsPage";
 import { EditApplicationPage } from "@/pages/EditApplicationPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
+import { LandingPage } from "@/pages/LandingPage";
 
 function App() {
   return (
     <Routes>
       {/* Public */}
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
       {/* Protected */}
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/applications" element={<ApplicationsPage />} />
           <Route path="/board" element={<BoardPage />} />

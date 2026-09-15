@@ -14,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { LogoutButton } from "@/features/auth/LogoutButton";
 import { useCurrentUser } from "@/features/auth/useCurrentUser";
 import { SkipLink } from "@/components/common/SkipLink";
+import { Brand } from "@/components/brand/Brand";
 
 const navigation = [
   {
@@ -70,12 +71,8 @@ function Navigation() {
 function SidebarContent() {
   return (
     <div className="flex h-full flex-col">
-      <div className="px-3 py-6">
-        <p className="text-xl font-bold">RoleNaviq</p>
-
-        <p className="text-xs text-muted-foreground">
-          Navigate your job search
-        </p>
+      <div className="px-4 py-5">
+        <Brand to="/dashboard" showTagline />
       </div>
 
       <Separator />
@@ -110,19 +107,23 @@ export function AppLayout() {
   const { data } = useCurrentUser();
 
   const user = data?.user;
+  const initials = [user?.firstName?.[0], user?.lastName?.[0]]
+    .filter(Boolean)
+    .join("")
+    .toUpperCase();
 
   return (
     <div className="min-h-screen bg-muted/30">
       <SkipLink />
 
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r bg-background md:block">
+      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r bg-sidebar md:block">
         <SidebarContent />
       </aside>
 
       <div className="md:pl-64">
         {/* Header */}
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-background px-4 md:px-6">
+        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-background/85 px-4 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 md:px-6">
           <div className="flex items-center gap-3">
             {/* Mobile menu */}
             <Sheet>
@@ -145,11 +146,11 @@ export function AppLayout() {
             </Sheet>
 
             <div className="md:hidden">
-              <p className="font-bold">RoleNaviq</p>
+              <Brand to="/dashboard" />
             </div>
           </div>
 
-          <div className="text-right">
+          {/* <div className="text-right">
             <p className="text-sm font-medium">
               {user?.firstName} {user?.lastName}
             </p>
@@ -157,6 +158,22 @@ export function AppLayout() {
             <p className="hidden text-xs text-muted-foreground sm:block">
               {user?.email}
             </p>
+          </div> */}
+          <div className="flex items-center gap-3">
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary"
+              aria-hidden="true"
+            >
+              {initials || "U"}
+            </div>
+
+            <div className="hidden text-right sm:block">
+              <p className="text-sm font-medium">
+                {user?.firstName} {user?.lastName}
+              </p>
+
+              <p className="text-xs text-muted-foreground">{user?.email}</p>
+            </div>
           </div>
         </header>
 

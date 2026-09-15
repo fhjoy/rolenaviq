@@ -8,7 +8,9 @@ export function PageTitle() {
   useEffect(() => {
     let title = "RoleNaviq";
 
-    if (pathname === "/dashboard") {
+    if (pathname === "/") {
+      title = "RoleNaviq | Navigate your job search";
+    } else if (pathname === "/dashboard") {
       title = "Dashboard | RoleNaviq";
     } else if (pathname === "/applications/new") {
       title = "Add Application | RoleNaviq";
