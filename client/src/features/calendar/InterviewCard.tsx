@@ -1,9 +1,12 @@
-import { CalendarDays, Clock, MapPin } from "lucide-react";
-
+import { ArrowRight, CalendarDays, Clock, MapPin } from "lucide-react";
 import { Link } from "react-router";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  applicationStatusLabels,
+  applicationStatusStyles,
+} from "@/features/applications/application-display";
 
 import type { Application } from "@/types/application";
 
@@ -19,14 +22,17 @@ export function InterviewCard({ application }: InterviewCardProps) {
   const interviewDate = new Date(application.interviewDate);
 
   return (
-    <article className="rounded-xl border bg-background p-5">
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-        <div>
+    <article className="group rounded-2xl border border-border/70 bg-background p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+      <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-start">
+        <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="font-semibold">{application.position}</h2>
+            <h2 className="font-semibold leading-snug">{application.position}</h2>
 
-            <Badge variant="secondary">
-              {application.status.replaceAll("_", " ")}
+            <Badge
+              variant="outline"
+              className={applicationStatusStyles[application.status]}
+            >
+              {applicationStatusLabels[application.status]}
             </Badge>
           </div>
 
@@ -34,38 +40,42 @@ export function InterviewCard({ application }: InterviewCardProps) {
             {application.company}
           </p>
 
-          <div className="mt-4 space-y-2 text-sm">
+          <div className="mt-4 grid gap-2.5 text-sm text-muted-foreground sm:grid-cols-2">
             <p className="flex items-center gap-2">
               <CalendarDays
-                className="h-4 w-4 text-muted-foreground"
+                className="h-4 w-4 shrink-0 text-primary"
                 aria-hidden="true"
               />
 
-              {interviewDate.toLocaleDateString(undefined, {
-                dateStyle: "full",
-              })}
+              <span>
+                {interviewDate.toLocaleDateString(undefined, {
+                  dateStyle: "medium",
+                })}
+              </span>
             </p>
 
             <p className="flex items-center gap-2">
               <Clock
-                className="h-4 w-4 text-muted-foreground"
+                className="h-4 w-4 shrink-0 text-primary"
                 aria-hidden="true"
               />
 
-              {interviewDate.toLocaleTimeString(undefined, {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              <span>
+                {interviewDate.toLocaleTimeString(undefined, {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
             </p>
 
             {application.location && (
-              <p className="flex items-center gap-2">
+              <p className="flex items-center gap-2 sm:col-span-2">
                 <MapPin
-                  className="h-4 w-4 text-muted-foreground"
+                  className="h-4 w-4 shrink-0 text-primary"
                   aria-hidden="true"
                 />
 
-                {application.location}
+                <span className="truncate">{application.location}</span>
               </p>
             )}
           </div>
@@ -73,9 +83,11 @@ export function InterviewCard({ application }: InterviewCardProps) {
 
         <Button
           variant="outline"
+          className="w-full shrink-0 sm:w-auto"
           render={<Link to={`/applications/${application._id}`} />}
         >
           View details
+          <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
     </article>
