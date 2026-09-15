@@ -7,15 +7,19 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ArrowRight, Columns3, Plus } from "lucide-react";
+import { Link } from "react-router";
 import { toast } from "sonner";
 
-import { BoardColumn } from "@/features/board/BoardColumn";
-import { boardColumns } from "@/features/board/board.constants";
+import { PageError } from "@/components/common/PageError";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { applicationStatusLabels } from "@/features/applications/application-display";
 import { updateApplication } from "@/features/applications/application.api";
 import { useApplications } from "@/features/applications/useApplications";
+import { BoardColumn } from "@/features/board/BoardColumn";
+import { boardColumns } from "@/features/board/board.constants";
 import type { ApplicationStatus } from "@/types/application";
-import { PageError } from "@/components/common/PageError";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export function BoardPage() {
   const queryClient = useQueryClient();
@@ -26,7 +30,6 @@ export function BoardPage() {
         distance: 5,
       },
     }),
-
     useSensor(KeyboardSensor),
   );
 
@@ -47,17 +50,12 @@ export function BoardPage() {
         queryClient.invalidateQueries({
           queryKey: ["applications"],
         }),
-
         queryClient.invalidateQueries({
           queryKey: ["dashboard"],
         }),
       ]);
 
-      const statusLabel = variables.status
-        .replaceAll("_", " ")
-        .replace(/\b\w/g, (letter) => letter.toUpperCase());
-
-      toast.success(`Moved to ${statusLabel}`);
+      toast.success(`Moved to ${applicationStatusLabels[variables.status]}`);
     },
 
     onError: () => {
@@ -93,19 +91,20 @@ export function BoardPage() {
   if (isLoading) {
     return (
       <div>
-        <Skeleton className="h-9 w-40" />
-        <Skeleton className="mt-3 h-4 w-80" />
+        <Skeleton className="h-10 w-48" />
+        <Skeleton className="mt-3 h-4 w-80 max-w-full" />
 
         <div className="mt-8 flex gap-4 overflow-hidden">
-          {Array.from({
-            length: 4,
-          }).map((_, index) => (
-            <div key={index} className="w-72 shrink-0 rounded-xl border p-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div
+              key={index}
+              className="w-80 shrink-0 rounded-2xl border bg-background p-4"
+            >
               <Skeleton className="h-5 w-24" />
 
               <div className="mt-5 space-y-3">
-                <Skeleton className="h-28 w-full" />
-                <Skeleton className="h-28 w-full" />
+                <Skeleton className="h-32 w-full" />
+                <Skeleton className="h-32 w-full" />
               </div>
             </div>
           ))}
@@ -126,18 +125,54 @@ export function BoardPage() {
   const applications = data?.applications ?? [];
 
   return (
-    <div>
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Board</h1>
+    <div className="w-full">
+      <section className="flex flex-col justify-between gap-5 rounded-2xl border bg-background p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
+        <div className="flex items-start gap-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Columns3 className="h-5 w-5" aria-hidden="true" />
+          </div>
 
-        <p className="mt-2 text-muted-foreground">
-          Move applications through each stage of your job search.
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Board</h1>
+
+            <p className="mt-2 max-w-2xl text-muted-foreground">
+              Move applications through each stage of your job search and keep
+              the whole pipeline visible at a glance.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Button
+            variant="outline"
+            render={<Link to="/applications" />}
+          >
+            View applications
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Button>
+
+          <Button render={<Link to="/applications/new" />}>
+            <Plus className="h-4 w-4" aria-hidden="true" />
+            Add application
+          </Button>
+        </div>
+      </section>
+
+      <div className="mt-6 flex items-center justify-between gap-4">
+        <p className="text-sm text-muted-foreground">
+          {applications.length} {applications.length === 1 ? "application" : "applications"}
         </p>
+
+        {updateStatusMutation.isPending && (
+          <p className="text-sm text-muted-foreground" aria-live="polite">
+            Updating status...
+          </p>
+        )}
       </div>
 
       <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-        <div className="mt-8 overflow-x-auto pb-6">
-          <div className="flex min-w-max items-start gap-4">
+        <div className="mt-4 overflow-x-auto pb-6 [scrollbar-width:thin]">
+          <div className="flex min-w-max snap-x snap-mandatory items-start gap-4">
             {boardColumns.map((column) => {
               const columnApplications = applications.filter(
                 (application) => application.status === column.status,
