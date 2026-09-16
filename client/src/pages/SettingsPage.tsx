@@ -1,15 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { useForm } from "react-hook-form";
-
-import { Save, UserRound } from "lucide-react";
-
+import { Save, ShieldCheck, UserRound } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-
 import {
   Card,
   CardContent,
@@ -17,24 +12,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import { Input } from "@/components/ui/input";
-
 import { Label } from "@/components/ui/label";
-
 import { Skeleton } from "@/components/ui/skeleton";
-
 import { PageError } from "@/components/common/PageError";
-
+import { DEMO_EMAIL } from "@/config/demo";
 import { useCurrentUser } from "@/features/auth/useCurrentUser";
-
 import { updateProfile } from "@/features/auth/auth.api";
-
 import {
   profileSchema,
   type ProfileFormData,
 } from "@/features/settings/profile.schemas";
-
 import type { User } from "@/types/auth";
 
 interface ProfileFormProps {
@@ -43,6 +31,7 @@ interface ProfileFormProps {
 
 function ProfileForm({ user }: ProfileFormProps) {
   const queryClient = useQueryClient();
+  const isDemoUser = user.email === DEMO_EMAIL;
 
   const {
     register,
@@ -54,9 +43,7 @@ function ProfileForm({ user }: ProfileFormProps) {
 
     defaultValues: {
       firstName: user.firstName,
-
       lastName: user.lastName,
-
       email: user.email,
     },
   });
@@ -71,9 +58,7 @@ function ProfileForm({ user }: ProfileFormProps) {
 
       reset({
         firstName: data.user.firstName,
-
         lastName: data.user.lastName,
-
         email: data.user.email,
       });
 
@@ -86,11 +71,27 @@ function ProfileForm({ user }: ProfileFormProps) {
   });
 
   const onSubmit = (data: ProfileFormData) => {
+    if (isDemoUser) {
+      return;
+    }
+
     mutation.mutate(data);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {isDemoUser && (
+        <div className="flex gap-3 rounded-xl border border-brand/20 bg-brand/8 p-4 text-sm">
+          <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+          <div>
+            <p className="font-medium">Demo profile is protected</p>
+            <p className="mt-1 text-muted-foreground">
+              You can explore applications, the board and the calendar, but the public demo account details cannot be changed.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="firstName">First name</Label>
@@ -98,6 +99,7 @@ function ProfileForm({ user }: ProfileFormProps) {
           <Input
             id="firstName"
             autoComplete="given-name"
+            disabled={isDemoUser}
             {...register("firstName")}
           />
 
@@ -114,6 +116,7 @@ function ProfileForm({ user }: ProfileFormProps) {
           <Input
             id="lastName"
             autoComplete="family-name"
+            disabled={isDemoUser}
             {...register("lastName")}
           />
 
@@ -132,6 +135,7 @@ function ProfileForm({ user }: ProfileFormProps) {
           id="email"
           type="email"
           autoComplete="email"
+          disabled={isDemoUser}
           {...register("email")}
         />
 
@@ -143,9 +147,11 @@ function ProfileForm({ user }: ProfileFormProps) {
       </div>
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={!isDirty || mutation.isPending}>
+        <Button
+          type="submit"
+          disabled={isDemoUser || !isDirty || mutation.isPending}
+        >
           <Save className="h-4 w-4" aria-hidden="true" />
-
           {mutation.isPending ? "Saving..." : "Save changes"}
         </Button>
       </div>
@@ -160,12 +166,10 @@ export function SettingsPage() {
     return (
       <div className="mx-auto max-w-3xl">
         <Skeleton className="h-9 w-40" />
-
         <Skeleton className="mt-3 h-4 w-80" />
 
         <div className="mt-8 rounded-xl border p-6">
           <Skeleton className="h-6 w-40" />
-
           <Skeleton className="mt-3 h-4 w-64" />
 
           <div className="mt-8 grid gap-6 sm:grid-cols-2">
