@@ -53,8 +53,8 @@ function Navigation() {
               [
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               ].join(" ")
             }
           >
@@ -88,8 +88,8 @@ function SidebarContent() {
             [
               "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
               isActive
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
             ].join(" ")
           }
         >
@@ -113,19 +113,16 @@ export function AppLayout() {
     .toUpperCase();
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-background">
       <SkipLink />
 
-      {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 hidden w-64 border-r bg-sidebar lg:block">
         <SidebarContent />
       </aside>
 
       <div className="lg:pl-64">
-        {/* Header */}
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-background/85 px-4 backdrop-blur-xl supports-backdrop-filter:bg-background/70 md:px-6">
+        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-background/88 px-4 backdrop-blur-xl supports-backdrop-filter:bg-background/75 md:px-6">
           <div className="flex items-center gap-3">
-            {/* Mobile menu */}
             <Sheet>
               <SheetTrigger
                 render={
@@ -150,18 +147,9 @@ export function AppLayout() {
             </div>
           </div>
 
-          {/* <div className="text-right">
-            <p className="text-sm font-medium">
-              {user?.firstName} {user?.lastName}
-            </p>
-
-            <p className="hidden text-xs text-muted-foreground sm:block">
-              {user?.email}
-            </p>
-          </div> */}
           <div className="flex items-center gap-3">
             <div
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-brand/12 text-sm font-semibold text-brand"
               aria-hidden="true"
             >
               {initials || "U"}
