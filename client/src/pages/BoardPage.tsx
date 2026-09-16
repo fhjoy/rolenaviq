@@ -18,8 +18,11 @@ import { applicationStatusLabels } from "@/features/applications/application-dis
 import { updateApplication } from "@/features/applications/application.api";
 import { useApplications } from "@/features/applications/useApplications";
 import { BoardColumn } from "@/features/board/BoardColumn";
-import { boardColumns } from "@/features/board/board.constants";
-import type { ApplicationStatus } from "@/types/application";
+import {
+  boardColumns,
+  canMoveApplication,
+} from "@/features/board/board.constants";
+import type { Application, ApplicationStatus } from "@/types/application";
 
 export function BoardPage() {
   const queryClient = useQueryClient();
@@ -66,7 +69,9 @@ export function BoardPage() {
       return;
     }
 
-    const application = active.data.current?.application;
+    const application = active.data.current?.application as
+      | Application
+      | undefined;
 
     if (!application) {
       return;
@@ -78,10 +83,32 @@ export function BoardPage() {
       return;
     }
 
+    if (!canMoveApplication(application.status, newStatus)) {
+      toast.error(
+        `${applicationStatusLabels[application.status]} cannot move back to ${applicationStatusLabels[newStatus]}`,
+      );
+
+      return;
+    }
+
     updateStatusMutation.mutate({
       id: application._id,
       status: newStatus,
     });
+  };
+
+  const handleReopen = (application: Application) => {
+    updateStatusMutation.mutate(
+      {
+        id: application._id,
+        status: "applied",
+      },
+      {
+        onSuccess: () => {
+          toast.success("Application reopened and moved to Applied");
+        },
+      },
+    );
   };
 
   if (isLoading) {
@@ -132,8 +159,8 @@ export function BoardPage() {
             <h1 className="text-3xl font-bold tracking-tight">Board</h1>
 
             <p className="mt-2 max-w-2xl text-muted-foreground">
-              Move applications through each stage of your job search and keep
-              the whole pipeline visible at a glance.
+              Move applications forward through your job-search pipeline. Closed
+              applications can be reopened explicitly when needed.
             </p>
           </div>
         </div>
@@ -178,6 +205,12 @@ export function BoardPage() {
                   status={column.status}
                   title={column.title}
                   applications={columnApplications}
+                  onReopen={handleReopen}
+                  updatingApplicationId={
+                    updateStatusMutation.isPending
+                      ? updateStatusMutation.variables?.id
+                      : undefined
+                  }
                 />
               );
             })}
