@@ -11,8 +11,8 @@ interface StatsCardProps {
 }
 
 const tones = {
-  primary: "bg-primary/10 text-primary",
-  blue: "bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-300",
+  primary: "bg-brand/12 text-brand",
+  blue: "bg-sky-50 text-sky-600 dark:bg-sky-950/40 dark:text-sky-300",
   amber: "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-300",
   emerald:
     "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-300",
@@ -34,7 +34,6 @@ export function StatsCard({
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-sm font-medium text-muted-foreground">{title}</p>
-
             <p className="mt-2 text-3xl font-bold tracking-tight">{value}</p>
           </div>
 
