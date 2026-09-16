@@ -43,103 +43,73 @@ const features = [
 function ProductPreview() {
   return (
     <div className="relative" aria-label="RoleNaviq dashboard preview">
-      <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-primary/10 blur-3xl" />
+      <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-brand/12 blur-3xl" />
 
-      <div className="overflow-hidden rounded-3xl border bg-card shadow-2xl shadow-primary/10">
+      <div className="overflow-hidden rounded-3xl border bg-card shadow-2xl shadow-foreground/8">
         <div className="flex items-center justify-between border-b px-5 py-4">
           <div className="flex items-center gap-2">
             <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
             <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
           </div>
-
-          {/* <span className="text-xs font-medium text-muted-foreground">
-            Sample dashboard
-          </span> */}
         </div>
 
-        <div className="bg-muted/20 p-5 sm:p-6">
+        <div className="bg-muted/25 p-5 sm:p-6">
           <div>
             <p className="text-xs text-muted-foreground">Welcome back</p>
-
             <p className="mt-1 text-xl font-bold">Your job search</p>
           </div>
 
           <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <PreviewStat label="Applications" value="24" />
-
             <PreviewStat label="Interviews" value="5" />
-
             <PreviewStat label="Offers" value="2" />
-
             <PreviewStat label="Response" value="38%" />
           </div>
 
           <div className="mt-4 grid gap-4 sm:grid-cols-[1.35fr_1fr]">
-            <div className="rounded-2xl border bg-background p-4 shadow-sm">
+            <div className="rounded-2xl border bg-card p-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-semibold">Monthly activity</p>
-
                   <p className="text-xs text-muted-foreground">
                     Applications added
                   </p>
                 </div>
 
-                <BarChart3
-                  className="h-4 w-4 text-primary"
-                  aria-hidden="true"
-                />
+                <BarChart3 className="h-4 w-4 text-brand" aria-hidden="true" />
               </div>
 
               <div className="mt-6 flex h-28 items-end gap-2">
-                <div className="h-[35%] flex-1 rounded-t-md bg-primary/20" />
-                <div className="h-[52%] flex-1 rounded-t-md bg-primary/30" />
-                <div className="h-[42%] flex-1 rounded-t-md bg-primary/25" />
-                <div className="h-[70%] flex-1 rounded-t-md bg-primary/50" />
-                <div className="h-[58%] flex-1 rounded-t-md bg-primary/40" />
-                <div className="h-[88%] flex-1 rounded-t-md bg-primary" />
-                <div className="h-[74%] flex-1 rounded-t-md bg-primary/70" />
+                <div className="h-[35%] flex-1 rounded-t-md bg-brand/18" />
+                <div className="h-[52%] flex-1 rounded-t-md bg-brand/28" />
+                <div className="h-[42%] flex-1 rounded-t-md bg-brand/22" />
+                <div className="h-[70%] flex-1 rounded-t-md bg-brand/45" />
+                <div className="h-[58%] flex-1 rounded-t-md bg-brand/35" />
+                <div className="h-[88%] flex-1 rounded-t-md bg-brand" />
+                <div className="h-[74%] flex-1 rounded-t-md bg-brand/65" />
               </div>
             </div>
 
-            <div className="rounded-2xl border bg-background p-4 shadow-sm">
+            <div className="rounded-2xl border bg-card p-4 shadow-sm">
               <p className="text-sm font-semibold">Pipeline</p>
-
               <p className="text-xs text-muted-foreground">Current status</p>
 
               <div className="mt-5 space-y-4">
-                <PipelineItem
-                  label="Applied"
-                  value="9"
-                  className="bg-blue-500"
-                />
-
-                <PipelineItem
-                  label="Interview"
-                  value="5"
-                  className="bg-amber-500"
-                />
-
-                <PipelineItem
-                  label="Offer"
-                  value="2"
-                  className="bg-emerald-500"
-                />
+                <PipelineItem label="Applied" value="9" className="bg-sky-500" />
+                <PipelineItem label="Interview" value="5" className="bg-amber-500" />
+                <PipelineItem label="Offer" value="2" className="bg-emerald-500" />
               </div>
             </div>
           </div>
 
-          <div className="mt-4 flex items-center gap-3 rounded-2xl border bg-background p-4 shadow-sm">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <div className="mt-4 flex items-center gap-3 rounded-2xl border bg-card p-4 shadow-sm">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand">
               <CalendarDays className="h-5 w-5" aria-hidden="true" />
             </div>
 
             <div className="min-w-0">
-              <p className="text-sm font-semibold">
-                Frontend Developer interview
-              </p>
-
+              <p className="text-sm font-semibold">Frontend Developer interview</p>
               <p className="truncate text-xs text-muted-foreground">
                 Wednesday · 10:30 · Example Company
               </p>
@@ -152,7 +122,7 @@ function ProductPreview() {
         </div>
       </div>
 
-      <div className="absolute -bottom-5 -left-5 hidden rounded-2xl border bg-background p-4 shadow-xl lg:block">
+      <div className="absolute -bottom-5 -left-5 hidden rounded-2xl border bg-card p-4 shadow-xl lg:block">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
             <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
@@ -160,7 +130,6 @@ function ProductPreview() {
 
           <div>
             <p className="text-xs text-muted-foreground">Latest update</p>
-
             <p className="text-sm font-semibold">Moved to Interview</p>
           </div>
         </div>
@@ -176,9 +145,8 @@ interface PreviewStatProps {
 
 function PreviewStat({ label, value }: PreviewStatProps) {
   return (
-    <div className="rounded-2xl border bg-background p-4 shadow-sm">
+    <div className="rounded-2xl border bg-card p-4 shadow-sm">
       <p className="text-2xl font-bold tracking-tight">{value}</p>
-
       <p className="mt-1 text-xs text-muted-foreground">{label}</p>
     </div>
   );
@@ -195,7 +163,6 @@ function PipelineItem({ label, value, className }: PipelineItemProps) {
     <div>
       <div className="flex items-center justify-between text-xs">
         <span className="text-muted-foreground">{label}</span>
-
         <span className="font-medium">{value}</span>
       </div>
 
@@ -209,7 +176,7 @@ function PipelineItem({ label, value, className }: PipelineItemProps) {
 export function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Brand />
 
@@ -237,10 +204,7 @@ export function LandingPage() {
               Sign in
             </Button>
 
-            <Button
-              className="hidden sm:inline-flex"
-              render={<Link to="/register" />}
-            >
+            <Button className="hidden sm:inline-flex" render={<Link to="/register" />}>
               Get started
             </Button>
           </div>
@@ -249,21 +213,19 @@ export function LandingPage() {
 
       <main>
         <section className="relative overflow-hidden border-b">
-          <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
-          <div className="pointer-events-none absolute right-0 top-10 h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
+          <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-brand/10 blur-3xl" />
+          <div className="pointer-events-none absolute right-0 top-10 h-96 w-96 rounded-full bg-amber-300/10 blur-3xl" />
 
           <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-32">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-3 py-1.5 text-sm font-medium shadow-sm">
-                <Sparkles className="h-4 w-4 text-primary" aria-hidden="true" />
+              <div className="inline-flex items-center gap-2 rounded-full border bg-card/80 px-3 py-1.5 text-sm font-medium shadow-sm">
+                <Sparkles className="h-4 w-4 text-brand" aria-hidden="true" />
                 One place for your job search
               </div>
 
               <h1 className="mt-7 max-w-3xl text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
                 Navigate your job search{" "}
-                <span className="bg-linear-to-r from-primary to-cyan-500 bg-clip-text text-transparent">
-                  without losing track.
-                </span>
+                <span className="text-brand">without losing track.</span>
               </h1>
 
               <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
@@ -278,28 +240,18 @@ export function LandingPage() {
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Button>
 
-                <Button
-                  size="lg"
-                  variant="outline"
-                  render={<Link to="/login" />}
-                >
+                <Button size="lg" variant="outline" render={<Link to="/login" />}>
                   I already have an account
                 </Button>
               </div>
 
               <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
                 <span>Applications</span>
-
                 <span aria-hidden="true">·</span>
-
                 <span>Kanban board</span>
-
                 <span aria-hidden="true">·</span>
-
                 <span>Interviews</span>
-
                 <span aria-hidden="true">·</span>
-
                 <span>Analytics</span>
               </div>
             </div>
@@ -313,18 +265,14 @@ export function LandingPage() {
           className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8"
         >
           <div className="max-w-2xl">
-            <p className="text-sm font-semibold text-primary">
-              Everything in one place
-            </p>
+            <p className="text-sm font-semibold text-brand">Everything in one place</p>
 
             <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-              Less time organizing. More time preparing for the next
-              opportunity.
+              Less time organizing. More time preparing for the next opportunity.
             </h2>
 
             <p className="mt-4 text-muted-foreground">
-              RoleNaviq turns the scattered parts of a job search into a clear
-              workflow.
+              RoleNaviq turns the scattered parts of a job search into a clear workflow.
             </p>
           </div>
 
@@ -335,16 +283,13 @@ export function LandingPage() {
               return (
                 <article
                   key={feature.title}
-                  className="group rounded-2xl border bg-card p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5"
+                  className="group rounded-2xl border bg-card p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-foreground/5"
                 >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand/10 text-brand transition-colors group-hover:bg-brand group-hover:text-brand-foreground">
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
 
-                  <h3 className="mt-5 text-lg font-semibold">
-                    {feature.title}
-                  </h3>
-
+                  <h3 className="mt-5 text-lg font-semibold">{feature.title}</h3>
                   <p className="mt-2 leading-7 text-muted-foreground">
                     {feature.description}
                   </p>
@@ -354,10 +299,10 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section id="built" className="border-y bg-muted/30">
+        <section id="built" className="border-y bg-muted/35">
           <div className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
             <div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand">
                 <ShieldCheck className="h-6 w-6" aria-hidden="true" />
               </div>
 
@@ -383,13 +328,12 @@ export function LandingPage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="flex items-center gap-3 rounded-xl border bg-background p-4"
+                  className="flex items-center gap-3 rounded-xl border bg-card p-4"
                 >
                   <CheckCircle2
-                    className="h-5 w-5 shrink-0 text-primary"
+                    className="h-5 w-5 shrink-0 text-brand"
                     aria-hidden="true"
                   />
-
                   <span className="text-sm font-medium">{item}</span>
                 </div>
               ))}
@@ -398,8 +342,8 @@ export function LandingPage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-12 text-primary-foreground shadow-xl shadow-primary/15 sm:px-10 lg:px-14">
-            <div className="absolute right-0 top-0 h-64 w-64 translate-x-1/3 -translate-y-1/3 rounded-full bg-white/10 blur-2xl" />
+          <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-12 text-primary-foreground shadow-xl shadow-foreground/10 sm:px-10 lg:px-14">
+            <div className="absolute right-0 top-0 h-64 w-64 translate-x-1/3 -translate-y-1/3 rounded-full bg-brand/20 blur-2xl" />
 
             <div className="relative flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
               <div>
@@ -408,16 +352,12 @@ export function LandingPage() {
                 </h2>
 
                 <p className="mt-3 max-w-2xl text-primary-foreground/75">
-                  Keep applications, interview dates and progress together
-                  instead of trying to remember everything.
+                  Keep applications, interview dates and progress together instead
+                  of trying to remember everything.
                 </p>
               </div>
 
-              <Button
-                size="lg"
-                variant="secondary"
-                render={<Link to="/register" />}
-              >
+              <Button size="lg" variant="secondary" render={<Link to="/register" />}>
                 Create an account
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Button>
@@ -430,9 +370,7 @@ export function LandingPage() {
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <Brand />
 
-          <p className="text-sm text-muted-foreground">
-            Built by Faisal Hossain
-          </p>
+          <p className="text-sm text-muted-foreground">Built by Faisal Hossain</p>
         </div>
       </footer>
     </div>
