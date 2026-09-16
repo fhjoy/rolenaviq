@@ -12,6 +12,8 @@ interface BoardColumnProps {
   applications: Application[];
   onReopen?: (application: Application) => void;
   updatingApplicationId?: string;
+  isDragActive?: boolean;
+  isDropAllowed?: boolean;
 }
 
 const columnAccentStyles: Record<ApplicationStatus, string> = {
@@ -31,6 +33,8 @@ export function BoardColumn({
   applications,
   onReopen,
   updatingApplicationId,
+  isDragActive = false,
+  isDropAllowed = true,
 }: BoardColumnProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: status,
@@ -39,14 +43,20 @@ export function BoardColumn({
     },
   });
 
+  const isInvalidTarget = isDragActive && !isDropAllowed;
+
   return (
     <section
       ref={setNodeRef}
       className={[
-        "flex w-[82vw] max-w-80 shrink-0 snap-start flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all sm:w-80",
-        isOver
-          ? "border-brand bg-brand/5 shadow-md shadow-brand/10"
-          : "border-border/70",
+        "flex min-h-[28rem] w-[82vw] max-w-80 shrink-0 snap-start flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all sm:w-80",
+        isOver && isDropAllowed
+          ? "border-brand bg-brand/5 shadow-md shadow-brand/10 ring-2 ring-brand/15"
+          : isOver && !isDropAllowed
+            ? "border-destructive/50 bg-destructive/5 ring-2 ring-destructive/10"
+            : isInvalidTarget
+              ? "border-border/50 opacity-55"
+              : "border-border/70",
       ].join(" ")}
     >
       <div className={`h-1 w-full ${columnAccentStyles[status]}`} />
@@ -66,25 +76,51 @@ export function BoardColumn({
         </Badge>
       </header>
 
-      <div className="min-h-44 flex-1 space-y-3 p-3">
+      <div
+        className={[
+          "min-h-80 flex-1 space-y-3 p-3 transition-colors",
+          isDragActive && isDropAllowed ? "bg-brand/2" : "",
+        ].join(" ")}
+      >
         {applications.length === 0 ? (
           <div
             className={[
-              "flex min-h-28 items-center justify-center rounded-xl border border-dashed px-4 text-center text-sm text-muted-foreground transition-colors",
-              isOver ? "border-brand/50 bg-brand/5 text-brand" : "",
+              "flex min-h-40 items-center justify-center rounded-xl border border-dashed px-4 text-center text-sm text-muted-foreground transition-colors",
+              isOver && isDropAllowed
+                ? "border-brand/50 bg-brand/5 text-brand"
+                : isOver && !isDropAllowed
+                  ? "border-destructive/40 bg-destructive/5 text-destructive"
+                  : "",
             ].join(" ")}
           >
-            Drop application here
+            {isDragActive && !isDropAllowed
+              ? "This move is not allowed"
+              : "Drop application here"}
           </div>
         ) : (
-          applications.map((application) => (
-            <BoardCard
-              key={application._id}
-              application={application}
-              onReopen={onReopen}
-              isUpdating={updatingApplicationId === application._id}
-            />
-          ))
+          <>
+            {applications.map((application) => (
+              <BoardCard
+                key={application._id}
+                application={application}
+                onReopen={onReopen}
+                isUpdating={updatingApplicationId === application._id}
+              />
+            ))}
+
+            {isDragActive && isDropAllowed && (
+              <div
+                className={[
+                  "flex min-h-24 items-center justify-center rounded-xl border border-dashed px-4 text-center text-sm transition-colors",
+                  isOver
+                    ? "border-brand/50 bg-brand/5 font-medium text-brand"
+                    : "border-border/70 text-muted-foreground",
+                ].join(" ")}
+              >
+                Drop anywhere in this column
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

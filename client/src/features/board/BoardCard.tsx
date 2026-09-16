@@ -34,9 +34,8 @@ export function BoardCard({
     });
 
   const style = {
-    transform: CSS.Translate.toString(transform),
-    opacity: isDragging ? 0.55 : 1,
-    zIndex: isDragging ? 10 : undefined,
+    transform: isDragging ? undefined : CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.25 : 1,
   };
 
   return (
@@ -46,7 +45,7 @@ export function BoardCard({
       className={[
         "rounded-xl border bg-background p-4 shadow-sm transition-all",
         isDragging
-          ? "scale-[1.02] border-primary shadow-lg shadow-primary/10"
+          ? "border-brand/40 shadow-none"
           : "border-border/70 hover:-translate-y-0.5 hover:shadow-md",
       ].join(" ")}
     >

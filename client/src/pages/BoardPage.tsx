@@ -1,18 +1,34 @@
 import {
   DndContext,
+  DragOverlay,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
+  type DragStartEvent,
 } from "@dnd-kit/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Columns3, Plus } from "lucide-react";
+import { ArrowRight, BriefcaseBusiness, Columns3, MapPin, Plus } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router";
 import { toast } from "sonner";
 
 import { PageError } from "@/components/common/PageError";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { applicationStatusLabels } from "@/features/applications/application-display";
 import { updateApplication } from "@/features/applications/application.api";
@@ -27,11 +43,61 @@ import type { Application, ApplicationStatus } from "@/types/application";
 interface StatusUpdateVariables {
   id: string;
   status: ApplicationStatus;
+  interviewDate?: string;
   successMessage?: string;
+}
+
+interface PendingInterviewMove {
+  application: Application;
+  status: "interview" | "technical_interview";
+}
+
+function BoardDragPreview({ application }: { application: Application }) {
+  return (
+    <div className="w-80 max-w-[82vw] rotate-1 rounded-xl border border-brand/30 bg-card p-4 shadow-2xl shadow-foreground/20">
+      <div className="min-w-0">
+        <p className="line-clamp-2 font-semibold leading-snug">
+          {application.position}
+        </p>
+
+        <div className="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground">
+          <BriefcaseBusiness className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          <span className="truncate">{application.company}</span>
+        </div>
+
+        {application.location && (
+          <div className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            <span className="truncate">{application.location}</span>
+          </div>
+        )}
+
+        {application.technologies.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {application.technologies.slice(0, 3).map((technology) => (
+              <Badge
+                key={technology}
+                variant="outline"
+                className="max-w-full truncate text-xs font-normal"
+              >
+                {technology}
+              </Badge>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export function BoardPage() {
   const queryClient = useQueryClient();
+  const [activeApplication, setActiveApplication] = useState<Application | null>(
+    null,
+  );
+  const [pendingInterviewMove, setPendingInterviewMove] =
+    useState<PendingInterviewMove | null>(null);
+  const [interviewDate, setInterviewDate] = useState("");
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -49,9 +115,16 @@ export function BoardPage() {
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: ({ id, status }: StatusUpdateVariables) =>
+    mutationFn: ({
+      id,
+      status,
+      interviewDate: nextInterviewDate,
+    }: StatusUpdateVariables) =>
       updateApplication(id, {
         status,
+        ...(nextInterviewDate
+          ? { interviewDate: new Date(nextInterviewDate).toISOString() }
+          : {}),
       }),
 
     onSuccess: async (_data, variables) => {
@@ -71,18 +144,23 @@ export function BoardPage() {
     },
   });
 
+  const handleDragStart = (event: DragStartEvent) => {
+    const application = event.active.data.current?.application as
+      | Application
+      | undefined;
+
+    setActiveApplication(application ?? null);
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
-    if (!over) {
-      return;
-    }
-
     const application = active.data.current?.application as
       | Application
       | undefined;
 
-    if (!application) {
+    setActiveApplication(null);
+
+    if (!over || !application) {
       return;
     }
 
@@ -94,9 +172,18 @@ export function BoardPage() {
 
     if (!canMoveApplication(application.status, newStatus)) {
       toast.error(
-        `${applicationStatusLabels[application.status]} cannot move back to ${applicationStatusLabels[newStatus]}`,
+        `${applicationStatusLabels[application.status]} cannot move to ${applicationStatusLabels[newStatus]}`,
       );
 
+      return;
+    }
+
+    if (newStatus === "interview" || newStatus === "technical_interview") {
+      setPendingInterviewMove({
+        application,
+        status: newStatus,
+      });
+      setInterviewDate("");
       return;
     }
 
@@ -112,6 +199,31 @@ export function BoardPage() {
       status: "applied",
       successMessage: "Application reopened and moved to Applied",
     });
+  };
+
+  const handleInterviewMoveConfirm = () => {
+    if (!pendingInterviewMove || !interviewDate) {
+      return;
+    }
+
+    const { application, status } = pendingInterviewMove;
+
+    updateStatusMutation.mutate({
+      id: application._id,
+      status,
+      interviewDate,
+      successMessage: `Moved to ${applicationStatusLabels[status]} and scheduled for ${new Date(
+        interviewDate,
+      ).toLocaleString()}`,
+    });
+
+    setPendingInterviewMove(null);
+    setInterviewDate("");
+  };
+
+  const closeInterviewDialog = () => {
+    setPendingInterviewMove(null);
+    setInterviewDate("");
   };
 
   if (isLoading) {
@@ -194,13 +306,21 @@ export function BoardPage() {
         )}
       </div>
 
-      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragCancel={() => setActiveApplication(null)}
+        onDragEnd={handleDragEnd}
+      >
         <div className="mt-4 overflow-x-auto pb-6 [scrollbar-width:thin]">
-          <div className="flex min-w-max snap-x snap-mandatory items-start gap-4">
+          <div className="flex min-w-max snap-x snap-mandatory gap-4">
             {boardColumns.map((column) => {
               const columnApplications = applications.filter(
                 (application) => application.status === column.status,
               );
+              const isDropAllowed = activeApplication
+                ? canMoveApplication(activeApplication.status, column.status)
+                : true;
 
               return (
                 <BoardColumn
@@ -214,12 +334,74 @@ export function BoardPage() {
                       ? updateStatusMutation.variables?.id
                       : undefined
                   }
+                  isDragActive={Boolean(activeApplication)}
+                  isDropAllowed={isDropAllowed}
                 />
               );
             })}
           </div>
         </div>
+
+        <DragOverlay dropAnimation={null}>
+          {activeApplication ? (
+            <BoardDragPreview application={activeApplication} />
+          ) : null}
+        </DragOverlay>
       </DndContext>
+
+      <AlertDialog
+        open={Boolean(pendingInterviewMove)}
+        onOpenChange={(open) => {
+          if (!open) {
+            closeInterviewDialog();
+          }
+        }}
+      >
+        <AlertDialogContent className="sm:max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Schedule {pendingInterviewMove?.status === "technical_interview"
+                ? "technical interview"
+                : "interview"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Add the interview date and time before moving{" "}
+              {pendingInterviewMove?.application.position ?? "this application"}
+              {pendingInterviewMove?.application.company
+                ? ` at ${pendingInterviewMove.application.company}`
+                : ""}
+              .
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <div className="space-y-2 py-2">
+            <Label htmlFor="board-interview-date">Interview date & time</Label>
+            <Input
+              id="board-interview-date"
+              type="datetime-local"
+              value={interviewDate}
+              onChange={(event) => setInterviewDate(event.target.value)}
+              autoFocus
+            />
+            <p className="text-xs text-muted-foreground">
+              This date will also appear in the RoleNaviq calendar.
+            </p>
+          </div>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={closeInterviewDialog}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              type="button"
+              disabled={!interviewDate || updateStatusMutation.isPending}
+              onClick={handleInterviewMoveConfirm}
+            >
+              {updateStatusMutation.isPending ? "Saving..." : "Save & move"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
