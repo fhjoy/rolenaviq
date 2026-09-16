@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 
@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { DEMO_EMAIL, DEMO_PASSWORD } from "@/config/demo";
 import { loginUser } from "@/features/auth/auth.api";
 import { loginSchema, type LoginFormData } from "@/features/auth/auth.schemas";
 import { ApiError } from "@/services/api";
@@ -22,6 +23,8 @@ import { ApiError } from "@/services/api";
 export function LoginPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
+  const isDemoLogin = searchParams.get("demo") === "1";
 
   const {
     register,
@@ -29,6 +32,12 @@ export function LoginPage() {
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
+    defaultValues: isDemoLogin
+      ? {
+          email: DEMO_EMAIL,
+          password: DEMO_PASSWORD,
+        }
+      : undefined,
   });
 
   const loginMutation = useMutation({
@@ -52,15 +61,26 @@ export function LoginPage() {
       <Card className="border-border/70 shadow-xl shadow-primary/5">
         <CardHeader className="space-y-2">
           <CardTitle className="text-3xl tracking-tight">
-            Welcome back
+            {isDemoLogin ? "Explore the demo" : "Welcome back"}
           </CardTitle>
 
           <CardDescription>
-            Sign in to continue managing your job search.
+            {isDemoLogin
+              ? "The demo credentials are already filled in. Sign in to explore the dashboard, board and calendar."
+              : "Sign in to continue managing your job search."}
           </CardDescription>
         </CardHeader>
 
         <CardContent>
+          {isDemoLogin && (
+            <div className="mb-5 rounded-xl border border-brand/20 bg-brand/8 p-4 text-sm">
+              <p className="font-medium">Public demo account</p>
+              <p className="mt-1 text-muted-foreground">
+                Feel free to move applications and explore the workflow. The demo profile itself is protected from changes.
+              </p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -111,7 +131,11 @@ export function LoginPage() {
               className="w-full"
               disabled={loginMutation.isPending}
             >
-              {loginMutation.isPending ? "Signing in..." : "Sign in"}
+              {loginMutation.isPending
+                ? "Signing in..."
+                : isDemoLogin
+                  ? "Enter demo"
+                  : "Sign in"}
             </Button>
           </form>
 
