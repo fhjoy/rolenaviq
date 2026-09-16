@@ -43,7 +43,7 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
   return (
     <div className="overflow-x-auto [scrollbar-width:thin]">
       <div className="min-w-175">
-        <div className="grid grid-cols-7 border-b bg-muted/20">
+        <div className="grid grid-cols-7 border-b bg-muted/30">
           {weekDays.map((day) => (
             <div
               key={day}
@@ -70,8 +70,8 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
                 className={[
                   "min-h-32 border-b border-r p-2 transition-colors last:border-r-0",
                   belongsToMonth
-                    ? "bg-background hover:bg-muted/15"
-                    : "bg-muted/20 text-muted-foreground",
+                    ? "bg-card hover:bg-muted/20"
+                    : "bg-muted/25 text-muted-foreground",
                 ].join(" ")}
               >
                 <div className="flex items-center justify-between gap-2">
@@ -79,7 +79,7 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
                     className={[
                       "flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium",
                       isToday(day)
-                        ? "bg-primary text-primary-foreground shadow-sm"
+                        ? "bg-brand text-brand-foreground shadow-sm"
                         : "",
                     ].join(" ")}
                   >
@@ -98,9 +98,9 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
                     <Link
                       key={application._id}
                       to={`/applications/${application._id}`}
-                      className="group block rounded-lg border border-primary/15 bg-primary/8 px-2 py-1.5 text-xs transition-colors hover:border-primary/30 hover:bg-primary/12"
+                      className="group block rounded-lg border border-brand/20 bg-brand/8 px-2 py-1.5 text-xs transition-colors hover:border-brand/35 hover:bg-brand/12"
                     >
-                      <span className="flex items-center gap-1.5 font-semibold text-primary">
+                      <span className="flex items-center gap-1.5 font-semibold text-brand">
                         <CalendarDays
                           className="h-3 w-3 shrink-0"
                           aria-hidden="true"
