@@ -22,7 +22,7 @@ export function InterviewCard({ application }: InterviewCardProps) {
   const interviewDate = new Date(application.interviewDate);
 
   return (
-    <article className="group rounded-2xl border border-border/70 bg-background p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <article className="group rounded-2xl border border-border/70 bg-card p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
       <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-start">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
@@ -43,7 +43,7 @@ export function InterviewCard({ application }: InterviewCardProps) {
           <div className="mt-4 grid gap-2.5 text-sm text-muted-foreground sm:grid-cols-2">
             <p className="flex items-center gap-2">
               <CalendarDays
-                className="h-4 w-4 shrink-0 text-primary"
+                className="h-4 w-4 shrink-0 text-brand"
                 aria-hidden="true"
               />
 
@@ -56,7 +56,7 @@ export function InterviewCard({ application }: InterviewCardProps) {
 
             <p className="flex items-center gap-2">
               <Clock
-                className="h-4 w-4 shrink-0 text-primary"
+                className="h-4 w-4 shrink-0 text-brand"
                 aria-hidden="true"
               />
 
@@ -71,7 +71,7 @@ export function InterviewCard({ application }: InterviewCardProps) {
             {application.location && (
               <p className="flex items-center gap-2 sm:col-span-2">
                 <MapPin
-                  className="h-4 w-4 shrink-0 text-primary"
+                  className="h-4 w-4 shrink-0 text-brand"
                   aria-hidden="true"
                 />
 
