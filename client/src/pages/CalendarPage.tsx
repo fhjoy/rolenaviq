@@ -66,9 +66,9 @@ export function CalendarPage() {
 
   return (
     <div className="w-full">
-      <section className="flex flex-col justify-between gap-5 rounded-2xl border bg-background p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
+      <section className="flex flex-col justify-between gap-5 rounded-2xl border bg-card p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
         <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand">
             <CalendarDays className="h-5 w-5" aria-hidden="true" />
           </div>
 
@@ -88,7 +88,7 @@ export function CalendarPage() {
         </Button>
       </section>
 
-      <section className="mt-6 overflow-hidden rounded-2xl border bg-background shadow-sm">
+      <section className="mt-6 overflow-hidden rounded-2xl border bg-card shadow-sm">
         <header className="flex flex-col gap-4 border-b p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
           <div>
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -141,7 +141,7 @@ export function CalendarPage() {
       <section className="mt-8">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-primary">Next up</p>
+            <p className="text-sm font-medium text-brand">Next up</p>
             <h2 className="mt-1 text-xl font-semibold">Upcoming interviews</h2>
           </div>
 
