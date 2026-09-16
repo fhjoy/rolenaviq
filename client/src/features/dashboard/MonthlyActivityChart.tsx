@@ -89,14 +89,10 @@ export function MonthlyActivityChart({ data }: MonthlyActivityChartProps) {
                 type="monotone"
                 dataKey="count"
                 stroke="currentColor"
-                className="text-primary"
+                className="text-brand"
                 strokeWidth={3}
-                dot={{
-                  r: 3,
-                }}
-                activeDot={{
-                  r: 5,
-                }}
+                dot={{ r: 3 }}
+                activeDot={{ r: 5 }}
               />
             </LineChart>
           </ResponsiveContainer>
