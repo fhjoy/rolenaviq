@@ -19,7 +19,6 @@ import {
 import { applicationStatusLabels } from "@/features/applications/application-display";
 
 import type { ApplicationStatus } from "@/types/application";
-
 import type { StatusDistributionItem } from "@/types/dashboard";
 
 interface StatusChartProps {
@@ -86,7 +85,7 @@ export function StatusChart({ data }: StatusChartProps) {
               <Bar
                 dataKey="count"
                 fill="currentColor"
-                className="text-primary"
+                className="text-brand"
                 radius={[6, 6, 0, 0]}
                 maxBarSize={46}
               />
