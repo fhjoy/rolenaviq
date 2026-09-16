@@ -98,9 +98,21 @@ function ProductPreview() {
               <p className="text-xs text-muted-foreground">Current status</p>
 
               <div className="mt-5 space-y-4">
-                <PipelineItem label="Applied" value="9" className="bg-sky-500" />
-                <PipelineItem label="Interview" value="5" className="bg-amber-500" />
-                <PipelineItem label="Offer" value="2" className="bg-emerald-500" />
+                <PipelineItem
+                  label="Applied"
+                  value="9"
+                  className="bg-sky-500"
+                />
+                <PipelineItem
+                  label="Interview"
+                  value="5"
+                  className="bg-amber-500"
+                />
+                <PipelineItem
+                  label="Offer"
+                  value="2"
+                  className="bg-emerald-500"
+                />
               </div>
             </div>
           </div>
@@ -111,7 +123,9 @@ function ProductPreview() {
             </div>
 
             <div className="min-w-0">
-              <p className="text-sm font-semibold">Frontend Developer interview</p>
+              <p className="text-sm font-semibold">
+                Frontend Developer interview
+              </p>
               <p className="truncate text-xs text-muted-foreground">
                 Wednesday · 10:30 · Example Company
               </p>
@@ -206,7 +220,10 @@ export function LandingPage() {
               Sign in
             </Button>
 
-            <Button className="hidden sm:inline-flex" render={<Link to="/register" />}>
+            <Button
+              className="hidden sm:inline-flex"
+              render={<Link to="/register" />}
+            >
               Get started
             </Button>
           </div>
@@ -242,7 +259,11 @@ export function LandingPage() {
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Button>
 
-                <Button size="lg" variant="outline" render={<Link to="/login?demo=1" />}>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  render={<Link to="/login?demo=1" />}
+                >
                   Explore demo
                 </Button>
 
@@ -258,9 +279,10 @@ export function LandingPage() {
                   </div>
 
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold">Demo access for recruiters</p>
+                    <p className="text-sm font-semibold">Demo access</p>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      Explore the real dashboard, Kanban board, calendar and application workflow without creating an account.
+                      Explore the real dashboard, Kanban board, calendar and
+                      application workflow without creating an account.
                     </p>
 
                     <dl className="mt-3 grid gap-1 text-sm sm:grid-cols-[auto_1fr] sm:gap-x-3">
@@ -293,14 +315,18 @@ export function LandingPage() {
           className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8"
         >
           <div className="max-w-2xl">
-            <p className="text-sm font-semibold text-brand">Everything in one place</p>
+            <p className="text-sm font-semibold text-brand">
+              Everything in one place
+            </p>
 
             <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-              Less time organizing. More time preparing for the next opportunity.
+              Less time organizing. More time preparing for the next
+              opportunity.
             </h2>
 
             <p className="mt-4 text-muted-foreground">
-              RoleNaviq turns the scattered parts of a job search into a clear workflow.
+              RoleNaviq turns the scattered parts of a job search into a clear
+              workflow.
             </p>
           </div>
 
@@ -317,7 +343,9 @@ export function LandingPage() {
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
 
-                  <h3 className="mt-5 text-lg font-semibold">{feature.title}</h3>
+                  <h3 className="mt-5 text-lg font-semibold">
+                    {feature.title}
+                  </h3>
                   <p className="mt-2 leading-7 text-muted-foreground">
                     {feature.description}
                   </p>
@@ -380,13 +408,17 @@ export function LandingPage() {
                 </h2>
 
                 <p className="mt-3 max-w-2xl text-primary-foreground/75">
-                  Keep applications, interview dates and progress together instead
-                  of trying to remember everything.
+                  Keep applications, interview dates and progress together
+                  instead of trying to remember everything.
                 </p>
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" variant="secondary" render={<Link to="/register" />}>
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  render={<Link to="/register" />}
+                >
                   Create an account
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Button>
@@ -409,7 +441,9 @@ export function LandingPage() {
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <Brand />
 
-          <p className="text-sm text-muted-foreground">Built by Faisal Hossain</p>
+          <p className="text-sm text-muted-foreground">
+            Built by Faisal Hossain
+          </p>
         </div>
       </footer>
     </div>
