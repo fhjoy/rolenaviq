@@ -47,12 +47,8 @@ export function BoardPage() {
 
     onSuccess: async (_data, variables) => {
       await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ["applications"],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ["dashboard"],
-        }),
+        queryClient.invalidateQueries({ queryKey: ["applications"] }),
+        queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
       ]);
 
       toast.success(`Moved to ${applicationStatusLabels[variables.status]}`);
@@ -98,7 +94,7 @@ export function BoardPage() {
           {Array.from({ length: 4 }).map((_, index) => (
             <div
               key={index}
-              className="w-80 shrink-0 rounded-2xl border bg-background p-4"
+              className="w-80 shrink-0 rounded-2xl border bg-card p-4"
             >
               <Skeleton className="h-5 w-24" />
 
@@ -126,9 +122,9 @@ export function BoardPage() {
 
   return (
     <div className="w-full">
-      <section className="flex flex-col justify-between gap-5 rounded-2xl border bg-background p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
+      <section className="flex flex-col justify-between gap-5 rounded-2xl border bg-card p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
         <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand">
             <Columns3 className="h-5 w-5" aria-hidden="true" />
           </div>
 
@@ -143,10 +139,7 @@ export function BoardPage() {
         </div>
 
         <div className="flex flex-col gap-2 sm:flex-row">
-          <Button
-            variant="outline"
-            render={<Link to="/applications" />}
-          >
+          <Button variant="outline" render={<Link to="/applications" />}>
             View applications
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Button>
@@ -160,7 +153,8 @@ export function BoardPage() {
 
       <div className="mt-6 flex items-center justify-between gap-4">
         <p className="text-sm text-muted-foreground">
-          {applications.length} {applications.length === 1 ? "application" : "applications"}
+          {applications.length}{" "}
+          {applications.length === 1 ? "application" : "applications"}
         </p>
 
         {updateStatusMutation.isPending && (
