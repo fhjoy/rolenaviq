@@ -24,6 +24,12 @@ import {
 } from "@/features/board/board.constants";
 import type { Application, ApplicationStatus } from "@/types/application";
 
+interface StatusUpdateVariables {
+  id: string;
+  status: ApplicationStatus;
+  successMessage?: string;
+}
+
 export function BoardPage() {
   const queryClient = useQueryClient();
 
@@ -43,7 +49,7 @@ export function BoardPage() {
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: ApplicationStatus }) =>
+    mutationFn: ({ id, status }: StatusUpdateVariables) =>
       updateApplication(id, {
         status,
       }),
@@ -54,7 +60,10 @@ export function BoardPage() {
         queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
       ]);
 
-      toast.success(`Moved to ${applicationStatusLabels[variables.status]}`);
+      toast.success(
+        variables.successMessage ??
+          `Moved to ${applicationStatusLabels[variables.status]}`,
+      );
     },
 
     onError: () => {
@@ -98,17 +107,11 @@ export function BoardPage() {
   };
 
   const handleReopen = (application: Application) => {
-    updateStatusMutation.mutate(
-      {
-        id: application._id,
-        status: "applied",
-      },
-      {
-        onSuccess: () => {
-          toast.success("Application reopened and moved to Applied");
-        },
-      },
-    );
+    updateStatusMutation.mutate({
+      id: application._id,
+      status: "applied",
+      successMessage: "Application reopened and moved to Applied",
+    });
   };
 
   if (isLoading) {
