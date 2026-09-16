@@ -14,7 +14,7 @@ interface BoardColumnProps {
 
 const columnAccentStyles: Record<ApplicationStatus, string> = {
   saved: "bg-slate-400",
-  applied: "bg-blue-500",
+  applied: "bg-sky-500",
   screening: "bg-cyan-500",
   interview: "bg-amber-500",
   technical_interview: "bg-orange-500",
@@ -35,9 +35,9 @@ export function BoardColumn({ status, title, applications }: BoardColumnProps) {
     <section
       ref={setNodeRef}
       className={[
-        "flex w-[82vw] max-w-80 shrink-0 snap-start flex-col overflow-hidden rounded-2xl border bg-muted/20 shadow-sm transition-all sm:w-80",
+        "flex w-[82vw] max-w-80 shrink-0 snap-start flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all sm:w-80",
         isOver
-          ? "border-primary bg-primary/5 shadow-md shadow-primary/10"
+          ? "border-brand bg-brand/5 shadow-md shadow-brand/10"
           : "border-border/70",
       ].join(" ")}
     >
@@ -63,7 +63,7 @@ export function BoardColumn({ status, title, applications }: BoardColumnProps) {
           <div
             className={[
               "flex min-h-28 items-center justify-center rounded-xl border border-dashed px-4 text-center text-sm text-muted-foreground transition-colors",
-              isOver ? "border-primary/50 bg-primary/5 text-primary" : "",
+              isOver ? "border-brand/50 bg-brand/5 text-brand" : "",
             ].join(" ")}
           >
             Drop application here
