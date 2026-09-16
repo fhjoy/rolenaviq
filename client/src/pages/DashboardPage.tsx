@@ -38,12 +38,12 @@ export function DashboardPage() {
 
   return (
     <div className="w-full">
-      <section className="relative overflow-hidden rounded-2xl border bg-linear-to-br from-primary/8 via-background to-cyan-500/6 p-6 sm:p-8">
-        <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+      <section className="relative overflow-hidden rounded-2xl border bg-linear-to-br from-brand/10 via-card to-amber-200/8 p-6 sm:p-8">
+        <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-brand/10 blur-3xl" />
 
         <div className="relative flex flex-col justify-between gap-6 2xl:flex-row 2xl:items-center">
           <div className="min-w-0">
-            <p className="text-sm font-medium text-primary">Welcome back</p>
+            <p className="text-sm font-medium text-brand">Welcome back</p>
 
             <h1 className="mt-2 max-w-3xl text-2xl font-bold leading-tight tracking-tight sm:text-3xl 2xl:text-4xl">
               {userData?.user.firstName
