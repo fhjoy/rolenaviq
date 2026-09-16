@@ -10,6 +10,8 @@ interface BoardColumnProps {
   status: ApplicationStatus;
   title: string;
   applications: Application[];
+  onReopen?: (application: Application) => void;
+  updatingApplicationId?: string;
 }
 
 const columnAccentStyles: Record<ApplicationStatus, string> = {
@@ -23,7 +25,13 @@ const columnAccentStyles: Record<ApplicationStatus, string> = {
   withdrawn: "bg-zinc-400",
 };
 
-export function BoardColumn({ status, title, applications }: BoardColumnProps) {
+export function BoardColumn({
+  status,
+  title,
+  applications,
+  onReopen,
+  updatingApplicationId,
+}: BoardColumnProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: status,
     data: {
@@ -70,7 +78,12 @@ export function BoardColumn({ status, title, applications }: BoardColumnProps) {
           </div>
         ) : (
           applications.map((application) => (
-            <BoardCard key={application._id} application={application} />
+            <BoardCard
+              key={application._id}
+              application={application}
+              onReopen={onReopen}
+              isUpdating={updatingApplicationId === application._id}
+            />
           ))
         )}
       </div>
