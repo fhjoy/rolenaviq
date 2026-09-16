@@ -34,13 +34,11 @@ async function ensureDemoUser() {
     });
   }
 
-  const demoApplicationCount = await Application.countDocuments({
+  await Application.deleteMany({
     userId: user._id,
   });
 
-  if (demoApplicationCount === 0) {
-    await Application.insertMany(createDemoApplications(user._id));
-  }
+  await Application.insertMany(createDemoApplications(user._id));
 
   return user;
 }
