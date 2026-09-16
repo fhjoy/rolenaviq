@@ -5,6 +5,7 @@ import {
   CalendarDays,
   CheckCircle2,
   Columns3,
+  KeyRound,
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
@@ -12,6 +13,7 @@ import { Link } from "react-router";
 
 import { Brand } from "@/components/brand/Brand";
 import { Button } from "@/components/ui/button";
+import { DEMO_EMAIL, DEMO_PASSWORD } from "@/config/demo";
 
 const features = [
   {
@@ -234,15 +236,41 @@ export function LandingPage() {
                 workspace.
               </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Button size="lg" render={<Link to="/register" />}>
                   Start tracking
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Button>
 
-                <Button size="lg" variant="outline" render={<Link to="/login" />}>
-                  I already have an account
+                <Button size="lg" variant="outline" render={<Link to="/login?demo=1" />}>
+                  Explore demo
                 </Button>
+
+                <Button size="lg" variant="ghost" render={<Link to="/login" />}>
+                  Sign in
+                </Button>
+              </div>
+
+              <div className="mt-6 max-w-xl rounded-2xl border border-brand/20 bg-card/85 p-4 shadow-sm">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">
+                    <KeyRound className="h-4 w-4" aria-hidden="true" />
+                  </div>
+
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold">Demo access for recruiters</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Explore the real dashboard, Kanban board, calendar and application workflow without creating an account.
+                    </p>
+
+                    <dl className="mt-3 grid gap-1 text-sm sm:grid-cols-[auto_1fr] sm:gap-x-3">
+                      <dt className="text-muted-foreground">Email</dt>
+                      <dd className="break-all font-medium">{DEMO_EMAIL}</dd>
+                      <dt className="text-muted-foreground">Password</dt>
+                      <dd className="break-all font-medium">{DEMO_PASSWORD}</dd>
+                    </dl>
+                  </div>
+                </div>
               </div>
 
               <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
@@ -357,10 +385,21 @@ export function LandingPage() {
                 </p>
               </div>
 
-              <Button size="lg" variant="secondary" render={<Link to="/register" />}>
-                Create an account
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Button>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Button size="lg" variant="secondary" render={<Link to="/register" />}>
+                  Create an account
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Button>
+
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+                  render={<Link to="/login?demo=1" />}
+                >
+                  Explore demo
+                </Button>
+              </div>
             </div>
           </div>
         </section>
