@@ -1,20 +1,33 @@
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { Building2, GripVertical, MapPin } from "lucide-react";
+import { Building2, GripVertical, MapPin, RotateCcw } from "lucide-react";
 import { Link } from "react-router";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { isTerminalStatus } from "@/features/board/board.constants";
 
 import type { Application } from "@/types/application";
 
 interface BoardCardProps {
   application: Application;
+  onReopen?: (application: Application) => void;
+  isUpdating?: boolean;
 }
 
-export function BoardCard({ application }: BoardCardProps) {
+export function BoardCard({
+  application,
+  onReopen,
+  isUpdating = false,
+}: BoardCardProps) {
+  const canReopen =
+    application.status === "rejected" || application.status === "withdrawn";
+  const isDragDisabled = isTerminalStatus(application.status);
+
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: application._id,
+      disabled: isDragDisabled,
       data: {
         application,
       },
@@ -54,10 +67,20 @@ export function BoardCard({ application }: BoardCardProps) {
 
         <button
           type="button"
-          {...listeners}
-          {...attributes}
-          className="shrink-0 cursor-grab rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:cursor-grabbing"
-          aria-label={`Move ${application.position} at ${application.company}`}
+          {...(!isDragDisabled ? listeners : {})}
+          {...(!isDragDisabled ? attributes : {})}
+          disabled={isDragDisabled}
+          className={[
+            "shrink-0 rounded-lg p-1.5 text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            isDragDisabled
+              ? "cursor-not-allowed opacity-35"
+              : "cursor-grab hover:bg-muted hover:text-foreground active:cursor-grabbing",
+          ].join(" ")}
+          aria-label={
+            isDragDisabled
+              ? `${application.position} cannot be moved from ${application.status}`
+              : `Move ${application.position} at ${application.company}`
+          }
         >
           <GripVertical className="h-4 w-4" aria-hidden="true" />
         </button>
@@ -88,6 +111,20 @@ export function BoardCard({ application }: BoardCardProps) {
             </Badge>
           )}
         </div>
+      )}
+
+      {canReopen && onReopen && (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="mt-4 w-full"
+          disabled={isUpdating}
+          onClick={() => onReopen(application)}
+        >
+          <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+          {isUpdating ? "Reopening..." : "Reopen application"}
+        </Button>
       )}
     </article>
   );
