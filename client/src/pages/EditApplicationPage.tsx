@@ -8,6 +8,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ApplicationForm } from "@/features/applications/ApplicationForm";
 import { updateApplication } from "@/features/applications/application.api";
 import type { ApplicationFormData } from "@/features/applications/application.schemas";
+import {
+  getEditableApplicationStatuses,
+  isReopenTransition,
+} from "@/features/applications/application-workflow";
 import { useApplication } from "@/features/applications/useApplication";
 import type { Application } from "@/types/application";
 
@@ -41,6 +45,7 @@ function getDefaultValues(application: Application): ApplicationFormData {
 function EditForm({ application }: { application: Application }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const statusOptions = getEditableApplicationStatuses(application.status);
 
   const mutation = useMutation({
     mutationFn: (data: ApplicationFormData) => {
@@ -49,6 +54,7 @@ function EditForm({ application }: { application: Application }) {
           ?.split(",")
           .map((technology) => technology.trim())
           .filter(Boolean) ?? [];
+      const reopen = isReopenTransition(application.status, data.status);
 
       return updateApplication(application._id, {
         company: data.company,
@@ -64,6 +70,7 @@ function EditForm({ application }: { application: Application }) {
           ? new Date(data.interviewDate).toISOString()
           : null,
         notes: data.notes || null,
+        ...(reopen ? { reopen: true } : {}),
       });
     },
 
@@ -77,8 +84,10 @@ function EditForm({ application }: { application: Application }) {
       navigate(`/applications/${application._id}`);
     },
 
-    onError: () => {
-      toast.error("Unable to update application");
+    onError: (error) => {
+      const message =
+        error instanceof Error ? error.message : "Unable to update application";
+      toast.error(message);
     },
   });
 
@@ -89,6 +98,7 @@ function EditForm({ application }: { application: Application }) {
       isSubmitting={mutation.isPending}
       submitLabel="Save changes"
       cancelTo={`/applications/${application._id}`}
+      statusOptions={statusOptions}
     />
   );
 }

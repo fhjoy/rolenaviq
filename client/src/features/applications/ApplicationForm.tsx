@@ -14,10 +14,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { applicationStatusLabels } from "@/features/applications/application-display";
 import {
   applicationFormSchema,
   type ApplicationFormData,
 } from "@/features/applications/application.schemas";
+import { applicationStatuses } from "@/features/applications/application-workflow";
+import type { ApplicationStatus } from "@/types/application";
 
 interface ApplicationFormProps {
   defaultValues: ApplicationFormData;
@@ -25,6 +28,7 @@ interface ApplicationFormProps {
   isSubmitting: boolean;
   submitLabel: string;
   cancelTo: string;
+  statusOptions?: ApplicationStatus[];
 }
 
 function todayForDateInput(): string {
@@ -50,6 +54,7 @@ export function ApplicationForm({
   isSubmitting,
   submitLabel,
   cancelTo,
+  statusOptions = applicationStatuses,
 }: ApplicationFormProps) {
   const {
     register,
@@ -194,15 +199,17 @@ export function ApplicationForm({
           <div className="space-y-2">
             <Label htmlFor="status">Status</Label>
             <select id="status" className={selectClassName} {...register("status")}>
-              <option value="saved">Saved</option>
-              <option value="applied">Applied</option>
-              <option value="screening">Screening</option>
-              <option value="interview">Interview</option>
-              <option value="technical_interview">Technical Interview</option>
-              <option value="offer">Offer</option>
-              <option value="rejected">Rejected</option>
-              <option value="withdrawn">Withdrawn</option>
+              {statusOptions.map((statusOption) => (
+                <option key={statusOption} value={statusOption}>
+                  {applicationStatusLabels[statusOption]}
+                </option>
+              ))}
             </select>
+            {statusOptions.length < applicationStatuses.length && (
+              <p className="text-xs text-muted-foreground">
+                Only valid next workflow stages are shown here.
+              </p>
+            )}
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2">

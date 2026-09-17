@@ -6,12 +6,27 @@ import {
   workplaceTypes,
 } from "../models/Application.js";
 
-export const createApplicationSchema = z.object({
+function isHttpUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+const httpUrlSchema = z
+  .string()
+  .trim()
+  .refine(isHttpUrl, "Please provide a valid HTTP or HTTPS URL");
+
+const applicationFieldsSchema = z.object({
   company: z.string().trim().min(1, "Company is required").max(100),
 
   position: z.string().trim().min(1, "Position is required").max(150),
 
-  jobUrl: z.string().trim().url("Please provide a valid URL").optional(),
+  jobUrl: httpUrlSchema.optional(),
 
   location: z.string().trim().max(150).optional(),
 
@@ -36,15 +51,25 @@ export const createApplicationSchema = z.object({
   notes: z.string().trim().max(5000).optional(),
 });
 
-export const updateApplicationSchema = createApplicationSchema
+export const createApplicationSchema = applicationFieldsSchema.superRefine(
+  (data, ctx) => {
+    const requiresInterviewDate =
+      data.status === "interview" || data.status === "technical_interview";
+
+    if (requiresInterviewDate && !data.interviewDate) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["interviewDate"],
+        message: "Interview date and time is required for interview stages",
+      });
+    }
+  },
+);
+
+export const updateApplicationSchema = applicationFieldsSchema
   .partial()
   .extend({
-    jobUrl: z
-      .string()
-      .trim()
-      .url("Please provide a valid URL")
-      .nullable()
-      .optional(),
+    jobUrl: httpUrlSchema.nullable().optional(),
 
     location: z.string().trim().max(150).nullable().optional(),
 
@@ -57,6 +82,8 @@ export const updateApplicationSchema = createApplicationSchema
     interviewDate: z.union([z.null(), z.coerce.date()]).optional(),
 
     notes: z.string().trim().max(5000).nullable().optional(),
+
+    reopen: z.boolean().optional(),
   });
 
 export const applicationQuerySchema = z.object({

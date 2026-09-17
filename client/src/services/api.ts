@@ -10,25 +10,42 @@ export class ApiError extends Error {
   }
 }
 
+function redirectToLoginOnExpiredSession(endpoint: string, status: number) {
+  if (
+    status !== 401 ||
+    endpoint === "/auth/login" ||
+    endpoint === "/auth/me" ||
+    typeof window === "undefined" ||
+    window.location.pathname === "/login"
+  ) {
+    return;
+  }
+
+  window.location.assign("/login?expired=1");
+}
+
 export async function apiRequest<T>(
   endpoint: string,
   options: RequestInit = {},
 ): Promise<T> {
+  const headers = new Headers(options.headers);
+
+  if (options.body && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
-
     credentials: "include",
-
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
+    headers,
   });
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({
       message: "Something went wrong",
     }));
+
+    redirectToLoginOnExpiredSession(endpoint, response.status);
 
     throw new ApiError(errorData.message || "Request failed", response.status);
   }

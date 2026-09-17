@@ -7,6 +7,11 @@ import {
   updateApplicationSchema,
   applicationQuerySchema,
 } from "../validators/application.validator.js";
+import {
+  canMoveApplication,
+  isInterviewStatus,
+  isReopenTransition,
+} from "../utils/application-workflow.js";
 import { escapeRegex } from "../utils/regex.js";
 
 export const createApplication = async (
@@ -98,34 +103,22 @@ export const getApplications = async (
       const searchRegex = new RegExp(escapeRegex(search), "i");
 
       filter.$or = [
-        {
-          company: searchRegex,
-        },
-        {
-          position: searchRegex,
-        },
-        {
-          location: searchRegex,
-        },
-        {
-          technologies: searchRegex,
-        },
+        { company: searchRegex },
+        { position: searchRegex },
+        { location: searchRegex },
+        { technologies: searchRegex },
       ];
     }
 
     const sortDescending = sort.startsWith("-");
-
     const sortField = sortDescending ? sort.substring(1) : sort;
-
     const sortOption = {
       [sortField]: sortDescending ? -1 : 1,
     } as Record<string, 1 | -1>;
-
     const skip = (page - 1) * limit;
 
     const [applications, total] = await Promise.all([
       Application.find(filter).sort(sortOption).skip(skip).limit(limit),
-
       Application.countDocuments(filter),
     ]);
 
@@ -133,7 +126,6 @@ export const getApplications = async (
 
     res.status(200).json({
       applications,
-
       pagination: {
         page,
         limit,
@@ -234,24 +226,64 @@ export const updateApplication = async (
       return;
     }
 
-    // const application = await Application.findOneAndUpdate(
-    //   {
-    //     _id: id,
-    //     userId: req.userId,
-    //   },
-    //   result.data,
-    //   {
-    //     new: true,
-    //     runValidators: true,
-    //   },
-    // );
+    const currentApplication = await Application.findOne({
+      _id: id,
+      userId: req.userId,
+    });
+
+    if (!currentApplication) {
+      res.status(404).json({
+        message: "Application not found",
+      });
+
+      return;
+    }
+
+    const { reopen = false, ...applicationUpdates } = result.data;
+    const nextStatus = applicationUpdates.status ?? currentApplication.status;
+    const statusChanged = nextStatus !== currentApplication.status;
+
+    if (reopen) {
+      if (
+        !statusChanged ||
+        !isReopenTransition(currentApplication.status, nextStatus)
+      ) {
+        res.status(409).json({
+          message: "Only rejected or withdrawn applications can be reopened to Applied",
+        });
+
+        return;
+      }
+    } else if (
+      statusChanged &&
+      !canMoveApplication(currentApplication.status, nextStatus)
+    ) {
+      res.status(409).json({
+        message: "This status transition is not allowed",
+      });
+
+      return;
+    }
+
+    const nextInterviewDate =
+      applicationUpdates.interviewDate === null
+        ? undefined
+        : applicationUpdates.interviewDate ?? currentApplication.interviewDate;
+
+    if (isInterviewStatus(nextStatus) && !nextInterviewDate) {
+      res.status(400).json({
+        message: "Interview date and time is required for interview stages",
+      });
+
+      return;
+    }
 
     const fieldsToSet = Object.fromEntries(
-      Object.entries(result.data).filter(([, value]) => value !== null),
+      Object.entries(applicationUpdates).filter(([, value]) => value !== null),
     );
 
     const fieldsToUnset = Object.fromEntries(
-      Object.entries(result.data)
+      Object.entries(applicationUpdates)
         .filter(([, value]) => value === null)
         .map(([key]) => [key, 1]),
     );

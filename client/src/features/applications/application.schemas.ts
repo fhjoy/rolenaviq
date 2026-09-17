@@ -1,15 +1,30 @@
 import { z } from "zod";
 
+function isHttpUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+const jobUrlSchema = z.union([
+  z.literal(""),
+  z
+    .string()
+    .trim()
+    .refine(isHttpUrl, "Please enter a valid HTTP or HTTPS URL"),
+]);
+
 export const applicationFormSchema = z
   .object({
     company: z.string().trim().min(1, "Company is required"),
 
     position: z.string().trim().min(1, "Position is required"),
 
-    jobUrl: z.union([
-      z.literal(""),
-      z.string().trim().url("Please enter a valid URL"),
-    ]),
+    jobUrl: jobUrlSchema,
 
     location: z.string().trim().optional(),
 

@@ -20,7 +20,7 @@ import { MonthlyCalendar } from "@/features/calendar/MonthlyCalendar";
 export function CalendarPage() {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
 
-  const { data, isLoading, isError } = useApplications({
+  const { data, isLoading, isError, refetch } = useApplications({
     page: 1,
     limit: 100,
     sort: "-createdAt",
@@ -41,6 +41,8 @@ export function CalendarPage() {
       <PageError
         title="Unable to load calendar"
         message="Your interview schedule could not be loaded."
+        actionLabel="Try again"
+        onAction={() => void refetch()}
       />
     );
   }

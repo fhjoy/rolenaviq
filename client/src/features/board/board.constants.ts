@@ -1,5 +1,10 @@
 import type { ApplicationStatus } from "@/types/application";
 
+export {
+  canMoveApplication,
+  isTerminalStatus,
+} from "@/features/applications/application-workflow";
+
 export interface BoardColumnDefinition {
   status: ApplicationStatus;
   title: string;
@@ -39,48 +44,3 @@ export const boardColumns: BoardColumnDefinition[] = [
     title: "Withdrawn",
   },
 ];
-
-const activeStageOrder: ApplicationStatus[] = [
-  "saved",
-  "applied",
-  "screening",
-  "interview",
-  "technical_interview",
-  "offer",
-];
-
-const terminalStatuses = new Set<ApplicationStatus>([
-  "offer",
-  "rejected",
-  "withdrawn",
-]);
-
-export function isTerminalStatus(status: ApplicationStatus): boolean {
-  return terminalStatuses.has(status);
-}
-
-export function canMoveApplication(
-  currentStatus: ApplicationStatus,
-  nextStatus: ApplicationStatus,
-): boolean {
-  if (currentStatus === nextStatus) {
-    return true;
-  }
-
-  if (isTerminalStatus(currentStatus)) {
-    return false;
-  }
-
-  if (nextStatus === "rejected" || nextStatus === "withdrawn") {
-    return true;
-  }
-
-  const currentIndex = activeStageOrder.indexOf(currentStatus);
-  const nextIndex = activeStageOrder.indexOf(nextStatus);
-
-  if (currentIndex === -1 || nextIndex === -1) {
-    return false;
-  }
-
-  return nextIndex > currentIndex;
-}

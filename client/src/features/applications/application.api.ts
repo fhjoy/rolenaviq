@@ -14,33 +14,13 @@ export function getApplications(
 ): Promise<ApplicationsResponse> {
   const searchParams = new URLSearchParams();
 
-  if (params.search) {
-    searchParams.set("search", params.search);
-  }
-
-  if (params.status) {
-    searchParams.set("status", params.status);
-  }
-
-  if (params.workplaceType) {
-    searchParams.set("workplaceType", params.workplaceType);
-  }
-
-  if (params.employmentType) {
-    searchParams.set("employmentType", params.employmentType);
-  }
-
-  if (params.page) {
-    searchParams.set("page", String(params.page));
-  }
-
-  if (params.limit) {
-    searchParams.set("limit", String(params.limit));
-  }
-
-  if (params.sort) {
-    searchParams.set("sort", params.sort);
-  }
+  if (params.search) searchParams.set("search", params.search);
+  if (params.status) searchParams.set("status", params.status);
+  if (params.workplaceType) searchParams.set("workplaceType", params.workplaceType);
+  if (params.employmentType) searchParams.set("employmentType", params.employmentType);
+  if (params.page) searchParams.set("page", String(params.page));
+  if (params.limit) searchParams.set("limit", String(params.limit));
+  if (params.sort) searchParams.set("sort", params.sort);
 
   const queryString = searchParams.toString();
 
@@ -52,20 +32,14 @@ export function getApplications(
 export interface CreateApplicationData {
   company: string;
   position: string;
-
   jobUrl?: string;
   location?: string;
-
   workplaceType?: WorkplaceType;
   employmentType?: EmploymentType;
-
   status: ApplicationStatus;
-
   technologies: string[];
-
   appliedAt?: string;
   interviewDate?: string;
-
   notes?: string;
 }
 
@@ -88,6 +62,7 @@ export type UpdateApplicationData = Partial<
   appliedAt?: string | null;
   interviewDate?: string | null;
   notes?: string | null;
+  reopen?: boolean;
 };
 
 export function createApplication(data: CreateApplicationData): Promise<{

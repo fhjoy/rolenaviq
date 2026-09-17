@@ -19,6 +19,15 @@ import {
 } from "../config/demo.js";
 import { createDemoApplications } from "../utils/demo-data.js";
 
+function isDuplicateKeyError(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code?: number }).code === 11000
+  );
+}
+
 async function ensureDemoUser() {
   let user = await User.findOne({ email: DEMO_EMAIL }).select("+passwordHash");
 
@@ -99,6 +108,13 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       },
     });
   } catch (error) {
+    if (isDuplicateKeyError(error)) {
+      res.status(409).json({
+        message: "A user with this email already exists",
+      });
+      return;
+    }
+
     console.error("Registration error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
@@ -265,6 +281,13 @@ export const updateProfile = async (
       },
     });
   } catch (error) {
+    if (isDuplicateKeyError(error)) {
+      res.status(409).json({
+        message: "An account with this email already exists",
+      });
+      return;
+    }
+
     console.error("Update profile error:", error);
     res.status(500).json({ message: "Internal server error" });
   }

@@ -44,6 +44,7 @@ interface StatusUpdateVariables {
   id: string;
   status: ApplicationStatus;
   interviewDate?: string;
+  reopen?: boolean;
   successMessage?: string;
 }
 
@@ -108,7 +109,7 @@ export function BoardPage() {
     useSensor(KeyboardSensor),
   );
 
-  const { data, isLoading, isError } = useApplications({
+  const { data, isLoading, isError, refetch } = useApplications({
     page: 1,
     limit: 100,
     sort: "-createdAt",
@@ -119,12 +120,14 @@ export function BoardPage() {
       id,
       status,
       interviewDate: nextInterviewDate,
+      reopen,
     }: StatusUpdateVariables) =>
       updateApplication(id, {
         status,
         ...(nextInterviewDate
           ? { interviewDate: new Date(nextInterviewDate).toISOString() }
           : {}),
+        ...(reopen ? { reopen: true } : {}),
       }),
 
     onSuccess: async (_data, variables) => {
@@ -197,6 +200,7 @@ export function BoardPage() {
     updateStatusMutation.mutate({
       id: application._id,
       status: "applied",
+      reopen: true,
       successMessage: "Application reopened and moved to Applied",
     });
   };
@@ -256,6 +260,8 @@ export function BoardPage() {
       <PageError
         title="Unable to load board"
         message="Your application board could not be loaded."
+        actionLabel="Try again"
+        onAction={() => void refetch()}
       />
     );
   }
