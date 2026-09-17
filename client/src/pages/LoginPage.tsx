@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CheckCircle2 } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useForm } from "react-hook-form";
-import { AuthLayout } from "@/components/auth/AuthLayout";
 
+import { AuthLayout } from "@/components/auth/AuthLayout";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,7 +15,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/config/demo";
 import { loginUser } from "@/features/auth/auth.api";
 import { loginSchema, type LoginFormData } from "@/features/auth/auth.schemas";
@@ -25,6 +25,7 @@ export function LoginPage() {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
   const isDemoLogin = searchParams.get("demo") === "1";
+  const registrationComplete = searchParams.get("registered") === "1";
 
   const {
     register,
@@ -42,19 +43,11 @@ export function LoginPage() {
 
   const loginMutation = useMutation({
     mutationFn: loginUser,
-
     onSuccess: (data) => {
-      queryClient.setQueryData(["auth", "me"], {
-        user: data.user,
-      });
-
+      queryClient.setQueryData(["auth", "me"], { user: data.user });
       navigate("/dashboard");
     },
   });
-
-  const onSubmit = (data: LoginFormData) => {
-    loginMutation.mutate(data);
-  };
 
   return (
     <AuthLayout>
@@ -63,7 +56,6 @@ export function LoginPage() {
           <CardTitle className="text-3xl tracking-tight">
             {isDemoLogin ? "Explore the demo" : "Welcome back"}
           </CardTitle>
-
           <CardDescription>
             {isDemoLogin
               ? "The demo credentials are already filled in. Sign in to explore the dashboard, board and calendar."
@@ -72,19 +64,28 @@ export function LoginPage() {
         </CardHeader>
 
         <CardContent>
+          {registrationComplete && !isDemoLogin && (
+            <div className="mb-5 flex gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300" role="status">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+              <div>
+                <p className="font-medium">Account created</p>
+                <p className="mt-1 opacity-90">You can sign in with your new account now.</p>
+              </div>
+            </div>
+          )}
+
           {isDemoLogin && (
             <div className="mb-5 rounded-xl border border-brand/20 bg-brand/8 p-4 text-sm">
               <p className="font-medium">Public demo account</p>
               <p className="mt-1 text-muted-foreground">
-                Feel free to move applications and explore the workflow. The demo profile itself is protected from changes.
+                Feel free to move applications and explore the workflow. Demo data is restored on the next demo login, while the demo profile itself stays protected.
               </p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={handleSubmit((data) => loginMutation.mutate(data))} className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-
               <Input
                 id="email"
                 type="email"
@@ -92,29 +93,13 @@ export function LoginPage() {
                 placeholder="you@example.com"
                 {...register("email")}
               />
-
-              {errors.email && (
-                <p className="text-sm text-destructive" role="alert">
-                  {errors.email.message}
-                </p>
-              )}
+              {errors.email && <p className="text-sm text-destructive" role="alert">{errors.email.message}</p>}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-
-              <Input
-                id="password"
-                type="password"
-                autoComplete="current-password"
-                {...register("password")}
-              />
-
-              {errors.password && (
-                <p className="text-sm text-destructive" role="alert">
-                  {errors.password.message}
-                </p>
-              )}
+              <Input id="password" type="password" autoComplete="current-password" {...register("password")} />
+              {errors.password && <p className="text-sm text-destructive" role="alert">{errors.password.message}</p>}
             </div>
 
             {loginMutation.isError && (
@@ -125,12 +110,7 @@ export function LoginPage() {
               </p>
             )}
 
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full"
-              disabled={loginMutation.isPending}
-            >
+            <Button type="submit" size="lg" className="w-full" disabled={loginMutation.isPending}>
               {loginMutation.isPending
                 ? "Signing in..."
                 : isDemoLogin
@@ -141,10 +121,7 @@ export function LoginPage() {
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link
-              to="/register"
-              className="font-semibold text-foreground underline-offset-4 hover:underline"
-            >
+            <Link to="/register" className="font-semibold text-foreground underline-offset-4 hover:underline">
               Create one
             </Link>
           </p>
