@@ -1,4 +1,3 @@
-import { Compass } from "lucide-react";
 import { Link } from "react-router";
 
 interface BrandProps {
@@ -17,12 +16,10 @@ export function Brand({
       to={to}
       className="inline-flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
-      <Compass
-        className={[
-          "h-7 w-7 shrink-0",
-          inverse ? "text-brand" : "text-brand",
-        ].join(" ")}
-        strokeWidth={2.2}
+      <img
+        src="/rolenaviq-icon.svg"
+        alt=""
+        className="h-8 w-8 shrink-0"
         aria-hidden="true"
       />
 
