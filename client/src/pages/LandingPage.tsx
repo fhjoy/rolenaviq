@@ -95,6 +95,19 @@ function FlowConnector({ reverse = false }: { reverse?: boolean }) {
   );
 }
 
+function FeatureSignal({ variant }: { variant: "board" | "calendar" | "analytics" }) {
+  return (
+    <span
+      className={["feature-signal", `feature-signal-${variant}`].join(" ")}
+      aria-hidden="true"
+    >
+      <span />
+      <span />
+      <span />
+    </span>
+  );
+}
+
 function HeroNavigationPreview() {
   return (
     <div className="relative mx-auto w-full max-w-2xl">
@@ -574,20 +587,27 @@ function ProductShowcase() {
               className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14"
             >
               <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                <span className="inline-flex rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
-                  {item.eyebrow}
-                </span>
+                <div className="inline-flex items-center gap-3">
+                  <span className="inline-flex rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
+                    {item.eyebrow}
+                  </span>
+                  <FeatureSignal
+                    variant={
+                      item.eyebrow === "Board"
+                        ? "board"
+                        : item.eyebrow === "Calendar"
+                          ? "calendar"
+                          : "analytics"
+                    }
+                  />
+                </div>
+
                 <h3 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
                   {item.title}
                 </h3>
                 <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
                   {item.description}
                 </p>
-
-                <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
-                  <span>See it in action</span>
-                  <FlowConnector reverse={index % 2 === 1} />
-                </div>
               </div>
 
               <div className={index % 2 === 1 ? "lg:order-1" : ""}>
@@ -940,9 +960,15 @@ export function LandingPage() {
                 A full-stack portfolio project for navigating applications,
                 interviews and job-search progress without losing track.
               </p>
-              <div className="mt-5 inline-flex items-center gap-2 rounded-full border bg-background px-3 py-1.5 text-xs font-medium text-muted-foreground">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                Production demo
+              <div
+                className="mt-5 inline-flex items-center gap-2 rounded-full border bg-background px-3 py-1.5 text-xs font-medium text-muted-foreground"
+                title="The live demo is running from the deployed production application."
+              >
+                <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-50" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                </span>
+                Live production deployment
               </div>
             </div>
 

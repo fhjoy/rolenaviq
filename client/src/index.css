@@ -206,6 +206,45 @@
   }
 }
 
+@keyframes feature-board-shift {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: translateY(-0.2rem);
+    opacity: 1;
+  }
+}
+
+@keyframes feature-calendar-pulse {
+  0%,
+  100% {
+    transform: scale(0.72);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes feature-analytics-rise {
+  0%,
+  100% {
+    transform: scaleY(0.45);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: scaleY(1);
+    opacity: 0.95;
+  }
+}
+
 .landing-route-line {
   stroke-dasharray: 10 12;
   animation: landing-route-flow 7s linear infinite;
@@ -276,6 +315,66 @@
   animation: landing-arrow-pulse 1.6s ease-in-out infinite;
 }
 
+.feature-signal {
+  display: inline-flex;
+  height: 1rem;
+  align-items: center;
+  gap: 0.18rem;
+  color: var(--brand);
+}
+
+.feature-signal span {
+  display: block;
+  width: 0.2rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.feature-signal-board span {
+  height: 0.55rem;
+  animation: feature-board-shift 2.6s ease-in-out infinite;
+}
+
+.feature-signal-board span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.feature-signal-board span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.feature-signal-calendar span {
+  height: 0.34rem;
+  border-radius: 999px;
+  animation: feature-calendar-pulse 2.4s ease-in-out infinite;
+}
+
+.feature-signal-calendar span:nth-child(2) {
+  animation-delay: 0.35s;
+}
+
+.feature-signal-calendar span:nth-child(3) {
+  animation-delay: 0.7s;
+}
+
+.feature-signal-analytics {
+  align-items: flex-end;
+}
+
+.feature-signal-analytics span {
+  height: 0.8rem;
+  transform-origin: bottom;
+  animation: feature-analytics-rise 2.8s ease-in-out infinite;
+}
+
+.feature-signal-analytics span:nth-child(2) {
+  animation-delay: 0.25s;
+}
+
+.feature-signal-analytics span:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
 .server-wake-track {
   position: relative;
   height: 0.25rem;
@@ -302,6 +401,7 @@
   .landing-flow-dot,
   .landing-progress-dot,
   .landing-arrow-pulse,
+  .feature-signal span,
   .server-wake-dot {
     animation: none;
   }
