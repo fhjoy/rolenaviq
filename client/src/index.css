@@ -316,20 +316,33 @@
   }
 }
 
-@keyframes landing-demo-shimmer {
+@keyframes landing-demo-breathe {
   0%,
-  55% {
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-1px) scale(1.025);
+  }
+}
+
+@keyframes landing-demo-shimmer {
+  0% {
     transform: translateX(-150%) skewX(-18deg);
     opacity: 0;
   }
 
-  65% {
+  18% {
+    opacity: 0.9;
+  }
+
+  50% {
     opacity: 0.95;
   }
 
   82% {
-    transform: translateX(320%) skewX(-18deg);
-    opacity: 0;
+    opacity: 0.65;
   }
 
   100% {
@@ -340,17 +353,12 @@
 
 @keyframes landing-demo-arrow {
   0%,
-  60%,
   100% {
     transform: translateX(0);
   }
 
-  72% {
-    transform: translateX(0.22rem);
-  }
-
-  82% {
-    transform: translateX(0);
+  50% {
+    transform: translateX(0.24rem);
   }
 }
 
@@ -487,6 +495,8 @@
 .landing-demo-button {
   position: relative;
   overflow: hidden;
+  transform-origin: center;
+  animation: landing-demo-breathe 1.8s ease-in-out infinite;
 }
 
 .landing-demo-button::after {
@@ -503,11 +513,11 @@
   content: "";
   opacity: 0;
   pointer-events: none;
-  animation: landing-demo-shimmer 3.6s ease-in-out infinite;
+  animation: landing-demo-shimmer 1.9s linear infinite;
 }
 
 .landing-demo-button svg {
-  animation: landing-demo-arrow 3.6s ease-in-out infinite;
+  animation: landing-demo-arrow 1.15s ease-in-out infinite;
 }
 
 .server-wake-track {
@@ -543,6 +553,7 @@
   .landing-board-offer-celebrate::after,
   .landing-calendar-date,
   .landing-analytics-bar,
+  .landing-demo-button,
   .landing-demo-button::after,
   .landing-demo-button svg,
   .server-wake-dot {
