@@ -112,6 +112,35 @@ function FeatureSignal({
   );
 }
 
+function CareerRouteMark() {
+  return (
+    <svg
+      viewBox="0 0 64 64"
+      className="h-7 w-7"
+      role="img"
+      aria-label="RoleNaviq"
+    >
+      <path
+        className="fill-brand"
+        d="M33 5 43 20 35.8 16.6 31 24.5 31.2 12.4Z"
+      />
+      <path
+        className="fill-foreground"
+        fillRule="evenodd"
+        d="M9 15h18.5c7.7 0 12.5 4.3 12.5 10.5 0 4.4-2.4 7.8-6.6 9.4L41 49H31.6l-6.9-12.5H18V49H9V15Zm9 7.2v7.2h8.4c3.1 0 4.8-1.2 4.8-3.6 0-2.4-1.7-3.6-4.8-3.6H18Z"
+      />
+      <path
+        className="fill-brand"
+        d="M34 21h8l9 13.2V21h8v28h-8L42 35.8V49h-8V21Z"
+      />
+      <path
+        className="fill-foreground"
+        d="M27 50.5 33 59l6-8.5-6 2.6Z"
+      />
+    </svg>
+  );
+}
+
 function HeroNavigationPreview() {
   return (
     <div className="relative mx-auto w-full max-w-2xl">
@@ -137,13 +166,8 @@ function HeroNavigationPreview() {
             </p>
           </div>
 
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border bg-background/80 shadow-sm">
-            <img
-              src="/rolenaviq-icon.svg"
-              alt=""
-              className="h-7 w-7"
-              aria-hidden="true"
-            />
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border bg-background/90 shadow-sm">
+            <CareerRouteMark />
           </div>
         </div>
 
@@ -491,12 +515,48 @@ function BoardPreview() {
 }
 
 function CalendarPreview() {
+  const firstInterview = new Date();
+  firstInterview.setDate(firstInterview.getDate() + 2);
+  firstInterview.setHours(10, 30, 0, 0);
+
+  const secondInterview = new Date();
+  secondInterview.setDate(secondInterview.getDate() + 5);
+  secondInterview.setHours(14, 0, 0, 0);
+
+  const previewMonth = firstInterview;
+  const daysInPreviewMonth = new Date(
+    previewMonth.getFullYear(),
+    previewMonth.getMonth() + 1,
+    0,
+  ).getDate();
+
+  const highlightedDays = new Set(
+    [firstInterview, secondInterview]
+      .filter(
+        (date) =>
+          date.getFullYear() === previewMonth.getFullYear() &&
+          date.getMonth() === previewMonth.getMonth(),
+      )
+      .map((date) => date.getDate()),
+  );
+
+  const monthLabel = new Intl.DateTimeFormat("en", {
+    month: "long",
+    year: "numeric",
+  }).format(previewMonth);
+
+  const interviewLabel =
+    new Intl.DateTimeFormat("en", {
+      day: "numeric",
+      month: "long",
+    }).format(firstInterview) + " · 10:30";
+
   return (
     <div className="rounded-3xl border bg-muted/30 p-4 sm:p-5">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-semibold">Interview calendar</p>
-          <p className="text-xs text-muted-foreground">September 2026</p>
+          <p className="text-xs text-muted-foreground">{monthLabel}</p>
         </div>
         <CalendarDays className="h-5 w-5 text-brand" aria-hidden="true" />
       </div>
@@ -508,9 +568,9 @@ function CalendarPreview() {
           </span>
         ))}
 
-        {Array.from({ length: 28 }).map((_, index) => {
+        {Array.from({ length: daysInPreviewMonth }).map((_, index) => {
           const day = index + 1;
-          const highlighted = day === 18 || day === 23;
+          const highlighted = highlightedDays.has(day);
 
           return (
             <div
@@ -535,7 +595,7 @@ function CalendarPreview() {
         <div>
           <p className="text-xs font-semibold">Frontend Developer interview</p>
           <p className="text-[11px] text-muted-foreground">
-            18 September · 10:30
+            {interviewLabel}
           </p>
         </div>
       </div>

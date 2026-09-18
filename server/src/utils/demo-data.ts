@@ -7,6 +7,15 @@ function daysFromNow(days: number, hour = 10, minute = 0): Date {
   return date;
 }
 
+function dateInNextMonth(day: number, hour = 10, minute = 0): Date {
+  const date = new Date();
+  date.setDate(1);
+  date.setMonth(date.getMonth() + 1);
+  date.setDate(day);
+  date.setHours(hour, minute, 0, 0);
+  return date;
+}
+
 function daysAgo(days: number): Date {
   const date = new Date();
   date.setDate(date.getDate() - days);
@@ -41,7 +50,7 @@ export function createDemoApplications(userId: IApplication["userId"]) {
       status: "technical_interview",
       technologies: ["React", "Node.js", "MongoDB"],
       appliedAt: daysAgo(22),
-      interviewDate: daysFromNow(5, 14, 0),
+      interviewDate: dateInNextMonth(8, 14, 0),
       notes: "Technical discussion focused on APIs and frontend architecture.",
       createdAt: daysAgo(24),
       updatedAt: daysAgo(3),
