@@ -14,29 +14,36 @@ export function Brand({
   return (
     <Link
       to={to}
-      className="inline-flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      aria-label="RoleNaviq home"
+      className="inline-flex items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
-      <img
-        src="/rolenaviq-icon.svg"
-        alt=""
-        className="h-8 w-8 shrink-0"
-        aria-hidden="true"
-      />
+      <span className="flex flex-col">
+        {inverse ? (
+          <img
+            src="/rolenaviq-logo-dark.png"
+            alt="RoleNaviq"
+            className="h-14 w-auto object-contain"
+          />
+        ) : (
+          <>
+            <img
+              src="/rolenaviq-logo-light.png"
+              alt="RoleNaviq"
+              className="h-14 w-auto object-contain dark:hidden"
+            />
 
-      <span>
-        <span
-          className={[
-            "block text-lg font-bold tracking-tight",
-            inverse ? "text-white" : "text-foreground",
-          ].join(" ")}
-        >
-          RoleNaviq
-        </span>
+            <img
+              src="/rolenaviq-logo-dark.png"
+              alt="RoleNaviq"
+              className="hidden h-14 w-auto object-contain dark:block"
+            />
+          </>
+        )}
 
         {showTagline && (
           <span
             className={[
-              "block text-xs",
+              "mt-1 text-xs",
               inverse ? "text-white/65" : "text-muted-foreground",
             ].join(" ")}
           >
