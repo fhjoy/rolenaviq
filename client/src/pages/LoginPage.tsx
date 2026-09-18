@@ -55,7 +55,6 @@ export function LoginPage() {
 
   useEffect(() => {
     if (!loginMutation.isPending) {
-      setShowServerWakeMessage(false);
       return;
     }
 
@@ -65,6 +64,11 @@ export function LoginPage() {
 
     return () => window.clearTimeout(timeoutId);
   }, [loginMutation.isPending]);
+
+  const handleLoginSubmit = (data: LoginFormData) => {
+    setShowServerWakeMessage(false);
+    loginMutation.mutate(data);
+  };
 
   return (
     <AuthLayout>
@@ -121,7 +125,7 @@ export function LoginPage() {
           )}
 
           <form
-            onSubmit={handleSubmit((data) => loginMutation.mutate(data))}
+            onSubmit={handleSubmit(handleLoginSubmit)}
             className="space-y-5"
           >
             <div className="space-y-2">
