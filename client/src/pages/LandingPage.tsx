@@ -14,12 +14,14 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
+import { Github } from "lucide-react";
+import { useEffect, type ReactNode } from "react";
 import { Link } from "react-router";
-import type { ReactNode } from "react";
 
 import { Brand } from "@/components/brand/Brand";
 import { Button } from "@/components/ui/button";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/config/demo";
+import { warmUpApi } from "@/services/api";
 
 const workflowStages = [
   { label: "Saved", detail: "Capture the opportunity" },
@@ -31,13 +33,24 @@ const workflowStages = [
 ];
 
 const engineeringHighlights = [
-  "React + TypeScript frontend",
+  "React 19 + TypeScript",
+  "Vite + Tailwind CSS",
+  "shadcn + Base UI",
+  "TanStack Query",
+  "React Hook Form + Zod",
   "Node + Express REST API",
-  "MongoDB + Mongoose persistence",
+  "MongoDB + Mongoose",
   "HttpOnly JWT authentication",
-  "Per-user data ownership",
+  "Per-user authorization",
+  "Vercel + Render + Atlas",
   "Responsive + accessible UI",
-  "Production deployment",
+];
+
+const engineeringRoadmap = [
+  "Cypress end-to-end testing",
+  "AI job analysis",
+  "LLM-powered matching",
+  "GitHub Actions CI/CD",
 ];
 
 function RouteBadge({
@@ -65,6 +78,21 @@ function RouteBadge({
     >
       {label}
     </span>
+  );
+}
+
+function FlowConnector({ reverse = false }: { reverse?: boolean }) {
+  return (
+    <div
+      className={[
+        "landing-flow-connector",
+        reverse ? "landing-flow-connector-reverse" : "",
+      ].join(" ")}
+      aria-hidden="true"
+    >
+      <span className="landing-flow-dot" />
+      <ArrowRight className="landing-flow-arrow h-4 w-4" />
+    </div>
   );
 }
 
@@ -260,10 +288,8 @@ function ChaosToClarity() {
             </div>
           </div>
 
-          <div className="hidden items-center justify-center lg:flex" aria-hidden="true">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full border bg-background text-brand shadow-sm">
-              <ArrowRight className="h-5 w-5" />
-            </div>
+          <div className="flex items-center justify-center py-1 lg:py-0">
+            <FlowConnector />
           </div>
 
           <div className="relative overflow-hidden rounded-3xl border border-brand/20 bg-card p-6 shadow-lg shadow-brand/5">
@@ -323,7 +349,9 @@ function WorkflowJourney() {
 
       <div className="relative mt-12">
         <div className="absolute left-5 top-5 hidden h-px w-[calc(100%-2.5rem)] bg-border md:block" />
-        <div className="absolute left-5 top-5 hidden h-px w-[82%] bg-brand/45 md:block" />
+        <div className="landing-progress-track absolute left-5 top-5 hidden w-[calc(100%-2.5rem)] md:block">
+          <span className="landing-progress-dot" />
+        </div>
 
         <div className="grid gap-4 md:grid-cols-6">
           {workflowStages.map((stage, index) => (
@@ -556,6 +584,11 @@ function ProductShowcase() {
                 <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
                   {item.description}
                 </p>
+
+                <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+                  <span>See it in action</span>
+                  <FlowConnector reverse={index % 2 === 1} />
+                </div>
               </div>
 
               <div className={index % 2 === 1 ? "lg:order-1" : ""}>
@@ -594,99 +627,197 @@ function ArchitectureNode({
   );
 }
 
-function EngineeringSection() {
+function ExploreCtaSection() {
   return (
-    <section id="engineering" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-      <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-        <div>
-          <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand">
-            <Code2 className="h-6 w-6" aria-hidden="true" />
-          </span>
+    <section id="demo" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+      <div className="relative overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-primary-foreground shadow-xl shadow-foreground/10 sm:px-10 lg:px-14 lg:py-14">
+        <div className="absolute right-0 top-0 h-72 w-72 translate-x-1/3 -translate-y-1/3 rounded-full bg-brand/25 blur-3xl" />
 
-          <p className="mt-6 text-sm font-semibold text-brand">
-            Built as a real full-stack product
-          </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-            Product thinking on the surface. Production architecture underneath.
-          </h2>
-          <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
-            RoleNaviq is a portfolio project, but the engineering decisions are
-            intentionally production-oriented: authenticated user data,
-            authorization boundaries, API-driven state and a deployed frontend,
-            backend and database.
-          </p>
+        <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <p className="text-sm font-semibold text-brand">
+              Ready to explore the route?
+            </p>
+            <h2 className="mt-2 text-3xl font-bold tracking-tight">
+              See the complete RoleNaviq workflow yourself.
+            </h2>
+            <p className="mt-3 max-w-2xl text-primary-foreground/70">
+              Open the live demo and move through the dashboard, application
+              board, calendar and real job-search workflow.
+            </p>
 
-          <div className="mt-7 flex flex-wrap gap-2">
-            {engineeringHighlights.map((item) => (
-              <span
-                key={item}
-                className="rounded-full border bg-card px-3 py-1.5 text-xs font-medium"
-              >
-                {item}
-              </span>
-            ))}
+            <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+              <span>Product tour</span>
+              <FlowConnector />
+              <span>Dashboard</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Button
+              size="lg"
+              variant="secondary"
+              render={<Link to="/login?demo=1" />}
+            >
+              Explore live demo
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Button>
+
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+              render={<Link to="/register" />}
+            >
+              Create account
+            </Button>
           </div>
         </div>
 
-        <div className="rounded-[2rem] border bg-card p-5 shadow-lg shadow-foreground/5 sm:p-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold">Production architecture</p>
-              <p className="text-xs text-muted-foreground">
-                Simple enough to understand. Real enough to deploy.
-              </p>
+        <div className="relative mt-8 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <KeyRound className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+            <span className="text-primary-foreground/70">
+              Demo credentials are ready for you.
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
+            <span>{DEMO_EMAIL}</span>
+            <span className="text-primary-foreground/60">{DEMO_PASSWORD}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function EngineeringSection() {
+  return (
+    <section id="engineering" className="border-t border-brand/20 bg-primary text-primary-foreground">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+        <div className="mb-12 flex flex-col gap-4 border-b border-white/10 pb-8 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+              <Code2 className="h-3.5 w-3.5" aria-hidden="true" />
+              Engineering · Portfolio case study
+            </span>
+            <h2 className="mt-5 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl">
+              This is how RoleNaviq is built — separate from what the product does.
+            </h2>
+          </div>
+
+          <p className="max-w-md text-sm leading-6 text-primary-foreground/65">
+            A technical view for developers and recruiters who want to look
+            beyond the UI and understand the architecture, security and stack.
+          </p>
+        </div>
+
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <div>
+            <p className="text-sm font-semibold text-brand">
+              Production-oriented full-stack engineering
+            </p>
+            <p className="mt-4 max-w-xl leading-7 text-primary-foreground/70">
+              RoleNaviq uses authenticated user data, server-side authorization,
+              API-driven state and separate production deployments for the
+              frontend, backend and database.
+            </p>
+
+            <p className="mt-7 text-xs font-semibold uppercase tracking-[0.18em] text-primary-foreground/50">
+              Implemented
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {engineeringHighlights.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-primary-foreground/85"
+                >
+                  {item}
+                </span>
+              ))}
             </div>
-            <ShieldCheck className="h-5 w-5 text-brand" aria-hidden="true" />
-          </div>
 
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <ArchitectureNode
-              icon={<Code2 className="h-5 w-5" aria-hidden="true" />}
-              label="Frontend"
-              value="React · Vite"
-              detail="Vercel"
-            />
-            <ArchitectureNode
-              icon={<Server className="h-5 w-5" aria-hidden="true" />}
-              label="API"
-              value="Node · Express"
-              detail="Render"
-            />
-            <ArchitectureNode
-              icon={<Database className="h-5 w-5" aria-hidden="true" />}
-              label="Database"
-              value="MongoDB"
-              detail="Atlas"
-            />
-          </div>
-
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
-            <span>React client</span>
-            <ArrowRight className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
-            <span>/api proxy</span>
-            <ArrowRight className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
-            <span>Express API</span>
-            <ArrowRight className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
-            <span>MongoDB Atlas</span>
-          </div>
-
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border bg-muted/25 p-4">
-              <KeyRound className="h-5 w-5 text-brand" aria-hidden="true" />
-              <p className="mt-3 text-sm font-semibold">Secure sessions</p>
-              <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                JWT authentication is stored in HttpOnly cookies rather than
-                exposed to client-side JavaScript.
-              </p>
+            <p className="mt-7 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+              Engineering roadmap
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {engineeringRoadmap.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-dashed border-brand/40 bg-brand/8 px-3 py-1.5 text-xs font-medium text-brand"
+                >
+                  {item}
+                </span>
+              ))}
             </div>
 
-            <div className="rounded-2xl border bg-muted/25 p-4">
+            <p className="mt-4 text-xs leading-5 text-primary-foreground/50">
+              Cypress, AI features and CI/CD are shown as roadmap items so the
+              portfolio stays clear about what is implemented today and what is
+              planned next.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/10 bg-background p-5 text-foreground shadow-2xl shadow-black/15 sm:p-6">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold">Production architecture</p>
+                <p className="text-xs text-muted-foreground">
+                  Simple enough to understand. Real enough to deploy.
+                </p>
+              </div>
               <ShieldCheck className="h-5 w-5 text-brand" aria-hidden="true" />
-              <p className="mt-3 text-sm font-semibold">Ownership enforced</p>
-              <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                Application access is scoped to the signed-in user on the
-                server, not only hidden in the interface.
-              </p>
+            </div>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <ArchitectureNode
+                icon={<Code2 className="h-5 w-5" aria-hidden="true" />}
+                label="Frontend"
+                value="React · Vite"
+                detail="Vercel"
+              />
+              <ArchitectureNode
+                icon={<Server className="h-5 w-5" aria-hidden="true" />}
+                label="API"
+                value="Node · Express"
+                detail="Render"
+              />
+              <ArchitectureNode
+                icon={<Database className="h-5 w-5" aria-hidden="true" />}
+                label="Database"
+                value="MongoDB"
+                detail="Atlas"
+              />
+            </div>
+
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
+              <span>React client</span>
+              <ArrowRight className="landing-arrow-pulse h-3.5 w-3.5 text-brand" aria-hidden="true" />
+              <span>/api proxy</span>
+              <ArrowRight className="landing-arrow-pulse h-3.5 w-3.5 text-brand" aria-hidden="true" />
+              <span>Express API</span>
+              <ArrowRight className="landing-arrow-pulse h-3.5 w-3.5 text-brand" aria-hidden="true" />
+              <span>MongoDB Atlas</span>
+            </div>
+
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl border bg-muted/25 p-4">
+                <KeyRound className="h-5 w-5 text-brand" aria-hidden="true" />
+                <p className="mt-3 text-sm font-semibold">Secure sessions</p>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                  JWT authentication is stored in HttpOnly cookies rather than
+                  exposed to client-side JavaScript.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border bg-muted/25 p-4">
+                <ShieldCheck className="h-5 w-5 text-brand" aria-hidden="true" />
+                <p className="mt-3 text-sm font-semibold">Ownership enforced</p>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                  Application access is scoped to the signed-in user on the
+                  server, not only hidden in the interface.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -696,6 +827,10 @@ function EngineeringSection() {
 }
 
 export function LandingPage() {
+  useEffect(() => {
+    void warmUpApi();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-xl">
@@ -793,67 +928,67 @@ export function LandingPage() {
         <ChaosToClarity />
         <WorkflowJourney />
         <ProductShowcase />
+        <ExploreCtaSection />
         <EngineeringSection />
+      </main>
 
-        <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8">
-          <div className="relative overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-primary-foreground shadow-xl shadow-foreground/10 sm:px-10 lg:px-14 lg:py-14">
-            <div className="absolute right-0 top-0 h-72 w-72 translate-x-1/3 -translate-y-1/3 rounded-full bg-brand/25 blur-3xl" />
-
-            <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
-              <div>
-                <p className="text-sm font-semibold text-brand">
-                  Ready to explore the route?
-                </p>
-                <h2 className="mt-2 text-3xl font-bold tracking-tight">
-                  See the complete RoleNaviq workflow yourself.
-                </h2>
-                <p className="mt-3 max-w-2xl text-primary-foreground/70">
-                  Open the live demo and move through the dashboard, application
-                  board, calendar and real job-search workflow.
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  render={<Link to="/login?demo=1" />}
-                >
-                  Explore live demo
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </Button>
-
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
-                  render={<Link to="/register" />}
-                >
-                  Create account
-                </Button>
+      <footer className="border-t bg-card/55">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+          <div className="grid gap-10 md:grid-cols-[1.3fr_0.7fr_0.8fr]">
+            <div>
+              <Brand />
+              <p className="mt-4 max-w-sm text-sm leading-6 text-muted-foreground">
+                A full-stack portfolio project for navigating applications,
+                interviews and job-search progress without losing track.
+              </p>
+              <div className="mt-5 inline-flex items-center gap-2 rounded-full border bg-background px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                Production demo
               </div>
             </div>
 
-            <div className="relative mt-8 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-3">
-                <KeyRound className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
-                <span className="text-primary-foreground/70">
-                  Demo credentials are ready for you.
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
-                <span>{DEMO_EMAIL}</span>
-                <span className="text-primary-foreground/60">{DEMO_PASSWORD}</span>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Explore
+              </p>
+              <nav className="mt-4 flex flex-col items-start gap-3 text-sm">
+                <a href="#features" className="transition-colors hover:text-brand">
+                  Product
+                </a>
+                <a href="#workflow" className="transition-colors hover:text-brand">
+                  Workflow
+                </a>
+                <Link to="/login?demo=1" className="transition-colors hover:text-brand">
+                  Live demo
+                </Link>
+              </nav>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Engineering
+              </p>
+              <div className="mt-4 flex flex-col items-start gap-3 text-sm">
+                <a href="#engineering" className="transition-colors hover:text-brand">
+                  Architecture
+                </a>
+                <a
+                  href="https://github.com/fhjoy/rolenaviq"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 transition-colors hover:text-brand"
+                >
+                  <Github className="h-4 w-4" aria-hidden="true" />
+                  GitHub repository
+                </a>
               </div>
             </div>
           </div>
-        </section>
-      </main>
 
-      <footer className="border-t">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <Brand />
-          <p className="text-sm text-muted-foreground">Built by Faisal Hossain</p>
+          <div className="mt-10 flex flex-col gap-3 border-t pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+            <p>Built by Faisal Hossain · Full-stack portfolio project</p>
+            <p>RoleNaviq · Navigate your job search</p>
+          </div>
         </div>
       </footer>
     </div>

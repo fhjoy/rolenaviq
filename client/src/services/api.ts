@@ -10,6 +10,17 @@ export class ApiError extends Error {
   }
 }
 
+export async function warmUpApi(): Promise<void> {
+  try {
+    await fetch(API_URL + "/health", {
+      credentials: "include",
+      cache: "no-store",
+    });
+  } catch {
+    // Warm-up is best-effort. Normal API requests still handle failures.
+  }
+}
+
 function redirectToLoginOnExpiredSession(endpoint: string, status: number) {
   if (
     status !== 401 ||

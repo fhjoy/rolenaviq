@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2, Clock3 } from "lucide-react";
+import { CheckCircle2, Clock3, Server } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { AuthLayout } from "@/components/auth/AuthLayout";
@@ -49,6 +50,21 @@ export function LoginPage() {
       navigate("/dashboard");
     },
   });
+
+  const [showServerWakeMessage, setShowServerWakeMessage] = useState(false);
+
+  useEffect(() => {
+    if (!loginMutation.isPending) {
+      setShowServerWakeMessage(false);
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowServerWakeMessage(true);
+    }, 2500);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [loginMutation.isPending]);
 
   return (
     <AuthLayout>
@@ -138,6 +154,37 @@ export function LoginPage() {
                 </p>
               )}
             </div>
+
+            {showServerWakeMessage && loginMutation.isPending && (
+              <div
+                className="rounded-xl border border-brand/20 bg-brand/8 p-4"
+                role="status"
+                aria-live="polite"
+              >
+                <div className="flex gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">
+                    <Server className="h-4 w-4" aria-hidden="true" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold">Starting the demo server…</p>
+                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                      RoleNaviq uses a free hosting service, so the server can
+                      need a few moments to wake after being inactive. Keep this
+                      page open — sign-in will continue automatically.
+                    </p>
+
+                    <div className="server-wake-track mt-4" aria-hidden="true">
+                      <span className="server-wake-dot" />
+                    </div>
+                    <div className="mt-2 flex justify-between gap-2 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                      <span>Starting</span>
+                      <span>Connecting</span>
+                      <span>Opening dashboard</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {loginMutation.isError && (
               <p className="text-sm text-destructive" role="alert">
