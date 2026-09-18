@@ -472,10 +472,12 @@ function BoardPreview() {
                     "h-2 w-2 rounded-full",
                     column.accent,
                     column.title === "Applied"
-                      ? "landing-board-status-pulse"
+                      ? "landing-board-status-applied"
                       : column.title === "Interview"
-                        ? "landing-board-status-pulse landing-board-status-pulse-delay"
-                        : "",
+                        ? "landing-board-status-interview"
+                        : column.title === "Offer"
+                          ? "landing-board-offer-celebrate"
+                          : "",
                   ].join(" ")}
                 />
                 <span className="text-xs font-semibold">{column.title}</span>
@@ -771,6 +773,7 @@ function ExploreCtaSection() {
             <Button
               size="lg"
               variant="secondary"
+              className="landing-demo-button"
               render={<Link to="/login?demo=1" />}
             >
               Explore live demo
@@ -1035,7 +1038,11 @@ export function LandingPage() {
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <Button size="lg" render={<Link to="/login?demo=1" />}>
+                <Button
+                  size="lg"
+                  className="landing-demo-button"
+                  render={<Link to="/login?demo=1" />}
+                >
                   Explore live demo
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Button>
