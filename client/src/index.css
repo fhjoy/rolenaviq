@@ -136,3 +136,21 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+@keyframes landing-route-flow {
+  to {
+    stroke-dashoffset: -44;
+  }
+}
+
+.landing-route-line {
+  stroke-dasharray: 10 12;
+  animation: landing-route-flow 7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-route-line {
+    animation: none;
+  }
+}

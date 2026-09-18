@@ -4,188 +4,694 @@ import {
   BriefcaseBusiness,
   CalendarDays,
   CheckCircle2,
+  ChevronRight,
+  Code2,
   Columns3,
+  Database,
   KeyRound,
+  Mail,
+  Server,
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
 import { Link } from "react-router";
+import type { ReactNode } from "react";
 
 import { Brand } from "@/components/brand/Brand";
 import { Button } from "@/components/ui/button";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/config/demo";
 
-const features = [
-  {
-    icon: BriefcaseBusiness,
-    title: "Keep applications together",
-    description:
-      "Track companies, roles, technologies, dates and notes without jumping between spreadsheets and documents.",
-  },
-  {
-    icon: Columns3,
-    title: "See where everything stands",
-    description:
-      "Move applications through your job-search workflow with a visual Kanban board.",
-  },
-  {
-    icon: CalendarDays,
-    title: "Stay ready for interviews",
-    description:
-      "Keep interview dates visible in one calendar so the next important conversation does not get lost.",
-  },
-  {
-    icon: BarChart3,
-    title: "Understand your progress",
-    description:
-      "Use dashboard statistics and activity trends to get a clearer picture of how your search is moving.",
-  },
+const workflowStages = [
+  { label: "Saved", detail: "Capture the opportunity" },
+  { label: "Applied", detail: "Know what went out" },
+  { label: "Screening", detail: "Track first contact" },
+  { label: "Interview", detail: "Prepare for the conversation" },
+  { label: "Technical", detail: "Keep the next step visible" },
+  { label: "Offer", detail: "See the destination" },
 ];
 
-function ProductPreview() {
-  return (
-    <div className="relative" aria-label="RoleNaviq dashboard preview">
-      <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-brand/12 blur-3xl" />
+const engineeringHighlights = [
+  "React + TypeScript frontend",
+  "Node + Express REST API",
+  "MongoDB + Mongoose persistence",
+  "HttpOnly JWT authentication",
+  "Per-user data ownership",
+  "Responsive + accessible UI",
+  "Production deployment",
+];
 
-      <div className="overflow-hidden rounded-3xl border bg-card shadow-2xl shadow-foreground/8">
-        <div className="flex items-center justify-between border-b px-5 py-4">
-          <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+function RouteBadge({
+  label,
+  tone = "brand",
+}: {
+  label: string;
+  tone?: "brand" | "sky" | "amber" | "emerald";
+}) {
+  const toneClasses = {
+    brand: "border-brand/20 bg-brand/10 text-brand",
+    sky: "border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-300",
+    amber:
+      "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-300",
+    emerald:
+      "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300",
+  };
+
+  return (
+    <span
+      className={[
+        "inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold",
+        toneClasses[tone],
+      ].join(" ")}
+    >
+      {label}
+    </span>
+  );
+}
+
+function HeroNavigationPreview() {
+  return (
+    <div className="relative mx-auto w-full max-w-2xl">
+      <div className="pointer-events-none absolute -inset-8 -z-10 rounded-[3rem] bg-brand/10 blur-3xl" />
+
+      <div className="relative min-h-[390px] overflow-hidden rounded-[2rem] border bg-card/90 p-5 shadow-2xl shadow-foreground/8 backdrop-blur sm:min-h-[440px] sm:p-6">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
+            backgroundSize: "34px 34px",
+          }}
+        />
+
+        <div className="relative flex items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">
+              Career route
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              One workspace. Every next step.
+            </p>
+          </div>
+
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border bg-background/80 shadow-sm">
+            <img
+              src="/rolenaviq-icon.svg"
+              alt=""
+              className="h-7 w-7"
+              aria-hidden="true"
+            />
           </div>
         </div>
 
-        <div className="bg-muted/25 p-5 sm:p-6">
-          <div>
-            <p className="text-xs text-muted-foreground">Welcome back</p>
-            <p className="mt-1 text-xl font-bold">Your job search</p>
+        <svg
+          className="pointer-events-none absolute inset-x-5 bottom-7 h-[280px] w-[calc(100%-2.5rem)] text-brand sm:inset-x-8 sm:bottom-8 sm:w-[calc(100%-4rem)]"
+          viewBox="0 0 620 300"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M28 246 C118 248 125 170 213 172 C302 173 300 96 392 103 C481 110 502 53 590 48"
+            className="landing-route-line"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          <circle cx="28" cy="246" r="6" fill="currentColor" />
+          <circle cx="213" cy="172" r="6" fill="currentColor" />
+          <circle cx="392" cy="103" r="6" fill="currentColor" />
+          <circle cx="590" cy="48" r="9" fill="currentColor" />
+          <circle
+            cx="590"
+            cy="48"
+            r="18"
+            stroke="currentColor"
+            strokeOpacity=".2"
+            strokeWidth="8"
+          />
+        </svg>
+
+        <div className="absolute bottom-8 left-[5%] w-[148px] rounded-2xl border bg-background/95 p-3 shadow-lg sm:bottom-9 sm:left-[6%] sm:w-[172px]">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted">
+              <BriefcaseBusiness className="h-4 w-4" aria-hidden="true" />
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-xs font-semibold">Frontend Engineer</p>
+              <p className="truncate text-[11px] text-muted-foreground">
+                Northstar Labs
+              </p>
+            </div>
+          </div>
+          <div className="mt-3">
+            <RouteBadge label="Saved" />
+          </div>
+        </div>
+
+        <div className="absolute left-[34%] top-[44%] w-[154px] rounded-2xl border bg-background/95 p-3 shadow-xl sm:left-[35%] sm:top-[43%] sm:w-[180px]">
+          <div className="flex items-center justify-between gap-2">
+            <div>
+              <p className="text-xs font-semibold">React Developer</p>
+              <p className="mt-0.5 text-[11px] text-muted-foreground">
+                Orbit Systems
+              </p>
+            </div>
+            <CheckCircle2 className="h-4 w-4 shrink-0 text-sky-600" aria-hidden="true" />
+          </div>
+          <div className="mt-3">
+            <RouteBadge label="Applied" tone="sky" />
+          </div>
+        </div>
+
+        <div className="absolute right-[4%] top-[24%] w-[158px] rounded-2xl border border-brand/25 bg-background/95 p-3 shadow-xl shadow-brand/10 sm:right-[5%] sm:top-[22%] sm:w-[190px]">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand">
+              <CalendarDays className="h-4 w-4" aria-hidden="true" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold">Product Engineer</p>
+              <p className="text-[11px] text-muted-foreground">Friday · 10:30</p>
+            </div>
+          </div>
+          <div className="mt-3">
+            <RouteBadge label="Interview" tone="amber" />
+          </div>
+        </div>
+
+        <div className="absolute right-4 top-[49%] hidden rounded-xl border bg-background/90 px-3 py-2 shadow-md sm:block">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+            Destination
+          </p>
+          <p className="mt-0.5 text-xs font-bold text-brand">Offer</p>
+        </div>
+      </div>
+
+      <div className="absolute -bottom-5 left-6 hidden items-center gap-3 rounded-2xl border bg-card px-4 py-3 shadow-xl lg:flex">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+          <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+        </span>
+        <div>
+          <p className="text-[11px] text-muted-foreground">Latest update</p>
+          <p className="text-sm font-semibold">Moved to Interview</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ChaosToClarity() {
+  return (
+    <section className="border-y bg-muted/25">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-sm font-semibold text-brand">From chaos to clarity</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+            Your job search should not live across six different places.
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            RoleNaviq turns scattered emails, notes, spreadsheets and interview
+            reminders into one calm operating view.
+          </p>
+        </div>
+
+        <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-[1fr_auto_1fr]">
+          <div className="relative overflow-hidden rounded-3xl border bg-card p-6">
+            <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-rose-300/10 blur-2xl" />
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Before
+            </p>
+            <h3 className="mt-2 text-xl font-semibold">Everything everywhere.</h3>
+
+            <div className="mt-7 space-y-3">
+              <div className="rotate-[-1.5deg] rounded-2xl border bg-background p-4 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <Mail className="h-5 w-5 text-sky-600" aria-hidden="true" />
+                  <div>
+                    <p className="text-sm font-semibold">Interview invitation</p>
+                    <p className="text-xs text-muted-foreground">
+                      buried in your inbox
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="ml-5 rotate-[1deg] rounded-2xl border bg-background p-4 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <BarChart3 className="h-5 w-5 text-emerald-600" aria-hidden="true" />
+                  <div>
+                    <p className="text-sm font-semibold">applications-final-v4.xlsx</p>
+                    <p className="text-xs text-muted-foreground">
+                      maybe the latest version
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mr-7 rotate-[-0.5deg] rounded-2xl border bg-background p-4 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <CalendarDays className="h-5 w-5 text-amber-600" aria-hidden="true" />
+                  <div>
+                    <p className="text-sm font-semibold">Friday 10:30?</p>
+                    <p className="text-xs text-muted-foreground">
+                      reminder without context
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <PreviewStat label="Applications" value="24" />
-            <PreviewStat label="Interviews" value="5" />
-            <PreviewStat label="Offers" value="2" />
-            <PreviewStat label="Response" value="38%" />
+          <div className="hidden items-center justify-center lg:flex" aria-hidden="true">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border bg-background text-brand shadow-sm">
+              <ArrowRight className="h-5 w-5" />
+            </div>
           </div>
 
-          <div className="mt-4 grid gap-4 sm:grid-cols-[1.35fr_1fr]">
-            <div className="rounded-2xl border bg-card p-4 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold">Monthly activity</p>
-                  <p className="text-xs text-muted-foreground">
-                    Applications added
+          <div className="relative overflow-hidden rounded-3xl border border-brand/20 bg-card p-6 shadow-lg shadow-brand/5">
+            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand/10 blur-3xl" />
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              With RoleNaviq
+            </p>
+            <h3 className="mt-2 text-xl font-semibold">One route. Clear next steps.</h3>
+
+            <div className="mt-7 grid grid-cols-3 gap-2">
+              {["Applied", "Interview", "Offer"].map((stage, index) => (
+                <div key={stage} className="rounded-2xl border bg-background p-3">
+                  <p className="text-[11px] text-muted-foreground">{stage}</p>
+                  <p className="mt-2 text-2xl font-bold">{[9, 5, 2][index]}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 space-y-2.5 rounded-2xl border bg-background p-4">
+              {[
+                ["Frontend Engineer", "Interview · Friday"],
+                ["React Developer", "Applied · 2 days ago"],
+                ["Full Stack Engineer", "Screening · Today"],
+              ].map(([role, meta]) => (
+                <div
+                  key={role}
+                  className="flex items-center justify-between gap-3 rounded-xl bg-muted/45 px-3 py-2.5"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">{role}</p>
+                    <p className="text-xs text-muted-foreground">{meta}</p>
+                  </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WorkflowJourney() {
+  return (
+    <section id="workflow" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+      <div className="max-w-3xl">
+        <p className="text-sm font-semibold text-brand">Your job-search route</p>
+        <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          Every opportunity has a next step. RoleNaviq keeps the route visible.
+        </h2>
+        <p className="mt-4 max-w-2xl text-muted-foreground">
+          Move forward without wondering which company replied, which interview
+          comes next, or where an application currently stands.
+        </p>
+      </div>
+
+      <div className="relative mt-12">
+        <div className="absolute left-5 top-5 hidden h-px w-[calc(100%-2.5rem)] bg-border md:block" />
+        <div className="absolute left-5 top-5 hidden h-px w-[82%] bg-brand/45 md:block" />
+
+        <div className="grid gap-4 md:grid-cols-6">
+          {workflowStages.map((stage, index) => (
+            <article
+              key={stage.label}
+              className="group relative rounded-2xl border bg-card p-4 transition-transform duration-200 hover:-translate-y-1"
+            >
+              <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-brand/25 bg-background text-sm font-bold text-brand shadow-sm">
+                {index + 1}
+              </div>
+              <p className="mt-4 font-semibold">{stage.label}</p>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                {stage.detail}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BoardPreview() {
+  const columns = [
+    {
+      title: "Applied",
+      cards: ["Frontend Engineer", "React Developer"],
+      accent: "bg-sky-500",
+    },
+    {
+      title: "Interview",
+      cards: ["Product Engineer"],
+      accent: "bg-amber-500",
+    },
+    {
+      title: "Offer",
+      cards: ["Full Stack Engineer"],
+      accent: "bg-emerald-500",
+    },
+  ];
+
+  return (
+    <div className="rounded-3xl border bg-muted/30 p-4 sm:p-5">
+      <div className="mb-4 flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold">Application board</p>
+          <p className="text-xs text-muted-foreground">Drag. Drop. Keep moving.</p>
+        </div>
+        <Columns3 className="h-5 w-5 text-brand" aria-hidden="true" />
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        {columns.map((column) => (
+          <div key={column.title} className="rounded-2xl border bg-card p-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className={["h-2 w-2 rounded-full", column.accent].join(" ")} />
+                <span className="text-xs font-semibold">{column.title}</span>
+              </div>
+              <span className="text-[11px] text-muted-foreground">
+                {column.cards.length}
+              </span>
+            </div>
+
+            <div className="mt-3 space-y-2">
+              {column.cards.map((card) => (
+                <div key={card} className="rounded-xl border bg-background p-3 shadow-sm">
+                  <p className="text-xs font-semibold">{card}</p>
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    Remote · Full-time
                   </p>
                 </div>
-
-                <BarChart3 className="h-4 w-4 text-brand" aria-hidden="true" />
-              </div>
-
-              <div className="mt-6 flex h-28 items-end gap-2">
-                <div className="h-[35%] flex-1 rounded-t-md bg-brand/18" />
-                <div className="h-[52%] flex-1 rounded-t-md bg-brand/28" />
-                <div className="h-[42%] flex-1 rounded-t-md bg-brand/22" />
-                <div className="h-[70%] flex-1 rounded-t-md bg-brand/45" />
-                <div className="h-[58%] flex-1 rounded-t-md bg-brand/35" />
-                <div className="h-[88%] flex-1 rounded-t-md bg-brand" />
-                <div className="h-[74%] flex-1 rounded-t-md bg-brand/65" />
-              </div>
-            </div>
-
-            <div className="rounded-2xl border bg-card p-4 shadow-sm">
-              <p className="text-sm font-semibold">Pipeline</p>
-              <p className="text-xs text-muted-foreground">Current status</p>
-
-              <div className="mt-5 space-y-4">
-                <PipelineItem
-                  label="Applied"
-                  value="9"
-                  className="bg-sky-500"
-                />
-                <PipelineItem
-                  label="Interview"
-                  value="5"
-                  className="bg-amber-500"
-                />
-                <PipelineItem
-                  label="Offer"
-                  value="2"
-                  className="bg-emerald-500"
-                />
-              </div>
+              ))}
             </div>
           </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-          <div className="mt-4 flex items-center gap-3 rounded-2xl border bg-card p-4 shadow-sm">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand">
-              <CalendarDays className="h-5 w-5" aria-hidden="true" />
-            </div>
-
-            <div className="min-w-0">
-              <p className="text-sm font-semibold">
-                Frontend Developer interview
-              </p>
-              <p className="truncate text-xs text-muted-foreground">
-                Wednesday · 10:30 · Example Company
-              </p>
-            </div>
-
-            <span className="ml-auto hidden rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 sm:inline">
-              Upcoming
-            </span>
-          </div>
+function CalendarPreview() {
+  return (
+    <div className="rounded-3xl border bg-muted/30 p-4 sm:p-5">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold">Interview calendar</p>
+          <p className="text-xs text-muted-foreground">September 2026</p>
         </div>
+        <CalendarDays className="h-5 w-5 text-brand" aria-hidden="true" />
       </div>
 
-      <div className="absolute -bottom-5 -left-5 hidden rounded-2xl border bg-card p-4 shadow-xl lg:block">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
-            <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
-          </div>
+      <div className="mt-5 grid grid-cols-7 gap-1.5 text-center text-[11px]">
+        {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
+          <span key={day + index} className="py-1 text-muted-foreground">
+            {day}
+          </span>
+        ))}
 
-          <div>
-            <p className="text-xs text-muted-foreground">Latest update</p>
-            <p className="text-sm font-semibold">Moved to Interview</p>
-          </div>
+        {Array.from({ length: 28 }).map((_, index) => {
+          const day = index + 1;
+          const highlighted = day === 18 || day === 23;
+
+          return (
+            <div
+              key={day}
+              className={[
+                "flex aspect-square items-center justify-center rounded-lg border text-xs",
+                highlighted
+                  ? "border-brand bg-brand text-brand-foreground"
+                  : "bg-card",
+              ].join(" ")}
+            >
+              {day}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 flex items-center gap-3 rounded-2xl border bg-card p-3">
+        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand/10 text-brand">
+          <CalendarDays className="h-4 w-4" aria-hidden="true" />
+        </span>
+        <div>
+          <p className="text-xs font-semibold">Frontend Developer interview</p>
+          <p className="text-[11px] text-muted-foreground">
+            18 September · 10:30
+          </p>
         </div>
       </div>
     </div>
   );
 }
 
-interface PreviewStatProps {
-  label: string;
-  value: string;
-}
-
-function PreviewStat({ label, value }: PreviewStatProps) {
+function AnalyticsPreview() {
   return (
-    <div className="rounded-2xl border bg-card p-4 shadow-sm">
-      <p className="text-2xl font-bold tracking-tight">{value}</p>
-      <p className="mt-1 text-xs text-muted-foreground">{label}</p>
+    <div className="rounded-3xl border bg-muted/30 p-4 sm:p-5">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold">Progress overview</p>
+          <p className="text-xs text-muted-foreground">Your search at a glance</p>
+        </div>
+        <BarChart3 className="h-5 w-5 text-brand" aria-hidden="true" />
+      </div>
+
+      <div className="mt-5 grid grid-cols-3 gap-2">
+        {[
+          ["24", "Applications"],
+          ["5", "Interviews"],
+          ["38%", "Response"],
+        ].map(([value, label]) => (
+          <div key={label} className="rounded-2xl border bg-card p-3">
+            <p className="text-xl font-bold">{value}</p>
+            <p className="mt-1 text-[11px] text-muted-foreground">{label}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 rounded-2xl border bg-card p-4">
+        <div className="flex h-28 items-end gap-2">
+          {[32, 46, 39, 68, 55, 86, 73].map((height, index) => (
+            <div key={index} className="flex h-full flex-1 items-end">
+              <div
+                className={[
+                  "w-full rounded-t-md",
+                  index === 5 ? "bg-brand" : "bg-brand/25",
+                ].join(" ")}
+                style={{ height: String(height) + "%" }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
-interface PipelineItemProps {
-  label: string;
-  value: string;
-  className: string;
+function ProductShowcase() {
+  const showcases = [
+    {
+      eyebrow: "Board",
+      title: "See momentum, not another spreadsheet.",
+      description:
+        "The visual board turns application status into something you can understand in seconds. Move opportunities forward while keeping the whole pipeline in view.",
+      preview: <BoardPreview />,
+    },
+    {
+      eyebrow: "Calendar",
+      title: "Know what needs your attention next.",
+      description:
+        "Interview dates live beside the applications they belong to, so preparation starts with context instead of searching through old messages.",
+      preview: <CalendarPreview />,
+    },
+    {
+      eyebrow: "Analytics",
+      title: "Turn activity into a useful signal.",
+      description:
+        "A focused dashboard gives you enough data to understand pace and response without turning your job search into a reporting exercise.",
+      preview: <AnalyticsPreview />,
+    },
+  ];
+
+  return (
+    <section id="features" className="border-y bg-card/35">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-sm font-semibold text-brand">The product, not just the pitch</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+            A workspace designed around the real rhythm of a job search.
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            RoleNaviq connects the board, calendar and progress view so each
+            screen answers a different question at the right moment.
+          </p>
+        </div>
+
+        <div className="mt-16 space-y-16 lg:space-y-24">
+          {showcases.map((item, index) => (
+            <article
+              key={item.title}
+              className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14"
+            >
+              <div className={index % 2 === 1 ? "lg:order-2" : ""}>
+                <span className="inline-flex rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
+                  {item.eyebrow}
+                </span>
+                <h3 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
+                  {item.title}
+                </h3>
+                <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
+                  {item.description}
+                </p>
+              </div>
+
+              <div className={index % 2 === 1 ? "lg:order-1" : ""}>
+                {item.preview}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
-function PipelineItem({ label, value, className }: PipelineItemProps) {
+function ArchitectureNode({
+  icon,
+  label,
+  value,
+  detail,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+  detail: string;
+}) {
   return (
-    <div>
-      <div className="flex items-center justify-between text-xs">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="font-medium">{value}</span>
-      </div>
-
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
-        <div className={`h-full w-2/3 rounded-full ${className}`} />
-      </div>
+    <div className="relative rounded-2xl border bg-background p-4">
+      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand/10 text-brand">
+        {icon}
+      </span>
+      <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+        {label}
+      </p>
+      <p className="mt-1 text-sm font-semibold">{value}</p>
+      <p className="mt-0.5 text-xs text-muted-foreground">{detail}</p>
     </div>
+  );
+}
+
+function EngineeringSection() {
+  return (
+    <section id="engineering" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+      <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <div>
+          <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+            <Code2 className="h-6 w-6" aria-hidden="true" />
+          </span>
+
+          <p className="mt-6 text-sm font-semibold text-brand">
+            Built as a real full-stack product
+          </p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+            Product thinking on the surface. Production architecture underneath.
+          </h2>
+          <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
+            RoleNaviq is a portfolio project, but the engineering decisions are
+            intentionally production-oriented: authenticated user data,
+            authorization boundaries, API-driven state and a deployed frontend,
+            backend and database.
+          </p>
+
+          <div className="mt-7 flex flex-wrap gap-2">
+            {engineeringHighlights.map((item) => (
+              <span
+                key={item}
+                className="rounded-full border bg-card px-3 py-1.5 text-xs font-medium"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-[2rem] border bg-card p-5 shadow-lg shadow-foreground/5 sm:p-6">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold">Production architecture</p>
+              <p className="text-xs text-muted-foreground">
+                Simple enough to understand. Real enough to deploy.
+              </p>
+            </div>
+            <ShieldCheck className="h-5 w-5 text-brand" aria-hidden="true" />
+          </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <ArchitectureNode
+              icon={<Code2 className="h-5 w-5" aria-hidden="true" />}
+              label="Frontend"
+              value="React · Vite"
+              detail="Vercel"
+            />
+            <ArchitectureNode
+              icon={<Server className="h-5 w-5" aria-hidden="true" />}
+              label="API"
+              value="Node · Express"
+              detail="Render"
+            />
+            <ArchitectureNode
+              icon={<Database className="h-5 w-5" aria-hidden="true" />}
+              label="Database"
+              value="MongoDB"
+              detail="Atlas"
+            />
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
+            <span>React client</span>
+            <ArrowRight className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
+            <span>/api proxy</span>
+            <ArrowRight className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
+            <span>Express API</span>
+            <ArrowRight className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
+            <span>MongoDB Atlas</span>
+          </div>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-2xl border bg-muted/25 p-4">
+              <KeyRound className="h-5 w-5 text-brand" aria-hidden="true" />
+              <p className="mt-3 text-sm font-semibold">Secure sessions</p>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                JWT authentication is stored in HttpOnly cookies rather than
+                exposed to client-side JavaScript.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border bg-muted/25 p-4">
+              <ShieldCheck className="h-5 w-5 text-brand" aria-hidden="true" />
+              <p className="mt-3 text-sm font-semibold">Ownership enforced</p>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                Application access is scoped to the signed-in user on the
+                server, not only hidden in the interface.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -193,25 +699,30 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-xl">
-        <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Brand />
 
           <nav
-            className="hidden items-center gap-7 md:flex"
+            className="hidden items-center gap-7 lg:flex"
             aria-label="Landing page navigation"
           >
             <a
               href="#features"
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
-              Features
+              Product
             </a>
-
             <a
-              href="#built"
+              href="#workflow"
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
-              How it helps
+              Workflow
+            </a>
+            <a
+              href="#engineering"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Engineering
             </a>
           </nav>
 
@@ -222,9 +733,9 @@ export function LandingPage() {
 
             <Button
               className="hidden sm:inline-flex"
-              render={<Link to="/register" />}
+              render={<Link to="/login?demo=1" />}
             >
-              Get started
+              Explore demo
             </Button>
           </div>
         </div>
@@ -232,184 +743,73 @@ export function LandingPage() {
 
       <main>
         <section className="relative overflow-hidden border-b">
-          <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-brand/10 blur-3xl" />
-          <div className="pointer-events-none absolute right-0 top-10 h-96 w-96 rounded-full bg-amber-300/10 blur-3xl" />
+          <div className="pointer-events-none absolute -left-24 top-10 h-96 w-96 rounded-full bg-brand/10 blur-3xl" />
+          <div className="pointer-events-none absolute right-0 top-32 h-80 w-80 rounded-full bg-amber-300/8 blur-3xl" />
 
-          <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-32">
+          <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[0.88fr_1.12fr] lg:px-8 lg:py-32">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border bg-card/80 px-3 py-1.5 text-sm font-medium shadow-sm">
                 <Sparkles className="h-4 w-4 text-brand" aria-hidden="true" />
-                One place for your job search
+                Your career navigation control center
               </div>
 
               <h1 className="mt-7 max-w-3xl text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-                Navigate your job search{" "}
-                <span className="text-brand">without losing track.</span>
+                Your job search has a lot of moving parts.{" "}
+                <span className="text-brand">Navigate them without losing track.</span>
               </h1>
 
               <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-                Job searching is already enough work. RoleNaviq keeps your
-                applications, interviews and progress organized in one calm
-                workspace.
+                RoleNaviq connects applications, interviews and progress into
+                one clear route, so you always know where you are and what comes
+                next.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <Button size="lg" render={<Link to="/register" />}>
-                  Start tracking
+                <Button size="lg" render={<Link to="/login?demo=1" />}>
+                  Explore live demo
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Button>
 
-                <Button
-                  size="lg"
-                  variant="outline"
-                  render={<Link to="/login?demo=1" />}
-                >
-                  Explore demo
-                </Button>
-
-                <Button size="lg" variant="ghost" render={<Link to="/login" />}>
-                  Sign in
+                <Button size="lg" variant="outline" render={<Link to="/register" />}>
+                  Create account
                 </Button>
               </div>
 
-              <div className="mt-6 max-w-xl rounded-2xl border border-brand/20 bg-card/85 p-4 shadow-sm">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">
-                    <KeyRound className="h-4 w-4" aria-hidden="true" />
-                  </div>
-
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold">Demo access</p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      Explore the real dashboard, Kanban board, calendar and
-                      application workflow without creating an account.
-                    </p>
-
-                    <dl className="mt-3 grid gap-1 text-sm sm:grid-cols-[auto_1fr] sm:gap-x-3">
-                      <dt className="text-muted-foreground">Email</dt>
-                      <dd className="break-all font-medium">{DEMO_EMAIL}</dd>
-                      <dt className="text-muted-foreground">Password</dt>
-                      <dd className="break-all font-medium">{DEMO_PASSWORD}</dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
+              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
                 <span>Applications</span>
                 <span aria-hidden="true">·</span>
-                <span>Kanban board</span>
+                <span>Kanban workflow</span>
                 <span aria-hidden="true">·</span>
-                <span>Interviews</span>
+                <span>Interview calendar</span>
                 <span aria-hidden="true">·</span>
                 <span>Analytics</span>
               </div>
             </div>
 
-            <ProductPreview />
+            <HeroNavigationPreview />
           </div>
         </section>
 
-        <section
-          id="features"
-          className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8"
-        >
-          <div className="max-w-2xl">
-            <p className="text-sm font-semibold text-brand">
-              Everything in one place
-            </p>
+        <ChaosToClarity />
+        <WorkflowJourney />
+        <ProductShowcase />
+        <EngineeringSection />
 
-            <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-              Less time organizing. More time preparing for the next
-              opportunity.
-            </h2>
+        <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8">
+          <div className="relative overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-primary-foreground shadow-xl shadow-foreground/10 sm:px-10 lg:px-14 lg:py-14">
+            <div className="absolute right-0 top-0 h-72 w-72 translate-x-1/3 -translate-y-1/3 rounded-full bg-brand/25 blur-3xl" />
 
-            <p className="mt-4 text-muted-foreground">
-              RoleNaviq turns the scattered parts of a job search into a clear
-              workflow.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-5 md:grid-cols-2">
-            {features.map((feature) => {
-              const Icon = feature.icon;
-
-              return (
-                <article
-                  key={feature.title}
-                  className="group rounded-2xl border bg-card p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-foreground/5"
-                >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand/10 text-brand transition-colors group-hover:bg-brand group-hover:text-brand-foreground">
-                    <Icon className="h-5 w-5" aria-hidden="true" />
-                  </div>
-
-                  <h3 className="mt-5 text-lg font-semibold">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-2 leading-7 text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-
-        <section id="built" className="border-y bg-muted/35">
-          <div className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
-            <div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand">
-                <ShieldCheck className="h-6 w-6" aria-hidden="true" />
-              </div>
-
-              <h2 className="mt-6 text-3xl font-bold tracking-tight">
-                A clearer way to manage your job search.
-              </h2>
-
-              <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
-                RoleNaviq brings your applications, interviews and progress into
-                one structured workspace, so you always know what needs your
-                attention next.
-              </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              {[
-                "Keep opportunities organized",
-                "Follow every application stage",
-                "Stay on top of interviews",
-                "See your progress at a glance",
-                "Find important details quickly",
-                "Keep your job search focused",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-3 rounded-xl border bg-card p-4"
-                >
-                  <CheckCircle2
-                    className="h-5 w-5 shrink-0 text-brand"
-                    aria-hidden="true"
-                  />
-                  <span className="text-sm font-medium">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-12 text-primary-foreground shadow-xl shadow-foreground/10 sm:px-10 lg:px-14">
-            <div className="absolute right-0 top-0 h-64 w-64 translate-x-1/3 -translate-y-1/3 rounded-full bg-brand/20 blur-2xl" />
-
-            <div className="relative flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
+            <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
               <div>
-                <h2 className="text-3xl font-bold tracking-tight">
-                  Give your job search a clearer direction.
+                <p className="text-sm font-semibold text-brand">
+                  Ready to explore the route?
+                </p>
+                <h2 className="mt-2 text-3xl font-bold tracking-tight">
+                  See the complete RoleNaviq workflow yourself.
                 </h2>
-
-                <p className="mt-3 max-w-2xl text-primary-foreground/75">
-                  Keep applications, interview dates and progress together
-                  instead of trying to remember everything.
+                <p className="mt-3 max-w-2xl text-primary-foreground/70">
+                  Open the live demo and move through the dashboard, application
+                  board, calendar and real job-search workflow.
                 </p>
               </div>
 
@@ -417,9 +817,9 @@ export function LandingPage() {
                 <Button
                   size="lg"
                   variant="secondary"
-                  render={<Link to="/register" />}
+                  render={<Link to="/login?demo=1" />}
                 >
-                  Create an account
+                  Explore live demo
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Button>
 
@@ -427,10 +827,23 @@ export function LandingPage() {
                   size="lg"
                   variant="outline"
                   className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
-                  render={<Link to="/login?demo=1" />}
+                  render={<Link to="/register" />}
                 >
-                  Explore demo
+                  Create account
                 </Button>
+              </div>
+            </div>
+
+            <div className="relative mt-8 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-3">
+                <KeyRound className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+                <span className="text-primary-foreground/70">
+                  Demo credentials are ready for you.
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
+                <span>{DEMO_EMAIL}</span>
+                <span className="text-primary-foreground/60">{DEMO_PASSWORD}</span>
               </div>
             </div>
           </div>
@@ -440,10 +853,7 @@ export function LandingPage() {
       <footer className="border-t">
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <Brand />
-
-          <p className="text-sm text-muted-foreground">
-            Built by Faisal Hossain
-          </p>
+          <p className="text-sm text-muted-foreground">Built by Faisal Hossain</p>
         </div>
       </footer>
     </div>
