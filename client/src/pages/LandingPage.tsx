@@ -95,7 +95,11 @@ function FlowConnector({ reverse = false }: { reverse?: boolean }) {
   );
 }
 
-function FeatureSignal({ variant }: { variant: "board" | "calendar" | "analytics" }) {
+function FeatureSignal({
+  variant,
+}: {
+  variant: "board" | "calendar" | "analytics";
+}) {
   return (
     <span
       className={["feature-signal", `feature-signal-${variant}`].join(" ")}
@@ -176,7 +180,9 @@ function HeroNavigationPreview() {
               <BriefcaseBusiness className="h-4 w-4" aria-hidden="true" />
             </div>
             <div className="min-w-0">
-              <p className="truncate text-xs font-semibold">Frontend Engineer</p>
+              <p className="truncate text-xs font-semibold">
+                Frontend Engineer
+              </p>
               <p className="truncate text-[11px] text-muted-foreground">
                 Northstar Labs
               </p>
@@ -195,7 +201,10 @@ function HeroNavigationPreview() {
                 Orbit Systems
               </p>
             </div>
-            <CheckCircle2 className="h-4 w-4 shrink-0 text-sky-600" aria-hidden="true" />
+            <CheckCircle2
+              className="h-4 w-4 shrink-0 text-sky-600"
+              aria-hidden="true"
+            />
           </div>
           <div className="mt-3">
             <RouteBadge label="Applied" tone="sky" />
@@ -209,7 +218,9 @@ function HeroNavigationPreview() {
             </div>
             <div>
               <p className="text-xs font-semibold">Product Engineer</p>
-              <p className="text-[11px] text-muted-foreground">Friday · 10:30</p>
+              <p className="text-[11px] text-muted-foreground">
+                Friday · 10:30
+              </p>
             </div>
           </div>
           <div className="mt-3">
@@ -243,7 +254,9 @@ function ChaosToClarity() {
     <section className="border-y bg-muted/25">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm font-semibold text-brand">From chaos to clarity</p>
+          <p className="text-sm font-semibold text-brand">
+            From chaos to clarity
+          </p>
           <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
             Your job search should not live across six different places.
           </h2>
@@ -259,14 +272,18 @@ function ChaosToClarity() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
               Before
             </p>
-            <h3 className="mt-2 text-xl font-semibold">Everything everywhere.</h3>
+            <h3 className="mt-2 text-xl font-semibold">
+              Everything everywhere.
+            </h3>
 
             <div className="mt-7 space-y-3">
               <div className="rotate-[-1.5deg] rounded-2xl border bg-background p-4 shadow-sm">
                 <div className="flex items-center gap-3">
                   <Mail className="h-5 w-5 text-sky-600" aria-hidden="true" />
                   <div>
-                    <p className="text-sm font-semibold">Interview invitation</p>
+                    <p className="text-sm font-semibold">
+                      Interview invitation
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       buried in your inbox
                     </p>
@@ -276,9 +293,14 @@ function ChaosToClarity() {
 
               <div className="ml-5 rotate-[1deg] rounded-2xl border bg-background p-4 shadow-sm">
                 <div className="flex items-center gap-3">
-                  <BarChart3 className="h-5 w-5 text-emerald-600" aria-hidden="true" />
+                  <BarChart3
+                    className="h-5 w-5 text-emerald-600"
+                    aria-hidden="true"
+                  />
                   <div>
-                    <p className="text-sm font-semibold">applications-final-v4.xlsx</p>
+                    <p className="text-sm font-semibold">
+                      applications-final-v4.xlsx
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       maybe the latest version
                     </p>
@@ -288,7 +310,10 @@ function ChaosToClarity() {
 
               <div className="mr-7 rotate-[-0.5deg] rounded-2xl border bg-background p-4 shadow-sm">
                 <div className="flex items-center gap-3">
-                  <CalendarDays className="h-5 w-5 text-amber-600" aria-hidden="true" />
+                  <CalendarDays
+                    className="h-5 w-5 text-amber-600"
+                    aria-hidden="true"
+                  />
                   <div>
                     <p className="text-sm font-semibold">Friday 10:30?</p>
                     <p className="text-xs text-muted-foreground">
@@ -309,11 +334,16 @@ function ChaosToClarity() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
               With RoleNaviq
             </p>
-            <h3 className="mt-2 text-xl font-semibold">One route. Clear next steps.</h3>
+            <h3 className="mt-2 text-xl font-semibold">
+              One route. Clear next steps.
+            </h3>
 
             <div className="mt-7 grid grid-cols-3 gap-2">
               {["Applied", "Interview", "Offer"].map((stage, index) => (
-                <div key={stage} className="rounded-2xl border bg-background p-3">
+                <div
+                  key={stage}
+                  className="rounded-2xl border bg-background p-3"
+                >
                   <p className="text-[11px] text-muted-foreground">{stage}</p>
                   <p className="mt-2 text-2xl font-bold">{[9, 5, 2][index]}</p>
                 </div>
@@ -334,7 +364,10 @@ function ChaosToClarity() {
                     <p className="truncate text-sm font-medium">{role}</p>
                     <p className="text-xs text-muted-foreground">{meta}</p>
                   </div>
-                  <ChevronRight className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+                  <ChevronRight
+                    className="h-4 w-4 shrink-0 text-brand"
+                    aria-hidden="true"
+                  />
                 </div>
               ))}
             </div>
@@ -347,9 +380,14 @@ function ChaosToClarity() {
 
 function WorkflowJourney() {
   return (
-    <section id="workflow" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+    <section
+      id="workflow"
+      className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8"
+    >
       <div className="max-w-3xl">
-        <p className="text-sm font-semibold text-brand">Your job-search route</p>
+        <p className="text-sm font-semibold text-brand">
+          Your job-search route
+        </p>
         <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
           Every opportunity has a next step. RoleNaviq keeps the route visible.
         </h2>
@@ -410,7 +448,9 @@ function BoardPreview() {
       <div className="mb-4 flex items-center justify-between">
         <div>
           <p className="text-sm font-semibold">Application board</p>
-          <p className="text-xs text-muted-foreground">Drag. Drop. Keep moving.</p>
+          <p className="text-xs text-muted-foreground">
+            Drag. Drop. Keep moving.
+          </p>
         </div>
         <Columns3 className="h-5 w-5 text-brand" aria-hidden="true" />
       </div>
@@ -420,7 +460,9 @@ function BoardPreview() {
           <div key={column.title} className="rounded-2xl border bg-card p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className={["h-2 w-2 rounded-full", column.accent].join(" ")} />
+                <span
+                  className={["h-2 w-2 rounded-full", column.accent].join(" ")}
+                />
                 <span className="text-xs font-semibold">{column.title}</span>
               </div>
               <span className="text-[11px] text-muted-foreground">
@@ -430,7 +472,10 @@ function BoardPreview() {
 
             <div className="mt-3 space-y-2">
               {column.cards.map((card) => (
-                <div key={card} className="rounded-xl border bg-background p-3 shadow-sm">
+                <div
+                  key={card}
+                  className="rounded-xl border bg-background p-3 shadow-sm"
+                >
                   <p className="text-xs font-semibold">{card}</p>
                   <p className="mt-1 text-[11px] text-muted-foreground">
                     Remote · Full-time
@@ -504,7 +549,9 @@ function AnalyticsPreview() {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-semibold">Progress overview</p>
-          <p className="text-xs text-muted-foreground">Your search at a glance</p>
+          <p className="text-xs text-muted-foreground">
+            Your search at a glance
+          </p>
         </div>
         <BarChart3 className="h-5 w-5 text-brand" aria-hidden="true" />
       </div>
@@ -570,7 +617,9 @@ function ProductShowcase() {
     <section id="features" className="border-y bg-card/35">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm font-semibold text-brand">The product, not just the pitch</p>
+          <p className="text-sm font-semibold text-brand">
+            The product, not just the pitch
+          </p>
           <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
             A workspace designed around the real rhythm of a job search.
           </h2>
@@ -648,7 +697,10 @@ function ArchitectureNode({
 
 function ExploreCtaSection() {
   return (
-    <section id="demo" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+    <section
+      id="demo"
+      className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8"
+    >
       <div className="relative overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-primary-foreground shadow-xl shadow-foreground/10 sm:px-10 lg:px-14 lg:py-14">
         <div className="absolute right-0 top-0 h-72 w-72 translate-x-1/3 -translate-y-1/3 rounded-full bg-brand/25 blur-3xl" />
 
@@ -665,11 +717,11 @@ function ExploreCtaSection() {
               board, calendar and real job-search workflow.
             </p>
 
-            <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+            {/* <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
               <span>Product tour</span>
               <FlowConnector />
               <span>Dashboard</span>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
@@ -695,7 +747,10 @@ function ExploreCtaSection() {
 
         <div className="relative mt-8 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <KeyRound className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+            <KeyRound
+              className="h-4 w-4 shrink-0 text-brand"
+              aria-hidden="true"
+            />
             <span className="text-primary-foreground/70">
               Demo credentials are ready for you.
             </span>
@@ -712,7 +767,10 @@ function ExploreCtaSection() {
 
 function EngineeringSection() {
   return (
-    <section id="engineering" className="border-t border-brand/20 bg-primary text-primary-foreground">
+    <section
+      id="engineering"
+      className="border-t border-brand/20 bg-primary text-primary-foreground"
+    >
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mb-12 flex flex-col gap-4 border-b border-white/10 pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -721,7 +779,8 @@ function EngineeringSection() {
               Engineering · Portfolio case study
             </span>
             <h2 className="mt-5 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl">
-              This is how RoleNaviq is built — separate from what the product does.
+              This is how RoleNaviq is built — separate from what the product
+              does.
             </h2>
           </div>
 
@@ -811,11 +870,20 @@ function EngineeringSection() {
 
             <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
               <span>React client</span>
-              <ArrowRight className="landing-arrow-pulse h-3.5 w-3.5 text-brand" aria-hidden="true" />
+              <ArrowRight
+                className="landing-arrow-pulse h-3.5 w-3.5 text-brand"
+                aria-hidden="true"
+              />
               <span>/api proxy</span>
-              <ArrowRight className="landing-arrow-pulse h-3.5 w-3.5 text-brand" aria-hidden="true" />
+              <ArrowRight
+                className="landing-arrow-pulse h-3.5 w-3.5 text-brand"
+                aria-hidden="true"
+              />
               <span>Express API</span>
-              <ArrowRight className="landing-arrow-pulse h-3.5 w-3.5 text-brand" aria-hidden="true" />
+              <ArrowRight
+                className="landing-arrow-pulse h-3.5 w-3.5 text-brand"
+                aria-hidden="true"
+              />
               <span>MongoDB Atlas</span>
             </div>
 
@@ -830,7 +898,10 @@ function EngineeringSection() {
               </div>
 
               <div className="rounded-2xl border bg-muted/25 p-4">
-                <ShieldCheck className="h-5 w-5 text-brand" aria-hidden="true" />
+                <ShieldCheck
+                  className="h-5 w-5 text-brand"
+                  aria-hidden="true"
+                />
                 <p className="mt-3 text-sm font-semibold">Ownership enforced</p>
                 <p className="mt-1 text-xs leading-5 text-muted-foreground">
                   Application access is scoped to the signed-in user on the
@@ -909,7 +980,9 @@ export function LandingPage() {
 
               <h1 className="mt-7 max-w-3xl text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
                 Your job search has a lot of moving parts.{" "}
-                <span className="text-brand">Navigate them without losing track.</span>
+                <span className="text-brand">
+                  Navigate them without losing track.
+                </span>
               </h1>
 
               <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
@@ -924,7 +997,11 @@ export function LandingPage() {
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Button>
 
-                <Button size="lg" variant="outline" render={<Link to="/register" />}>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  render={<Link to="/register" />}
+                >
                   Create account
                 </Button>
               </div>
@@ -977,13 +1054,22 @@ export function LandingPage() {
                 Explore
               </p>
               <nav className="mt-4 flex flex-col items-start gap-3 text-sm">
-                <a href="#features" className="transition-colors hover:text-brand">
+                <a
+                  href="#features"
+                  className="transition-colors hover:text-brand"
+                >
                   Product
                 </a>
-                <a href="#workflow" className="transition-colors hover:text-brand">
+                <a
+                  href="#workflow"
+                  className="transition-colors hover:text-brand"
+                >
                   Workflow
                 </a>
-                <Link to="/login?demo=1" className="transition-colors hover:text-brand">
+                <Link
+                  to="/login?demo=1"
+                  className="transition-colors hover:text-brand"
+                >
                   Live demo
                 </Link>
               </nav>
@@ -994,7 +1080,10 @@ export function LandingPage() {
                 Engineering
               </p>
               <div className="mt-4 flex flex-col items-start gap-3 text-sm">
-                <a href="#engineering" className="transition-colors hover:text-brand">
+                <a
+                  href="#engineering"
+                  className="transition-colors hover:text-brand"
+                >
                   Architecture
                 </a>
                 <a
