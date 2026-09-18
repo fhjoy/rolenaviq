@@ -206,42 +206,59 @@
   }
 }
 
-@keyframes feature-board-shift {
+@keyframes landing-board-status-pulse {
   0%,
+  72%,
   100% {
-    transform: translateY(0);
-    opacity: 0.35;
-  }
-
-  50% {
-    transform: translateY(-0.2rem);
+    transform: scale(1);
     opacity: 1;
   }
-}
 
-@keyframes feature-calendar-pulse {
-  0%,
-  100% {
-    transform: scale(0.72);
-    opacity: 0.3;
+  82% {
+    transform: scale(1.45);
+    opacity: 0.72;
   }
 
-  50% {
+  90% {
     transform: scale(1);
     opacity: 1;
   }
 }
 
-@keyframes feature-analytics-rise {
+@keyframes landing-calendar-date-pulse {
   0%,
+  78%,
   100% {
-    transform: scaleY(0.45);
-    opacity: 0.35;
+    transform: scale(1);
+    opacity: 1;
   }
 
-  50% {
+  86% {
+    transform: scale(1.06);
+    opacity: 0.84;
+  }
+
+  93% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes landing-analytics-bar-rise {
+  0%,
+  8% {
+    transform: scaleY(0.72);
+    opacity: 0.55;
+  }
+
+  24% {
     transform: scaleY(1);
-    opacity: 0.95;
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
   }
 }
 
@@ -315,64 +332,23 @@
   animation: landing-arrow-pulse 1.6s ease-in-out infinite;
 }
 
-.feature-signal {
-  display: inline-flex;
-  height: 1rem;
-  align-items: center;
-  gap: 0.18rem;
-  color: var(--brand);
+.landing-board-status-pulse {
+  transform-origin: center;
+  animation: landing-board-status-pulse 4.6s ease-in-out infinite;
 }
 
-.feature-signal span {
-  display: block;
-  width: 0.2rem;
-  border-radius: 999px;
-  background: currentColor;
+.landing-board-status-pulse-delay {
+  animation-delay: 0.75s;
 }
 
-.feature-signal-board span {
-  height: 0.55rem;
-  animation: feature-board-shift 2.6s ease-in-out infinite;
+.landing-calendar-date {
+  transform-origin: center;
+  animation: landing-calendar-date-pulse 5.2s ease-in-out infinite;
 }
 
-.feature-signal-board span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.feature-signal-board span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-.feature-signal-calendar span {
-  height: 0.34rem;
-  border-radius: 999px;
-  animation: feature-calendar-pulse 2.4s ease-in-out infinite;
-}
-
-.feature-signal-calendar span:nth-child(2) {
-  animation-delay: 0.35s;
-}
-
-.feature-signal-calendar span:nth-child(3) {
-  animation-delay: 0.7s;
-}
-
-.feature-signal-analytics {
-  align-items: flex-end;
-}
-
-.feature-signal-analytics span {
-  height: 0.8rem;
+.landing-analytics-bar {
   transform-origin: bottom;
-  animation: feature-analytics-rise 2.8s ease-in-out infinite;
-}
-
-.feature-signal-analytics span:nth-child(2) {
-  animation-delay: 0.25s;
-}
-
-.feature-signal-analytics span:nth-child(3) {
-  animation-delay: 0.5s;
+  animation: landing-analytics-bar-rise 5.6s ease-out infinite;
 }
 
 .server-wake-track {
@@ -401,7 +377,9 @@
   .landing-flow-dot,
   .landing-progress-dot,
   .landing-arrow-pulse,
-  .feature-signal span,
+  .landing-board-status-pulse,
+  .landing-calendar-date,
+  .landing-analytics-bar,
   .server-wake-dot {
     animation: none;
   }

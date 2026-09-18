@@ -95,23 +95,6 @@ function FlowConnector({ reverse = false }: { reverse?: boolean }) {
   );
 }
 
-function FeatureSignal({
-  variant,
-}: {
-  variant: "board" | "calendar" | "analytics";
-}) {
-  return (
-    <span
-      className={["feature-signal", `feature-signal-${variant}`].join(" ")}
-      aria-hidden="true"
-    >
-      <span />
-      <span />
-      <span />
-    </span>
-  );
-}
-
 function CareerRouteMark() {
   return (
     <svg
@@ -485,7 +468,15 @@ function BoardPreview() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span
-                  className={["h-2 w-2 rounded-full", column.accent].join(" ")}
+                  className={[
+                    "h-2 w-2 rounded-full",
+                    column.accent,
+                    column.title === "Applied"
+                      ? "landing-board-status-pulse"
+                      : column.title === "Interview"
+                        ? "landing-board-status-pulse landing-board-status-pulse-delay"
+                        : "",
+                  ].join(" ")}
                 />
                 <span className="text-xs font-semibold">{column.title}</span>
               </div>
@@ -578,7 +569,7 @@ function CalendarPreview() {
               className={[
                 "flex aspect-square items-center justify-center rounded-lg border text-xs",
                 highlighted
-                  ? "border-brand bg-brand text-brand-foreground"
+                  ? "landing-calendar-date border-brand bg-brand text-brand-foreground"
                   : "bg-card",
               ].join(" ")}
             >
@@ -635,10 +626,13 @@ function AnalyticsPreview() {
             <div key={index} className="flex h-full flex-1 items-end">
               <div
                 className={[
-                  "w-full rounded-t-md",
+                  "landing-analytics-bar w-full rounded-t-md",
                   index === 5 ? "bg-brand" : "bg-brand/25",
                 ].join(" ")}
-                style={{ height: String(height) + "%" }}
+                style={{
+                  height: String(height) + "%",
+                  animationDelay: String(index * 120) + "ms",
+                }}
               />
             </div>
           ))}
@@ -696,20 +690,9 @@ function ProductShowcase() {
               className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14"
             >
               <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                <div className="inline-flex items-center gap-3">
-                  <span className="inline-flex rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
-                    {item.eyebrow}
-                  </span>
-                  <FeatureSignal
-                    variant={
-                      item.eyebrow === "Board"
-                        ? "board"
-                        : item.eyebrow === "Calendar"
-                          ? "calendar"
-                          : "analytics"
-                    }
-                  />
-                </div>
+                <span className="inline-flex rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
+                  {item.eyebrow}
+                </span>
 
                 <h3 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
                   {item.title}
