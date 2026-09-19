@@ -139,35 +139,42 @@ function HeroNavigationPreview() {
           }}
         />
 
-        <div className="relative flex items-center justify-between gap-4">
-          <div>
+        <div className="relative z-10 grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border bg-background/90 shadow-sm">
+            <CareerRouteMark />
+          </div>
+
+          <div className="min-w-0 text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">
               Career route
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 hidden text-sm text-muted-foreground sm:block">
               One workspace. Every next step.
             </p>
           </div>
 
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border bg-background/90 shadow-sm">
-            <CareerRouteMark />
+          <div className="rounded-xl border border-brand/25 bg-background/95 px-3 py-2 text-right shadow-md shadow-brand/10">
+            <p className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground sm:text-[10px]">
+              Destination
+            </p>
+            <p className="mt-0.5 text-xs font-bold text-brand">Offer</p>
           </div>
         </div>
 
         <svg
-          className="pointer-events-none absolute inset-x-5 bottom-7 z-0 h-[280px] w-[calc(100%-2.5rem)] text-brand sm:inset-x-8 sm:bottom-8 sm:w-[calc(100%-4rem)]"
-          viewBox="0 0 620 300"
+          className="pointer-events-none absolute inset-x-5 bottom-7 z-0 h-[330px] w-[calc(100%-2.5rem)] text-brand sm:inset-x-8 sm:bottom-8 sm:h-[390px] sm:w-[calc(100%-4rem)]"
+          viewBox="0 0 620 390"
           fill="none"
           aria-hidden="true"
         >
           <path
-            d="M28 246 C118 248 125 170 213 172 C302 173 300 96 392 103 C481 110 502 53 590 48"
+            d="M28 340 C118 342 125 238 213 240 C302 242 300 148 392 150 C481 152 512 42 590 30"
             className="landing-route-line"
             stroke="currentColor"
             strokeWidth="3"
             strokeLinecap="round"
           />
-          <circle cx="28" cy="246" r="6" fill="currentColor" />
+          <circle cx="28" cy="340" r="6" fill="currentColor" />
           <circle
             className="landing-route-moving-marker"
             cx="0"
@@ -179,14 +186,14 @@ function HeroNavigationPreview() {
               dur="9s"
               repeatCount="indefinite"
               calcMode="paced"
-              path="M28 246 C118 248 125 170 213 172 C302 173 300 96 392 103 C481 110 502 53 590 48"
+              path="M28 340 C118 342 125 238 213 240 C302 242 300 148 392 150 C481 152 512 42 590 30"
             />
           </circle>
-          <circle cx="392" cy="103" r="6" fill="currentColor" />
-          <circle cx="590" cy="48" r="9" fill="currentColor" />
+          <circle cx="392" cy="150" r="6" fill="currentColor" />
+          <circle cx="590" cy="30" r="9" fill="currentColor" />
           <circle
             cx="590"
-            cy="48"
+            cy="30"
             r="18"
             stroke="currentColor"
             strokeOpacity=".2"
@@ -232,28 +239,28 @@ function HeroNavigationPreview() {
         </div>
 
         <div className="absolute right-[4%] top-[24%] z-10 w-[158px] rounded-2xl border border-brand/25 bg-background/95 p-3 shadow-xl shadow-brand/10 sm:right-[5%] sm:top-[22%] sm:w-[190px]">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand">
-              <CalendarDays className="h-4 w-4" aria-hidden="true" />
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex min-w-0 items-center gap-2">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand">
+                <CalendarDays className="h-4 w-4" aria-hidden="true" />
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-xs font-semibold">Product Engineer</p>
+                <p className="truncate text-[11px] text-muted-foreground">
+                  Friday · 10:30
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs font-semibold">Product Engineer</p>
-              <p className="text-[11px] text-muted-foreground">
-                Friday · 10:30
-              </p>
-            </div>
+            <CheckCircle2
+              className="h-4 w-4 shrink-0 text-amber-600"
+              aria-hidden="true"
+            />
           </div>
           <div className="mt-3">
             <RouteBadge label="Interview" tone="amber" />
           </div>
         </div>
 
-        <div className="absolute right-4 top-[49%] z-10 hidden rounded-xl border bg-background/90 px-3 py-2 shadow-md sm:block">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            Destination
-          </p>
-          <p className="mt-0.5 text-xs font-bold text-brand">Offer</p>
-        </div>
       </div>
 
       <div className="absolute -bottom-5 left-6 hidden items-center gap-3 rounded-2xl border bg-card px-4 py-3 shadow-xl lg:flex">
