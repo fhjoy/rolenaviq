@@ -189,7 +189,6 @@ function HeroNavigationPreview() {
               path="M28 340 C118 342 125 238 213 240 C302 242 300 148 392 150 C481 152 512 42 590 30"
             />
           </circle>
-          <circle cx="392" cy="150" r="6" fill="currentColor" />
           <circle cx="590" cy="30" r="9" fill="currentColor" />
           <circle
             cx="590"
@@ -236,6 +235,18 @@ function HeroNavigationPreview() {
           <div className="mt-3">
             <RouteBadge label="Applied" tone="sky" />
           </div>
+
+          <div className="absolute left-1/2 top-[calc(100%+0.55rem)] hidden w-[176px] -translate-x-1/2 items-center gap-2.5 rounded-2xl border bg-card px-3 py-2.5 shadow-xl sm:flex">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+              <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[10px] text-muted-foreground">Latest update</p>
+              <p className="truncate text-xs font-semibold">
+                Moved to Interview
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="absolute right-[4%] top-[24%] z-10 w-[158px] rounded-2xl border border-brand/25 bg-background/95 p-3 shadow-xl shadow-brand/10 sm:right-[5%] sm:top-[22%] sm:w-[190px]">
@@ -263,15 +274,6 @@ function HeroNavigationPreview() {
 
       </div>
 
-      <div className="absolute -bottom-5 left-6 hidden items-center gap-3 rounded-2xl border bg-card px-4 py-3 shadow-xl lg:flex">
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
-          <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
-        </span>
-        <div>
-          <p className="text-[11px] text-muted-foreground">Latest update</p>
-          <p className="text-sm font-semibold">Moved to Interview</p>
-        </div>
-      </div>
     </div>
   );
 }
