@@ -598,9 +598,9 @@ function CalendarPreview() {
               className={[
                 "relative flex aspect-square items-center justify-center rounded-lg border text-xs",
                 isFirstInterview
-                  ? "landing-calendar-date landing-calendar-date-first border-brand bg-brand text-brand-foreground"
+                  ? "landing-calendar-date landing-calendar-date-first z-20 border-brand bg-brand text-brand-foreground"
                   : isSecondInterview
-                    ? "landing-calendar-date landing-calendar-date-second border-brand bg-brand text-brand-foreground"
+                    ? "landing-calendar-date landing-calendar-date-second z-20 border-brand bg-brand text-brand-foreground"
                     : "bg-card",
               ].join(" ")}
             >

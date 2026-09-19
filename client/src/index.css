@@ -280,30 +280,29 @@
 }
 
 @keyframes landing-calendar-first-pulse {
-  0%,
-  8%,
-  40%,
+  0% {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 5px color-mix(in oklch, var(--brand) 18%, transparent);
+  }
+
+  14%,
+  46%,
   100% {
     transform: scale(1);
     box-shadow: 0 0 0 0 transparent;
-  }
-
-  22% {
-    transform: scale(1.12);
-    box-shadow: 0 0 0 5px color-mix(in oklch, var(--brand) 18%, transparent);
   }
 }
 
 @keyframes landing-calendar-second-pulse {
   0%,
-  48%,
-  82%,
+  49%,
+  64%,
   100% {
     transform: scale(1);
     box-shadow: 0 0 0 0 transparent;
   }
 
-  64% {
+  50% {
     transform: scale(1.12);
     box-shadow: 0 0 0 5px color-mix(in oklch, var(--brand) 18%, transparent);
   }
@@ -311,18 +310,12 @@
 
 @keyframes landing-calendar-first-popover {
   0%,
-  5% {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-
-  12%,
-  38% {
+  26% {
     transform: scale(1);
     opacity: 1;
   }
 
-  46%,
+  34%,
   100% {
     transform: scale(0.94);
     opacity: 0;
@@ -331,18 +324,18 @@
 
 @keyframes landing-calendar-second-popover {
   0%,
-  48% {
-    transform: scale(0.9);
+  49% {
+    transform: scale(0.94);
     opacity: 0;
   }
 
-  56%,
-  84% {
+  50%,
+  76% {
     transform: scale(1);
     opacity: 1;
   }
 
-  92%,
+  84%,
   100% {
     transform: scale(0.94);
     opacity: 0;
