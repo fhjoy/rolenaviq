@@ -155,7 +155,7 @@ function HeroNavigationPreview() {
         </div>
 
         <svg
-          className="pointer-events-none absolute inset-x-5 bottom-7 h-[280px] w-[calc(100%-2.5rem)] text-brand sm:inset-x-8 sm:bottom-8 sm:w-[calc(100%-4rem)]"
+          className="pointer-events-none absolute inset-x-5 bottom-7 z-0 h-[280px] w-[calc(100%-2.5rem)] text-brand sm:inset-x-8 sm:bottom-8 sm:w-[calc(100%-4rem)]"
           viewBox="0 0 620 300"
           fill="none"
           aria-hidden="true"
@@ -181,7 +181,32 @@ function HeroNavigationPreview() {
           />
         </svg>
 
-        <div className="absolute bottom-8 left-[5%] w-[148px] rounded-2xl border bg-background/95 p-3 shadow-lg sm:bottom-9 sm:left-[6%] sm:w-[172px]">
+        <svg
+          className="pointer-events-none absolute inset-x-5 bottom-7 z-20 h-[280px] w-[calc(100%-2.5rem)] text-brand sm:inset-x-8 sm:bottom-8 sm:w-[calc(100%-4rem)]"
+          viewBox="0 0 620 300"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle
+            className="landing-route-pointer"
+            cx="0"
+            cy="0"
+            r="7"
+            fill="currentColor"
+            stroke="currentColor"
+            strokeWidth="8"
+            strokeOpacity="0.16"
+          >
+            <animateMotion
+              dur="5.5s"
+              repeatCount="indefinite"
+              calcMode="paced"
+              path="M28 246 C118 248 125 170 213 172 C302 173 300 96 392 103 C481 110 502 53 590 48"
+            />
+          </circle>
+        </svg>
+
+        <div className="absolute bottom-8 left-[5%] z-10 w-[148px] rounded-2xl border bg-background/95 p-3 shadow-lg sm:bottom-9 sm:left-[6%] sm:w-[172px]">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted">
               <BriefcaseBusiness className="h-4 w-4" aria-hidden="true" />
@@ -200,7 +225,7 @@ function HeroNavigationPreview() {
           </div>
         </div>
 
-        <div className="absolute left-[34%] top-[44%] w-[154px] rounded-2xl border bg-background/95 p-3 shadow-xl sm:left-[35%] sm:top-[43%] sm:w-[180px]">
+        <div className="absolute left-[34%] top-[44%] z-10 w-[154px] rounded-2xl border bg-background/95 p-3 shadow-xl sm:left-[35%] sm:top-[43%] sm:w-[180px]">
           <div className="flex items-center justify-between gap-2">
             <div>
               <p className="text-xs font-semibold">React Developer</p>
@@ -218,7 +243,7 @@ function HeroNavigationPreview() {
           </div>
         </div>
 
-        <div className="absolute right-[4%] top-[24%] w-[158px] rounded-2xl border border-brand/25 bg-background/95 p-3 shadow-xl shadow-brand/10 sm:right-[5%] sm:top-[22%] sm:w-[190px]">
+        <div className="absolute right-[4%] top-[24%] z-10 w-[158px] rounded-2xl border border-brand/25 bg-background/95 p-3 shadow-xl shadow-brand/10 sm:right-[5%] sm:top-[22%] sm:w-[190px]">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand">
               <CalendarDays className="h-4 w-4" aria-hidden="true" />
@@ -235,7 +260,7 @@ function HeroNavigationPreview() {
           </div>
         </div>
 
-        <div className="absolute right-4 top-[49%] hidden rounded-xl border bg-background/90 px-3 py-2 shadow-md sm:block">
+        <div className="absolute right-4 top-[49%] z-10 hidden rounded-xl border bg-background/90 px-3 py-2 shadow-md sm:block">
           <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
             Destination
           </p>
@@ -508,41 +533,52 @@ function BoardPreview() {
 }
 
 function CalendarPreview() {
-  const firstInterview = new Date();
-  firstInterview.setDate(firstInterview.getDate() + 2);
-  firstInterview.setHours(10, 30, 0, 0);
+  const today = new Date();
+  const currentMonthEnd = new Date(
+    today.getFullYear(),
+    today.getMonth() + 1,
+    0,
+  ).getDate();
 
-  const secondInterview = new Date();
-  secondInterview.setDate(secondInterview.getDate() + 5);
+  const useNextMonth = today.getDate() > currentMonthEnd - 6;
+  const previewMonth = new Date(today);
+
+  if (useNextMonth) {
+    previewMonth.setMonth(previewMonth.getMonth() + 1, 1);
+  }
+
+  const firstInterview = new Date(previewMonth);
+  const secondInterview = new Date(previewMonth);
+
+  if (useNextMonth) {
+    firstInterview.setDate(3);
+    secondInterview.setDate(6);
+  } else {
+    firstInterview.setDate(today.getDate() + 2);
+    secondInterview.setDate(today.getDate() + 5);
+  }
+
+  firstInterview.setHours(10, 30, 0, 0);
   secondInterview.setHours(14, 0, 0, 0);
 
-  const previewMonth = firstInterview;
   const daysInPreviewMonth = new Date(
     previewMonth.getFullYear(),
     previewMonth.getMonth() + 1,
     0,
   ).getDate();
 
-  const highlightedDays = new Set(
-    [firstInterview, secondInterview]
-      .filter(
-        (date) =>
-          date.getFullYear() === previewMonth.getFullYear() &&
-          date.getMonth() === previewMonth.getMonth(),
-      )
-      .map((date) => date.getDate()),
-  );
-
   const monthLabel = new Intl.DateTimeFormat("en", {
     month: "long",
     year: "numeric",
   }).format(previewMonth);
 
-  const interviewLabel =
-    new Intl.DateTimeFormat("en", {
-      day: "numeric",
-      month: "long",
-    }).format(firstInterview) + " · 10:30";
+  const dateFormatter = new Intl.DateTimeFormat("en", {
+    day: "numeric",
+    month: "long",
+  });
+
+  const firstInterviewLabel = dateFormatter.format(firstInterview) + " · 10:30";
+  const secondInterviewLabel = dateFormatter.format(secondInterview) + " · 14:00";
 
   return (
     <div className="rounded-3xl border bg-muted/30 p-4 sm:p-5">
@@ -563,16 +599,19 @@ function CalendarPreview() {
 
         {Array.from({ length: daysInPreviewMonth }).map((_, index) => {
           const day = index + 1;
-          const highlighted = highlightedDays.has(day);
+          const isFirstInterview = day === firstInterview.getDate();
+          const isSecondInterview = day === secondInterview.getDate();
 
           return (
             <div
               key={day}
               className={[
                 "flex aspect-square items-center justify-center rounded-lg border text-xs",
-                highlighted
-                  ? "landing-calendar-date border-brand bg-brand text-brand-foreground"
-                  : "bg-card",
+                isFirstInterview
+                  ? "landing-calendar-date landing-calendar-date-first border-brand bg-brand text-brand-foreground"
+                  : isSecondInterview
+                    ? "landing-calendar-date landing-calendar-date-second border-brand bg-brand text-brand-foreground"
+                    : "bg-card",
               ].join(" ")}
             >
               {day}
@@ -581,15 +620,29 @@ function CalendarPreview() {
         })}
       </div>
 
-      <div className="mt-4 flex items-center gap-3 rounded-2xl border bg-card p-3">
-        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand/10 text-brand">
-          <CalendarDays className="h-4 w-4" aria-hidden="true" />
-        </span>
-        <div>
-          <p className="text-xs font-semibold">Frontend Developer interview</p>
-          <p className="text-[11px] text-muted-foreground">
-            {interviewLabel}
-          </p>
+      <div className="relative mt-4 h-[66px]">
+        <div className="landing-calendar-interview landing-calendar-interview-first absolute inset-0 flex items-center gap-3 rounded-2xl border bg-card p-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand/10 text-brand">
+            <CalendarDays className="h-4 w-4" aria-hidden="true" />
+          </span>
+          <div>
+            <p className="text-xs font-semibold">Frontend Developer interview</p>
+            <p className="text-[11px] text-muted-foreground">
+              {firstInterviewLabel}
+            </p>
+          </div>
+        </div>
+
+        <div className="landing-calendar-interview landing-calendar-interview-second absolute inset-0 flex items-center gap-3 rounded-2xl border bg-card p-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand/10 text-brand">
+            <CalendarDays className="h-4 w-4" aria-hidden="true" />
+          </span>
+          <div>
+            <p className="text-xs font-semibold">Full Stack Developer interview</p>
+            <p className="text-[11px] text-muted-foreground">
+              {secondInterviewLabel}
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -279,22 +279,87 @@
   }
 }
 
-@keyframes landing-calendar-date-pulse {
+@keyframes landing-calendar-first-pulse {
   0%,
-  55%,
+  8%,
+  40%,
   100% {
     transform: scale(1);
-    opacity: 1;
+    box-shadow: 0 0 0 0 transparent;
   }
 
-  68% {
-    transform: scale(1.1);
-    opacity: 0.8;
+  22% {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 5px color-mix(in oklch, var(--brand) 18%, transparent);
   }
+}
 
-  82% {
+@keyframes landing-calendar-second-pulse {
+  0%,
+  48%,
+  82%,
+  100% {
     transform: scale(1);
+    box-shadow: 0 0 0 0 transparent;
+  }
+
+  64% {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 5px color-mix(in oklch, var(--brand) 18%, transparent);
+  }
+}
+
+@keyframes landing-calendar-first-interview {
+  0%,
+  40% {
+    transform: translateY(0);
     opacity: 1;
+  }
+
+  48%,
+  92% {
+    transform: translateY(0.2rem);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes landing-calendar-second-interview {
+  0%,
+  40% {
+    transform: translateY(0.2rem);
+    opacity: 0;
+  }
+
+  48%,
+  92% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0.2rem);
+    opacity: 0;
+  }
+}
+
+@keyframes landing-demo-ripple {
+  0% {
+    transform: scale(0.98);
+    opacity: 0.58;
+  }
+
+  70% {
+    opacity: 0.12;
+  }
+
+  100% {
+    transform: scale(1.18);
+    opacity: 0;
   }
 }
 
@@ -316,55 +381,13 @@
   }
 }
 
-@keyframes landing-demo-breathe {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-
-  50% {
-    transform: translateY(-1px) scale(1.025);
-  }
-}
-
-@keyframes landing-demo-shimmer {
-  0% {
-    transform: translateX(-150%) skewX(-18deg);
-    opacity: 0;
-  }
-
-  18% {
-    opacity: 0.9;
-  }
-
-  50% {
-    opacity: 0.95;
-  }
-
-  82% {
-    opacity: 0.65;
-  }
-
-  100% {
-    transform: translateX(320%) skewX(-18deg);
-    opacity: 0;
-  }
-}
-
-@keyframes landing-demo-arrow {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-
-  50% {
-    transform: translateX(0.24rem);
-  }
-}
-
 .landing-route-line {
   stroke-dasharray: 10 12;
   animation: landing-route-flow 7s linear infinite;
+}
+
+.landing-route-pointer {
+  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--brand) 45%, transparent));
 }
 
 .landing-flow-connector {
@@ -484,7 +507,27 @@
 
 .landing-calendar-date {
   transform-origin: center;
-  animation: landing-calendar-date-pulse 3.6s ease-in-out infinite;
+}
+
+.landing-calendar-date-first {
+  animation: landing-calendar-first-pulse 4s ease-in-out infinite;
+}
+
+.landing-calendar-date-second {
+  animation: landing-calendar-second-pulse 4s ease-in-out infinite;
+}
+
+.landing-calendar-interview {
+  will-change: transform, opacity;
+}
+
+.landing-calendar-interview-first {
+  animation: landing-calendar-first-interview 4s ease-in-out infinite;
+}
+
+.landing-calendar-interview-second {
+  opacity: 0;
+  animation: landing-calendar-second-interview 4s ease-in-out infinite;
 }
 
 .landing-analytics-bar {
@@ -494,30 +537,24 @@
 
 .landing-demo-button {
   position: relative;
-  overflow: hidden;
-  transform-origin: center;
-  animation: landing-demo-breathe 1.8s ease-in-out infinite;
+  isolation: isolate;
+  overflow: visible;
+}
+
+.landing-demo-button::before,
+.landing-demo-button::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border: 2px solid color-mix(in oklch, var(--brand) 68%, transparent);
+  border-radius: inherit;
+  content: "";
+  pointer-events: none;
+  animation: landing-demo-ripple 1.8s ease-out infinite;
 }
 
 .landing-demo-button::after {
-  position: absolute;
-  inset: -40% auto -40% -45%;
-  width: 34%;
-  transform: translateX(-150%) skewX(-18deg);
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in oklch, var(--brand) 24%, white),
-    transparent
-  );
-  content: "";
-  opacity: 0;
-  pointer-events: none;
-  animation: landing-demo-shimmer 1.9s linear infinite;
-}
-
-.landing-demo-button svg {
-  animation: landing-demo-arrow 1.15s ease-in-out infinite;
+  animation-delay: 0.9s;
 }
 
 .server-wake-track {
@@ -551,12 +588,22 @@
   .landing-board-offer-celebrate,
   .landing-board-offer-celebrate::before,
   .landing-board-offer-celebrate::after,
-  .landing-calendar-date,
+  .landing-calendar-date-first,
+  .landing-calendar-date-second,
+  .landing-calendar-interview-first,
+  .landing-calendar-interview-second,
   .landing-analytics-bar,
-  .landing-demo-button,
+  .landing-demo-button::before,
   .landing-demo-button::after,
-  .landing-demo-button svg,
   .server-wake-dot {
     animation: none;
+  }
+
+  .landing-route-pointer {
+    display: none;
+  }
+
+  .landing-calendar-interview-second {
+    opacity: 0;
   }
 }
