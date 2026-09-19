@@ -168,7 +168,20 @@ function HeroNavigationPreview() {
             strokeLinecap="round"
           />
           <circle cx="28" cy="246" r="6" fill="currentColor" />
-          <circle cx="213" cy="172" r="6" fill="currentColor" />
+          <circle
+            className="landing-route-moving-marker"
+            cx="0"
+            cy="0"
+            r="7"
+            fill="currentColor"
+          >
+            <animateMotion
+              dur="9s"
+              repeatCount="indefinite"
+              calcMode="paced"
+              path="M28 246 C118 248 125 170 213 172 C302 173 300 96 392 103 C481 110 502 53 590 48"
+            />
+          </circle>
           <circle cx="392" cy="103" r="6" fill="currentColor" />
           <circle cx="590" cy="48" r="9" fill="currentColor" />
           <circle
@@ -179,31 +192,6 @@ function HeroNavigationPreview() {
             strokeOpacity=".2"
             strokeWidth="8"
           />
-        </svg>
-
-        <svg
-          className="pointer-events-none absolute inset-x-5 bottom-7 z-20 h-[280px] w-[calc(100%-2.5rem)] text-brand sm:inset-x-8 sm:bottom-8 sm:w-[calc(100%-4rem)]"
-          viewBox="0 0 620 300"
-          fill="none"
-          aria-hidden="true"
-        >
-          <circle
-            className="landing-route-pointer"
-            cx="0"
-            cy="0"
-            r="7"
-            fill="currentColor"
-            stroke="currentColor"
-            strokeWidth="8"
-            strokeOpacity="0.16"
-          >
-            <animateMotion
-              dur="5.5s"
-              repeatCount="indefinite"
-              calcMode="paced"
-              path="M28 246 C118 248 125 170 213 172 C302 173 300 96 392 103 C481 110 502 53 590 48"
-            />
-          </circle>
         </svg>
 
         <div className="absolute bottom-8 left-[5%] z-10 w-[148px] rounded-2xl border bg-background/95 p-3 shadow-lg sm:bottom-9 sm:left-[6%] sm:w-[172px]">
@@ -601,12 +589,14 @@ function CalendarPreview() {
           const day = index + 1;
           const isFirstInterview = day === firstInterview.getDate();
           const isSecondInterview = day === secondInterview.getDate();
+          const dayColumn = index % 7;
+          const popoverOpensLeft = dayColumn >= 4;
 
           return (
             <div
               key={day}
               className={[
-                "flex aspect-square items-center justify-center rounded-lg border text-xs",
+                "relative flex aspect-square items-center justify-center rounded-lg border text-xs",
                 isFirstInterview
                   ? "landing-calendar-date landing-calendar-date-first border-brand bg-brand text-brand-foreground"
                   : isSecondInterview
@@ -615,35 +605,45 @@ function CalendarPreview() {
               ].join(" ")}
             >
               {day}
+
+              {isFirstInterview && (
+                <div
+                  className={[
+                    "landing-calendar-popover landing-calendar-popover-first absolute top-0 z-30 w-44 rounded-xl border bg-popover p-2.5 text-left text-popover-foreground shadow-xl",
+                    popoverOpensLeft
+                      ? "right-[calc(100%+0.4rem)]"
+                      : "left-[calc(100%+0.4rem)]",
+                  ].join(" ")}
+                >
+                  <p className="text-[11px] font-semibold">
+                    Frontend Developer interview
+                  </p>
+                  <p className="mt-0.5 text-[10px] text-muted-foreground">
+                    {firstInterviewLabel}
+                  </p>
+                </div>
+              )}
+
+              {isSecondInterview && (
+                <div
+                  className={[
+                    "landing-calendar-popover landing-calendar-popover-second absolute top-0 z-30 w-44 rounded-xl border bg-popover p-2.5 text-left text-popover-foreground shadow-xl",
+                    popoverOpensLeft
+                      ? "right-[calc(100%+0.4rem)]"
+                      : "left-[calc(100%+0.4rem)]",
+                  ].join(" ")}
+                >
+                  <p className="text-[11px] font-semibold">
+                    Full Stack Developer interview
+                  </p>
+                  <p className="mt-0.5 text-[10px] text-muted-foreground">
+                    {secondInterviewLabel}
+                  </p>
+                </div>
+              )}
             </div>
           );
         })}
-      </div>
-
-      <div className="relative mt-4 h-[66px]">
-        <div className="landing-calendar-interview landing-calendar-interview-first absolute inset-0 flex items-center gap-3 rounded-2xl border bg-card p-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand/10 text-brand">
-            <CalendarDays className="h-4 w-4" aria-hidden="true" />
-          </span>
-          <div>
-            <p className="text-xs font-semibold">Frontend Developer interview</p>
-            <p className="text-[11px] text-muted-foreground">
-              {firstInterviewLabel}
-            </p>
-          </div>
-        </div>
-
-        <div className="landing-calendar-interview landing-calendar-interview-second absolute inset-0 flex items-center gap-3 rounded-2xl border bg-card p-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand/10 text-brand">
-            <CalendarDays className="h-4 w-4" aria-hidden="true" />
-          </span>
-          <div>
-            <p className="text-xs font-semibold">Full Stack Developer interview</p>
-            <p className="text-[11px] text-muted-foreground">
-              {secondInterviewLabel}
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

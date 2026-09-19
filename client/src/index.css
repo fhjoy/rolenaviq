@@ -309,56 +309,58 @@
   }
 }
 
-@keyframes landing-calendar-first-interview {
+@keyframes landing-calendar-first-popover {
   0%,
-  40% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  48%,
-  92% {
-    transform: translateY(0.2rem);
+  5% {
+    transform: scale(0.9);
     opacity: 0;
   }
 
-  100% {
-    transform: translateY(0);
+  12%,
+  38% {
+    transform: scale(1);
     opacity: 1;
+  }
+
+  46%,
+  100% {
+    transform: scale(0.94);
+    opacity: 0;
   }
 }
 
-@keyframes landing-calendar-second-interview {
+@keyframes landing-calendar-second-popover {
   0%,
-  40% {
-    transform: translateY(0.2rem);
+  48% {
+    transform: scale(0.9);
     opacity: 0;
   }
 
-  48%,
-  92% {
-    transform: translateY(0);
+  56%,
+  84% {
+    transform: scale(1);
     opacity: 1;
   }
 
+  92%,
   100% {
-    transform: translateY(0.2rem);
+    transform: scale(0.94);
     opacity: 0;
   }
 }
 
 @keyframes landing-demo-ripple {
   0% {
-    transform: scale(0.98);
-    opacity: 0.58;
+    transform: scaleX(1.02) scaleY(1.05);
+    opacity: 0.56;
   }
 
-  70% {
-    opacity: 0.12;
+  72% {
+    opacity: 0.14;
   }
 
   100% {
-    transform: scale(1.18);
+    transform: scaleX(1.62) scaleY(1.9);
     opacity: 0;
   }
 }
@@ -386,8 +388,8 @@
   animation: landing-route-flow 7s linear infinite;
 }
 
-.landing-route-pointer {
-  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--brand) 45%, transparent));
+.landing-route-moving-marker {
+  filter: drop-shadow(0 0 4px color-mix(in oklch, var(--brand) 35%, transparent));
 }
 
 .landing-flow-connector {
@@ -517,17 +519,19 @@
   animation: landing-calendar-second-pulse 4s ease-in-out infinite;
 }
 
-.landing-calendar-interview {
+.landing-calendar-popover {
+  transform-origin: center;
+  opacity: 0;
+  pointer-events: none;
   will-change: transform, opacity;
 }
 
-.landing-calendar-interview-first {
-  animation: landing-calendar-first-interview 4s ease-in-out infinite;
+.landing-calendar-popover-first {
+  animation: landing-calendar-first-popover 4s ease-in-out infinite;
 }
 
-.landing-calendar-interview-second {
-  opacity: 0;
-  animation: landing-calendar-second-interview 4s ease-in-out infinite;
+.landing-calendar-popover-second {
+  animation: landing-calendar-second-popover 4s ease-in-out infinite;
 }
 
 .landing-analytics-bar {
@@ -550,11 +554,11 @@
   border-radius: inherit;
   content: "";
   pointer-events: none;
-  animation: landing-demo-ripple 1.8s ease-out infinite;
+  animation: landing-demo-ripple 2.15s ease-out infinite;
 }
 
 .landing-demo-button::after {
-  animation-delay: 0.9s;
+  animation-delay: 1.075s;
 }
 
 .server-wake-track {
@@ -590,8 +594,8 @@
   .landing-board-offer-celebrate::after,
   .landing-calendar-date-first,
   .landing-calendar-date-second,
-  .landing-calendar-interview-first,
-  .landing-calendar-interview-second,
+  .landing-calendar-popover-first,
+  .landing-calendar-popover-second,
   .landing-analytics-bar,
   .landing-demo-button::before,
   .landing-demo-button::after,
@@ -599,11 +603,15 @@
     animation: none;
   }
 
-  .landing-route-pointer {
+  .landing-route-moving-marker {
     display: none;
   }
 
-  .landing-calendar-interview-second {
+  .landing-calendar-popover-first {
+    opacity: 1;
+  }
+
+  .landing-calendar-popover-second {
     opacity: 0;
   }
 }
