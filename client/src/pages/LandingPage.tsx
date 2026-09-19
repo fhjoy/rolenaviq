@@ -219,7 +219,7 @@ function HeroNavigationPreview() {
           </div>
         </div>
 
-        <div className="absolute left-[34%] top-[44%] z-10 w-[154px] rounded-2xl border bg-background/95 p-3 shadow-xl sm:left-[35%] sm:top-[43%] sm:w-[180px]">
+        <div className="absolute left-[34%] top-[49%] z-10 w-[154px] rounded-2xl border bg-background/95 p-3 shadow-xl sm:left-[35%] sm:top-[48%] sm:w-[180px]">
           <div className="flex items-center justify-between gap-2">
             <div>
               <p className="text-xs font-semibold">React Developer</p>
@@ -236,7 +236,7 @@ function HeroNavigationPreview() {
             <RouteBadge label="Applied" tone="sky" />
           </div>
 
-          <div className="absolute -right-3 bottom-[calc(100%+0.5rem)] hidden w-[176px] items-center gap-2.5 rounded-2xl border bg-card px-3 py-2.5 shadow-xl sm:flex">
+          <div className="absolute right-0 bottom-[calc(100%+0.7rem)] hidden w-[164px] items-center gap-2.5 rounded-2xl border bg-card px-3 py-2.5 shadow-xl sm:flex">
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
               <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
             </span>
