@@ -598,9 +598,9 @@ function CalendarPreview() {
               className={[
                 "relative flex aspect-square items-center justify-center rounded-lg border text-xs",
                 isFirstInterview
-                  ? "landing-calendar-date landing-calendar-date-first z-20 border-brand bg-brand text-brand-foreground"
+                  ? "landing-calendar-date landing-calendar-date-first z-40 border-brand bg-brand text-brand-foreground"
                   : isSecondInterview
-                    ? "landing-calendar-date landing-calendar-date-second z-20 border-brand bg-brand text-brand-foreground"
+                    ? "landing-calendar-date landing-calendar-date-second z-40 border-brand bg-brand text-brand-foreground"
                     : "bg-card",
               ].join(" ")}
             >
@@ -609,10 +609,10 @@ function CalendarPreview() {
               {isFirstInterview && (
                 <div
                   className={[
-                    "landing-calendar-popover landing-calendar-popover-first absolute top-0 z-30 w-44 rounded-xl border bg-popover p-2.5 text-left text-popover-foreground shadow-xl",
+                    "landing-calendar-popover landing-calendar-popover-first absolute top-0 z-50 w-44 rounded-xl border bg-popover p-2.5 text-left text-popover-foreground shadow-xl",
                     popoverOpensLeft
-                      ? "right-[calc(100%+0.4rem)]"
-                      : "left-[calc(100%+0.4rem)]",
+                      ? "right-[calc(100%+0.4rem)] origin-right"
+                      : "left-[calc(100%+0.4rem)] origin-left",
                   ].join(" ")}
                 >
                   <p className="text-[11px] font-semibold">
@@ -627,10 +627,10 @@ function CalendarPreview() {
               {isSecondInterview && (
                 <div
                   className={[
-                    "landing-calendar-popover landing-calendar-popover-second absolute top-0 z-30 w-44 rounded-xl border bg-popover p-2.5 text-left text-popover-foreground shadow-xl",
+                    "landing-calendar-popover landing-calendar-popover-second absolute top-0 z-50 w-44 rounded-xl border bg-popover p-2.5 text-left text-popover-foreground shadow-xl",
                     popoverOpensLeft
-                      ? "right-[calc(100%+0.4rem)]"
-                      : "left-[calc(100%+0.4rem)]",
+                      ? "right-[calc(100%+0.4rem)] origin-right"
+                      : "left-[calc(100%+0.4rem)] origin-left",
                   ].join(" ")}
                 >
                   <p className="text-[11px] font-semibold">
