@@ -220,32 +220,32 @@ function HeroNavigationPreview() {
         </div>
 
         <div className="absolute left-[34%] top-[49%] z-10 w-[154px] rounded-2xl border bg-background/95 p-3 shadow-xl sm:left-[35%] sm:top-[48%] sm:w-[180px]">
-          <div className="flex items-center justify-between gap-2">
-            <div>
-              <p className="text-xs font-semibold">React Developer</p>
-              <p className="mt-0.5 text-[11px] text-muted-foreground">
-                Orbit Systems
-              </p>
-            </div>
-            <CheckCircle2
-              className="h-4 w-4 shrink-0 text-sky-600"
-              aria-hidden="true"
-            />
+          <div>
+            <p className="text-xs font-semibold">React Developer</p>
+            <p className="mt-0.5 text-[11px] text-muted-foreground">
+              Orbit Systems
+            </p>
           </div>
           <div className="mt-3">
             <RouteBadge label="Applied" tone="sky" />
           </div>
 
-          <div className="absolute left-[calc(100%+0.65rem)] top-1 hidden w-[164px] items-center gap-2.5 rounded-2xl border bg-card px-3 py-2.5 shadow-xl sm:flex">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
-              <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+          <div className="absolute left-[76%] top-[-34%] hidden w-[158px] items-center gap-2 rounded-xl border border-brand/20 bg-background/95 px-2.5 py-2 shadow-lg backdrop-blur sm:flex">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+              <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
             </span>
             <div className="min-w-0">
-              <p className="text-[10px] text-muted-foreground">Latest update</p>
-              <p className="truncate text-xs font-semibold">
+              <p className="text-[9px] leading-none text-muted-foreground">
+                Latest update
+              </p>
+              <p className="mt-1 truncate text-[11px] font-semibold">
                 Moved to Interview
               </p>
             </div>
+            <span
+              className="absolute -bottom-1 left-5 h-2 w-2 rotate-45 border-b border-r border-brand/20 bg-background"
+              aria-hidden="true"
+            />
           </div>
         </div>
 
