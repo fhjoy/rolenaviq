@@ -236,7 +236,7 @@ function HeroNavigationPreview() {
             <RouteBadge label="Applied" tone="sky" />
           </div>
 
-          <div className="absolute left-1/2 top-[calc(100%+0.55rem)] hidden w-[176px] -translate-x-1/2 items-center gap-2.5 rounded-2xl border bg-card px-3 py-2.5 shadow-xl sm:flex">
+          <div className="absolute -right-3 bottom-[calc(100%+0.5rem)] hidden w-[176px] items-center gap-2.5 rounded-2xl border bg-card px-3 py-2.5 shadow-xl sm:flex">
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
               <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
             </span>
