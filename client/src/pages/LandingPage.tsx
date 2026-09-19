@@ -116,10 +116,7 @@ function CareerRouteMark() {
         className="fill-brand"
         d="M34 21h8l9 13.2V21h8v28h-8L42 35.8V49h-8V21Z"
       />
-      <path
-        className="fill-foreground"
-        d="M27 50.5 33 59l6-8.5-6 2.6Z"
-      />
+      <path className="fill-foreground" d="M27 50.5 33 59l6-8.5-6 2.6Z" />
     </svg>
   );
 }
@@ -230,7 +227,7 @@ function HeroNavigationPreview() {
             <RouteBadge label="Applied" tone="sky" />
           </div>
 
-          <div className="absolute left-[76%] top-[-34%] hidden w-[158px] items-center gap-2 rounded-xl border border-brand/20 bg-background/95 px-2.5 py-2 shadow-lg backdrop-blur sm:flex">
+          <div className="absolute left-[76%] top-[-4%] hidden w-[190px] items-center gap-2 rounded-xl border border-brand/20 bg-background/95 px-2.5 py-2 shadow-lg backdrop-blur sm:flex">
             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
               <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
             </span>
@@ -256,7 +253,9 @@ function HeroNavigationPreview() {
                 <CalendarDays className="h-4 w-4" aria-hidden="true" />
               </div>
               <div className="min-w-0">
-                <p className="truncate text-xs font-semibold">Product Engineer</p>
+                <p className="truncate text-xs font-semibold">
+                  Product Engineer
+                </p>
                 <p className="truncate text-[11px] text-muted-foreground">
                   Friday · 10:30
                 </p>
@@ -271,9 +270,7 @@ function HeroNavigationPreview() {
             <RouteBadge label="Interview" tone="amber" />
           </div>
         </div>
-
       </div>
-
     </div>
   );
 }
@@ -575,7 +572,8 @@ function CalendarPreview() {
   });
 
   const firstInterviewLabel = dateFormatter.format(firstInterview) + " · 10:30";
-  const secondInterviewLabel = dateFormatter.format(secondInterview) + " · 14:00";
+  const secondInterviewLabel =
+    dateFormatter.format(secondInterview) + " · 14:00";
 
   return (
     <div className="rounded-3xl border bg-muted/30 p-4 sm:p-5">
