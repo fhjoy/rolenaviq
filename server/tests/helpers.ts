@@ -1,4 +1,4 @@
-import request, { type SuperAgentTest } from "supertest";
+import request from "supertest";
 
 import app from "../src/app.js";
 
@@ -33,7 +33,7 @@ export const registerUser = async (
 export const createAuthenticatedAgent = async (
   user: Required<TestUserInput> = createTestUser(),
 ): Promise<{
-  agent: SuperAgentTest;
+  agent: ReturnType<typeof request.agent>;
   user: Required<TestUserInput>;
   userId: string;
 }> => {

@@ -308,7 +308,7 @@ export const updateApplication = async (
       },
       updateOperations,
       {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       },
     );

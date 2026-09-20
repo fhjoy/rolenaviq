@@ -263,7 +263,7 @@ export const updateProfile = async (
     const user = await User.findByIdAndUpdate(
       req.userId,
       { firstName, lastName, email: normalizedEmail },
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     );
 
     if (!user) {
