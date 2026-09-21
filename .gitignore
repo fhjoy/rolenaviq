@@ -33,3 +33,8 @@ Thumbs.db
 # IDEs
 .idea/
 .vscode/
+
+# Cypress artifacts
+client/cypress/screenshots/
+client/cypress/videos/
+client/cypress/downloads/

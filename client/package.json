@@ -10,7 +10,10 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "dev:e2e": "vite --mode e2e --host 127.0.0.1 --port 4173",
+    "e2e": "cypress run",
+    "e2e:open": "cypress open"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -55,6 +58,7 @@
     "@vitest/coverage-v8": "^5.0.1",
     "jsdom": "^26.1.0",
     "msw": "^2.11.5",
-    "vitest": "^5.0.1"
+    "vitest": "^5.0.1",
+    "cypress": "^16.1.0"
   }
 }
