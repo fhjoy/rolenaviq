@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Route, Routes } from "react-router";
 import { describe, expect, it } from "vitest";
@@ -34,11 +34,14 @@ describe("LoginPage", () => {
       screen.getByLabelText("Email"),
       "invalid-email",
     );
-    await user.click(
-      screen.getByRole("button", {
-        name: "Sign in",
-      }),
-    );
+    const submitButton = screen.getByRole("button", {
+      name: "Sign in",
+    });
+    const form = submitButton.closest("form");
+
+    expect(form).not.toBeNull();
+
+    fireEvent.submit(form!);
 
     expect(
       await screen.findByText("Please enter a valid email address"),
