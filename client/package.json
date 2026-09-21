@@ -12,7 +12,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "dev:e2e": "vite --mode e2e --host 127.0.0.1 --port 4173",
-    "e2e": "cypress run",
+    "e2e": "cypress run --browser chrome",
     "e2e:open": "cypress open"
   },
   "dependencies": {

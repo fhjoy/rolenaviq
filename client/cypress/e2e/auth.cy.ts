@@ -4,7 +4,7 @@ describe("authentication", () => {
 
     cy.location("pathname").should("eq", "/login");
     cy.location("search").should("contain", "expired=1");
-    cy.contains("h1, h2", "Welcome back").should("be.visible");
+    cy.contains('[data-slot="card-title"]', "Welcome back").should("be.visible");
   });
 
   it("registers a real user and signs in through the browser", () => {
@@ -29,19 +29,19 @@ describe("authentication", () => {
     cy.location("pathname", {
       timeout: 15_000,
     }).should("eq", "/dashboard");
-    cy.contains("h1", "Dashboard").should("be.visible");
+    cy.get("main").contains("Welcome back").should("be.visible");
   });
 
   it("logs into the demo account and signs out cleanly", () => {
     cy.loginDemo();
 
-    cy.contains("h1", "Dashboard").should("be.visible");
+    cy.get("main").contains("Welcome back").should("be.visible");
 
     cy.contains("button", "Logout").click();
     cy.contains("h2", "Sign out?").should("be.visible");
     cy.contains("button", "Sign out").click();
 
     cy.location("pathname").should("eq", "/login");
-    cy.contains("h1, h2", "Welcome back").should("be.visible");
+    cy.contains('[data-slot="card-title"]', "Welcome back").should("be.visible");
   });
 });
