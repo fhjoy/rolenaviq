@@ -8,11 +8,13 @@ describe("authentication", () => {
   });
 
   it("registers a real user and signs in through the browser", () => {
+    const email = `cypress.tester.${crypto.randomUUID()}@example.com`;
+
     cy.visit("/register");
 
     cy.get("#firstName").type("Cypress");
     cy.get("#lastName").type("Tester");
-    cy.get("#email").type("cypress.tester@example.com");
+    cy.get("#email").type(email);
     cy.get("#password").type("StrongPass123!");
     cy.get("#confirmPassword").type("StrongPass123!");
 
@@ -22,7 +24,7 @@ describe("authentication", () => {
     cy.location("search").should("contain", "registered=1");
     cy.contains("Account created").should("be.visible");
 
-    cy.get("#email").type("cypress.tester@example.com");
+    cy.get("#email").type(email);
     cy.get("#password").type("StrongPass123!");
     cy.contains("button", "Sign in").click();
 
