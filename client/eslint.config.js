@@ -41,4 +41,12 @@ export default defineConfig([
       "react-refresh/only-export-components": "off",
     },
   },
+
+  {
+    files: ["cypress/support/commands.ts"],
+    rules: {
+      // Cypress custom commands extend its global Chainable interface.
+      "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }],
+    },
+  },
 ]);
