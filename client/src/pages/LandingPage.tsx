@@ -34,22 +34,22 @@ const workflowStages = [
 const engineeringHighlights = [
   "React 19 + TypeScript",
   "Vite + Tailwind CSS",
-  "shadcn + Base UI",
   "TanStack Query",
-  "React Hook Form + Zod",
   "Node + Express REST API",
   "MongoDB + Mongoose",
   "HttpOnly JWT authentication",
   "Per-user authorization",
+  "Vitest + Cypress tests",
+  "Docker Compose",
+  "GitHub Actions CI",
   "Vercel + Render + Atlas",
   "Responsive + accessible UI",
 ];
 
 const engineeringRoadmap = [
-  "Cypress end-to-end testing",
-  "AI job analysis",
-  "LLM-powered matching",
-  "GitHub Actions CI/CD",
+  "Angular interview prep",
+  "Python + FastAPI job analysis",
+  "AI-assisted matching",
 ];
 
 function RouteBadge({
@@ -922,7 +922,7 @@ function EngineeringSection() {
             </div>
 
             <p className="mt-7 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
-              Engineering roadmap
+              Planned next
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {engineeringRoadmap.map((item) => (
@@ -936,9 +936,10 @@ function EngineeringSection() {
             </div>
 
             <p className="mt-4 text-xs leading-5 text-primary-foreground/50">
-              Cypress, AI features and CI/CD are shown as roadmap items so the
-              portfolio stays clear about what is implemented today and what is
-              planned next.
+              Angular would add interview prep alongside the React app. Express
+              would call a separate Python/FastAPI service for job analysis;
+              AI-assisted matching would come later. These are plans, not live
+              features yet.
             </p>
           </div>
 

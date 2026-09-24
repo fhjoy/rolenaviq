@@ -164,6 +164,23 @@
   }
 }
 
+@keyframes landing-flow-dot-vertical {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+
+  15%,
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    top: calc(100% - 0.5rem);
+    opacity: 0;
+  }
+}
+
 @keyframes landing-progress-dot {
   0% {
     left: 0;
@@ -476,6 +493,35 @@
 
 .landing-flow-connector-reverse {
   transform: rotate(180deg);
+}
+
+@media (max-width: 1023px) {
+  .landing-flow-connector {
+    height: 3.5rem;
+    width: 2rem;
+    flex-direction: column;
+  }
+
+  .landing-flow-connector::before {
+    top: 0;
+    bottom: 0.8rem;
+    left: 50%;
+    right: auto;
+    height: auto;
+    width: 2px;
+    transform: translateX(-50%);
+  }
+
+  .landing-flow-dot {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-name: landing-flow-dot-vertical;
+  }
+
+  .landing-flow-arrow {
+    transform: rotate(90deg);
+  }
 }
 
 .landing-progress-track {
