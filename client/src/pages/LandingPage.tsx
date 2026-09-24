@@ -11,7 +11,6 @@ import {
   KeyRound,
   Mail,
   Server,
-  ShieldCheck,
   Sparkles,
 } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
@@ -29,27 +28,6 @@ const workflowStages = [
   { label: "Interview", detail: "Prepare for the conversation" },
   { label: "Technical", detail: "Keep the next step visible" },
   { label: "Offer", detail: "See the destination" },
-];
-
-const engineeringHighlights = [
-  "React 19 + TypeScript",
-  "Vite + Tailwind CSS",
-  "shadcn + Base UI",
-  "TanStack Query",
-  "React Hook Form + Zod",
-  "Node + Express REST API",
-  "MongoDB + Mongoose",
-  "HttpOnly JWT authentication",
-  "Per-user authorization",
-  "Vercel + Render + Atlas",
-  "Responsive + accessible UI",
-];
-
-const engineeringRoadmap = [
-  "Cypress end-to-end testing",
-  "AI job analysis",
-  "LLM-powered matching",
-  "GitHub Actions CI/CD",
 ];
 
 function RouteBadge({
@@ -787,15 +765,17 @@ function ArchitectureNode({
   detail: string;
 }) {
   return (
-    <div className="relative rounded-2xl border bg-background p-4">
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
       <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand/10 text-brand">
         {icon}
       </span>
-      <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+      <p className="mt-5 text-xs font-medium text-primary-foreground/55">
         {label}
       </p>
-      <p className="mt-1 text-sm font-semibold">{value}</p>
-      <p className="mt-0.5 text-xs text-muted-foreground">{detail}</p>
+      <h3 className="mt-1 text-lg font-semibold">{value}</h3>
+      <p className="mt-2 text-sm leading-6 text-primary-foreground/65">
+        {detail}
+      </p>
     </div>
   );
 }
@@ -877,145 +857,54 @@ function EngineeringSection() {
       id="engineering"
       className="border-t border-brand/20 bg-primary text-primary-foreground"
     >
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-        <div className="mb-12 flex flex-col gap-4 border-b border-white/10 pb-8 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
-              <Code2 className="h-3.5 w-3.5" aria-hidden="true" />
-              Engineering · Portfolio case study
-            </span>
-            <h2 className="mt-5 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl">
-              This is how RoleNaviq is built — separate from what the product
-              does.
-            </h2>
-          </div>
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <span className="inline-flex items-center gap-2 text-sm font-semibold text-brand">
+          <Code2 className="h-4 w-4" aria-hidden="true" />
+          Behind RoleNaviq
+        </span>
+        <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+          How it’s built
+        </h2>
+        <p className="mt-4 max-w-2xl leading-7 text-primary-foreground/70">
+          A React app, an Express API and a database each handle one part of the
+          job search. Here’s what powers the live version today.
+        </p>
 
-          <p className="max-w-md text-sm leading-6 text-primary-foreground/65">
-            A technical view for developers and recruiters who want to look
-            beyond the UI and understand the architecture, security and stack.
-          </p>
+        <div className="mt-9 grid gap-4 md:grid-cols-3">
+          <ArchitectureNode
+            icon={<Code2 className="h-5 w-5" aria-hidden="true" />}
+            label="Vercel"
+            value="React frontend"
+            detail="The pages you see and use."
+          />
+          <ArchitectureNode
+            icon={<Server className="h-5 w-5" aria-hidden="true" />}
+            label="Render"
+            value="Express API"
+            detail="Handles sign-in and keeps each user’s applications private."
+          />
+          <ArchitectureNode
+            icon={<Database className="h-5 w-5" aria-hidden="true" />}
+            label="MongoDB Atlas"
+            value="Application data"
+            detail="Stores your opportunities, notes and interview dates."
+          />
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          <div>
-            <p className="text-sm font-semibold text-brand">
-              Production-oriented full-stack engineering
-            </p>
-            <p className="mt-4 max-w-xl leading-7 text-primary-foreground/70">
-              RoleNaviq uses authenticated user data, server-side authorization,
-              API-driven state and separate production deployments for the
-              frontend, backend and database.
-            </p>
-
-            <p className="mt-7 text-xs font-semibold uppercase tracking-[0.18em] text-primary-foreground/50">
-              Implemented
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {engineeringHighlights.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-primary-foreground/85"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-
-            <p className="mt-7 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
-              Engineering roadmap
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {engineeringRoadmap.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-dashed border-brand/40 bg-brand/8 px-3 py-1.5 text-xs font-medium text-brand"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-
-            <p className="mt-4 text-xs leading-5 text-primary-foreground/50">
-              Cypress, AI features and CI/CD are shown as roadmap items so the
-              portfolio stays clear about what is implemented today and what is
-              planned next.
-            </p>
-          </div>
-
-          <div className="rounded-[2rem] border border-white/10 bg-background p-5 text-foreground shadow-2xl shadow-black/15 sm:p-6">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold">Production architecture</p>
-                <p className="text-xs text-muted-foreground">
-                  Simple enough to understand. Real enough to deploy.
-                </p>
-              </div>
-              <ShieldCheck className="h-5 w-5 text-brand" aria-hidden="true" />
-            </div>
-
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              <ArchitectureNode
-                icon={<Code2 className="h-5 w-5" aria-hidden="true" />}
-                label="Frontend"
-                value="React · Vite"
-                detail="Vercel"
-              />
-              <ArchitectureNode
-                icon={<Server className="h-5 w-5" aria-hidden="true" />}
-                label="API"
-                value="Node · Express"
-                detail="Render"
-              />
-              <ArchitectureNode
-                icon={<Database className="h-5 w-5" aria-hidden="true" />}
-                label="Database"
-                value="MongoDB"
-                detail="Atlas"
-              />
-            </div>
-
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
-              <span>React client</span>
-              <ArrowRight
-                className="landing-arrow-pulse h-3.5 w-3.5 text-brand"
-                aria-hidden="true"
-              />
-              <span>/api proxy</span>
-              <ArrowRight
-                className="landing-arrow-pulse h-3.5 w-3.5 text-brand"
-                aria-hidden="true"
-              />
-              <span>Express API</span>
-              <ArrowRight
-                className="landing-arrow-pulse h-3.5 w-3.5 text-brand"
-                aria-hidden="true"
-              />
-              <span>MongoDB Atlas</span>
-            </div>
-
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border bg-muted/25 p-4">
-                <KeyRound className="h-5 w-5 text-brand" aria-hidden="true" />
-                <p className="mt-3 text-sm font-semibold">Secure sessions</p>
-                <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                  JWT authentication is stored in HttpOnly cookies rather than
-                  exposed to client-side JavaScript.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border bg-muted/25 p-4">
-                <ShieldCheck
-                  className="h-5 w-5 text-brand"
-                  aria-hidden="true"
-                />
-                <p className="mt-3 text-sm font-semibold">Ownership enforced</p>
-                <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                  Application access is scoped to the signed-in user on the
-                  server, not only hidden in the interface.
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-2xl text-sm leading-6 text-primary-foreground/70">
+            Automated tests, GitHub Actions and Docker help keep changes easy to
+            check before they go live.
+          </p>
+          <a
+            href="https://github.com/fhjoy/rolenaviq"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-brand transition-colors hover:text-brand/80"
+          >
+            View the code
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </a>
         </div>
       </div>
     </section>
