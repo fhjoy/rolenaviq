@@ -60,14 +60,6 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
           </NavLink>
         );
       })}
-      <a
-        href="/prep/"
-        onClick={onNavigate}
-        className="group flex items-center gap-3 rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-      >
-        <BookOpenCheck className="h-4 w-4 group-hover:text-foreground" aria-hidden="true" />
-        Interview prep
-      </a>
     </nav>
   );
 }
@@ -81,6 +73,20 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       <Separator />
       <div className="flex-1 px-3 py-4">
         <Navigation onNavigate={onNavigate} />
+
+        <div className="mt-7 border-t px-1 pt-5">
+          <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            Preparation
+          </p>
+          <a
+            href="/prep/"
+            onClick={onNavigate}
+            className="group flex items-center gap-3 rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <BookOpenCheck className="h-4 w-4 group-hover:text-brand" aria-hidden="true" />
+            Interview prep
+          </a>
+        </div>
       </div>
       <div className="space-y-2 border-t p-3">
         <NavLink
