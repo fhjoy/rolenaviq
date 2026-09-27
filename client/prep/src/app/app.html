@@ -1,0 +1,25 @@
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="site-header">
+  <a class="brand" routerLink="/" aria-label="RoleNaviq Interview Prep home">
+    <span class="brand-mark">RN</span>
+    <span>RoleNaviq <small>Interview prep</small></span>
+  </a>
+  <nav aria-label="Interview preparation navigation">
+    <a routerLink="/">Interviews</a>
+    <a href="/dashboard">Back to workspace</a>
+  </nav>
+</header>
+
+<main id="main-content" class="container">
+  @if (status() === 'loading') {
+    <p role="status">Checking your session…</p>
+  } @else if (status() === 'error') {
+    <div class="panel" role="alert">
+      <h1>Unable to check your session</h1>
+      <p>The API may be waking up. Please try again.</p>
+      <button type="button" (click)="checkSession()">Try again</button>
+    </div>
+  } @else {
+    <router-outlet />
+  }
+</main>

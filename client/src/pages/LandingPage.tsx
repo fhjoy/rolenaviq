@@ -40,6 +40,7 @@ const engineeringHighlights = [
   "HttpOnly JWT authentication",
   "Per-user authorization",
   "Vitest + Cypress tests",
+  "Angular interview prep",
   "Docker Compose",
   "GitHub Actions CI",
   "Vercel + Render + Atlas",
@@ -47,7 +48,6 @@ const engineeringHighlights = [
 ];
 
 const engineeringRoadmap = [
-  "Angular interview prep",
   "Python + FastAPI job analysis",
   "AI-assisted matching",
 ];
@@ -936,10 +936,9 @@ function EngineeringSection() {
             </div>
 
             <p className="mt-4 text-xs leading-5 text-primary-foreground/50">
-              Angular would add interview prep alongside the React app. Express
-              would call a separate Python/FastAPI service for job analysis;
-              AI-assisted matching would come later. These are plans, not live
-              features yet.
+              Angular powers interview prep alongside the React workspace.
+              A separate Python/FastAPI job analysis service and AI-assisted
+              matching are planned for later.
             </p>
           </div>
 
@@ -957,8 +956,8 @@ function EngineeringSection() {
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
               <ArchitectureNode
                 icon={<Code2 className="h-5 w-5" aria-hidden="true" />}
-                label="Frontend"
-                value="React · Vite"
+                label="Frontends"
+                value="React · Angular"
                 detail="Vercel"
               />
               <ArchitectureNode
@@ -976,7 +975,7 @@ function EngineeringSection() {
             </div>
 
             <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
-              <span>React client</span>
+              <span>React + Angular</span>
               <ArrowRight
                 className="landing-arrow-pulse h-3.5 w-3.5 text-brand"
                 aria-hidden="true"

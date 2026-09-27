@@ -1,4 +1,7 @@
 node_modules
+prep/node_modules
+prep/dist
+prep/.angular
 dist
 coverage
 cypress

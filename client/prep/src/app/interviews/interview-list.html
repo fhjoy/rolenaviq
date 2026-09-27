@@ -1,0 +1,36 @@
+<section class="page-heading">
+  <span class="eyebrow">Interview preparation</span>
+  <h1>Walk into your next interview ready.</h1>
+  <p>Your interview-stage applications are already here. Pick one to make a plan.</p>
+</section>
+
+@if (loading()) {
+  <p role="status">Loading interviews…</p>
+} @else if (error()) {
+  <div class="panel" role="alert">
+    <p>We couldn't load your interviews right now.</p>
+    <button type="button" (click)="load()">Try again</button>
+  </div>
+} @else if (interviews().length === 0) {
+  <div class="panel empty-state">
+    <h2>No interviews scheduled yet</h2>
+    <p>When an application reaches the Interview or Technical stage, it will appear here.</p>
+    <a class="button" href="/applications">View applications</a>
+  </div>
+} @else {
+  <div class="interview-grid">
+    @for (interview of interviews(); track interview._id) {
+      <article class="panel interview-card">
+        <span class="badge">{{ interview.status === 'technical_interview' ? 'Technical interview' : 'Interview' }}</span>
+        <h2>{{ interview.position }}</h2>
+        <p class="company">{{ interview.company }}</p>
+        @if (interview.interviewDate) {
+          <p class="muted">{{ interview.interviewDate | date:'medium' }}</p>
+        }
+        <a class="button" [routerLink]="['/interviews', interview._id]">
+          Prepare for this interview
+        </a>
+      </article>
+    }
+  </div>
+}

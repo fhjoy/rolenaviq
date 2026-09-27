@@ -6,6 +6,14 @@
       "destination": "https://rolenaviq.onrender.com/api/:path*"
     },
     {
+      "source": "/prep",
+      "destination": "/prep/index.html"
+    },
+    {
+      "source": "/prep/:path*",
+      "destination": "/prep/index.html"
+    },
+    {
       "source": "/:path*",
       "destination": "/index.html"
     }
