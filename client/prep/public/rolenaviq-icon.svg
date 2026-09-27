@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">RoleNaviq</title>
+  <desc id="desc">RN navigation monogram</desc>
+
+  <style>
+    .neutral { fill: #1f2937; }
+    .accent { fill: #249B86; }
+
+    @media (prefers-color-scheme: dark) {
+      .neutral { fill: #f8fafc; }
+      .accent { fill: #54B9A5; }
+    }
+  </style>
+
+  <!-- Upward navigation marker -->
+  <path class="accent" d="M33 5 43 20 35.8 16.6 31 24.5 31.2 12.4Z"></path>
+
+  <!-- R -->
+  <path class="neutral" fill-rule="evenodd" d="
+    M9 15h18.5c7.7 0 12.5 4.3 12.5 10.5
+    0 4.4-2.4 7.8-6.6 9.4
+    L41 49H31.6l-6.9-12.5H18V49H9V15Zm9 7.2v7.2h8.4
+    c3.1 0 4.8-1.2 4.8-3.6
+    0-2.4-1.7-3.6-4.8-3.6H18Z
+  "></path>
+
+  <!-- N -->
+  <path class="accent" d="M34 21h8l9 13.2V21h8v28h-8L42 35.8V49h-8V21Z"></path>
+
+  <!-- Downward navigation marker -->
+  <path class="neutral" d="M27 50.5 33 59l6-8.5-6 2.6Z"></path>
+</svg>

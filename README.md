@@ -9,11 +9,12 @@ I built RoleNaviq to keep the moving parts of a job search in one place. Save op
 - Track applications from saved roles through interviews and offers.
 - Switch between a searchable list, a board, a calendar, and a dashboard.
 - Keep job links, technologies, salary details, notes, and interview dates together.
+- Prepare for interviews with a checklist, practice questions, and saved notes.
 - Use your own account or explore the app with the demo login.
 
 ## Built with
 
-- **Frontend:** React, TypeScript, Vite, Tailwind CSS, TanStack Query.
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS, TanStack Query; Angular for interview preparation.
 - **Backend:** Node.js, Express, MongoDB, Mongoose, JWT authentication.
 - **Testing and delivery:** Vitest, React Testing Library, Supertest, Cypress, Docker Compose, GitHub Actions.
 
@@ -34,17 +35,20 @@ For development without Docker, use Node.js 24 and a MongoDB database. Copy `ser
 ```bash
 npm ci --prefix server
 npm ci --prefix client
+npm ci --prefix client/prep
 npm --prefix server run dev
 npm --prefix client run dev
+npm --prefix client run dev:prep
 ```
 
-Run the last two commands in separate terminals, then open [http://localhost:5173](http://localhost:5173).
+Run the last three commands in separate terminals, then open [http://localhost:5173](http://localhost:5173). Angular is served under `/prep/` through the React development server.
 
 ## Checks
 
 ```bash
 npm --prefix server test
 npm --prefix client test
+npm --prefix client/prep test -- --watch=false
 ```
 
 GitHub Actions also runs build checks, Cypress browser tests, and a Docker stack smoke test on pull requests.

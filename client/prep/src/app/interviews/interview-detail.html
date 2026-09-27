@@ -1,0 +1,73 @@
+<a class="back-link" routerLink="/">← All interviews</a>
+
+@if (loading()) {
+  <p role="status">Loading your preparation…</p>
+} @else if (application(); as interview) {
+  <section class="page-heading">
+    <span class="eyebrow">Your interview plan</span>
+    <h1>{{ interview.position }}</h1>
+    <p>{{ interview.company }}
+      @if (interview.interviewDate) {
+        · {{ interview.interviewDate | date:'medium' }}
+      }
+    </p>
+    <p class="muted">{{ progress() }} of {{ checklist.length + questions.length }} steps practiced or completed</p>
+  </section>
+
+  <div class="prep-grid">
+    <section class="panel" aria-labelledby="checklist-heading">
+      <h2 id="checklist-heading">Preparation checklist</h2>
+      <p class="muted">Keep the essentials in one place.</p>
+      <div class="task-list">
+        @for (task of checklist; track task.id) {
+          <label class="task">
+            <input type="checkbox" [checked]="completedTasks().includes(task.id)" (change)="toggleTask(task.id)" />
+            <span>{{ task.label }}</span>
+          </label>
+        }
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">Your notes</h2>
+      <p class="muted">Ideas, research, and things to remember.</p>
+      <label for="prep-notes" class="sr-only">Interview preparation notes</label>
+      <textarea id="prep-notes" rows="8" maxlength="5000" [value]="notes()" (input)="setNotes($event)" placeholder="What do you want to remember?" ></textarea>
+    </section>
+  </div>
+
+  <section class="panel practice-section" aria-labelledby="practice-heading">
+    <h2 id="practice-heading">Practice questions</h2>
+    <p class="muted">Write a short answer, then mark the question as practiced.</p>
+    <div class="question-grid">
+      @for (question of questions; track question.id) {
+        <div class="question">
+          <h3>{{ question.prompt }}</h3>
+          <label [for]="'answer-' + question.id" class="sr-only">Your answer to {{ question.prompt }}</label>
+          <textarea [id]="'answer-' + question.id" rows="3" maxlength="2000" [value]="answerFor(question.id)" (input)="setAnswer(question.id, $event)" placeholder="Draft your answer…"></textarea>
+          <label class="task">
+            <input type="checkbox" [checked]="practiced(question.id)" (change)="togglePracticed(question.id)" />
+            <span>I practiced this answer</span>
+          </label>
+        </div>
+      }
+    </div>
+  </section>
+
+  <div class="save-bar">
+    <p class="muted">Your changes are saved when you press the button.</p>
+    <button type="button" [disabled]="saving()" (click)="save()">
+      {{ saving() ? 'Saving…' : 'Save preparation' }}
+    </button>
+    @if (saved()) { <span role="status">Saved</span> }
+  </div>
+} @else {
+  <div class="panel" role="alert">
+    <h1>Application unavailable</h1>
+    <a routerLink="/">Back to interviews</a>
+  </div>
+}
+
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}

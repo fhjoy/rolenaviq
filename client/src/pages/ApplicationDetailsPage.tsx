@@ -1,4 +1,4 @@
-import { ArrowLeft, CalendarDays, ExternalLink, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, BookOpenCheck, CalendarDays, ExternalLink, Pencil, Trash2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
@@ -103,6 +103,12 @@ export function ApplicationDetailsPage() {
           </div>
 
           <div className="flex flex-wrap gap-2">
+            {(application.status === "interview" || application.status === "technical_interview") && (
+              <Button variant="outline" render={<a href={`/prep/interviews/${application._id}`} />}>
+                <BookOpenCheck className="h-4 w-4" aria-hidden="true" />
+                Prepare for interview
+              </Button>
+            )}
             {application.jobUrl && (
               <Button
                 variant="outline"

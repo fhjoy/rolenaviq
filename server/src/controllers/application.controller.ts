@@ -2,6 +2,7 @@ import { type Request, type Response } from "express";
 import { type QueryFilter, isValidObjectId } from "mongoose";
 
 import Application, { type IApplication } from "../models/Application.js";
+import InterviewPrep from "../models/InterviewPrep.js";
 import {
   createApplicationSchema,
   updateApplicationSchema,
@@ -369,6 +370,8 @@ export const deleteApplication = async (
 
       return;
     }
+
+    await InterviewPrep.deleteOne({ applicationId: application._id, userId: req.userId });
 
     res.status(200).json({
       message: "Application deleted successfully",

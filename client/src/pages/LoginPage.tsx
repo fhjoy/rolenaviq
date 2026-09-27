@@ -28,6 +28,7 @@ export function LoginPage() {
   const isDemoLogin = searchParams.get("demo") === "1";
   const registrationComplete = searchParams.get("registered") === "1";
   const sessionExpired = searchParams.get("expired") === "1";
+  const returnTo = searchParams.get("returnTo");
 
   const {
     register,
@@ -47,7 +48,11 @@ export function LoginPage() {
     mutationFn: loginUser,
     onSuccess: (data) => {
       queryClient.setQueryData(["auth", "me"], { user: data.user });
-      navigate("/dashboard");
+      if (returnTo?.startsWith("/prep/") && !returnTo.includes("\\")) {
+        window.location.assign(returnTo);
+      } else {
+        navigate("/dashboard");
+      }
     },
   });
 
