@@ -1,7 +1,12 @@
-<section class="page-heading">
+<section class="page-heading prep-hero">
   <span class="eyebrow">Interview preparation</span>
   <h1>Walk into your next interview ready.</h1>
   <p>Your interview-stage applications are already here. Pick one to make a plan.</p>
+  <div class="prep-method" aria-label="Your preparation routine">
+    <span><b>01</b> Research the role</span>
+    <span><b>02</b> Shape your story</span>
+    <span><b>03</b> Practice with purpose</span>
+  </div>
 </section>
 
 @if (loading()) {
@@ -18,6 +23,10 @@
     <a class="button" href="/applications">View applications</a>
   </div>
 } @else {
+  <div class="section-heading">
+    <h2>Your upcoming conversations</h2>
+    <span class="muted">{{ interviews().length }} to prepare for</span>
+  </div>
   <div class="interview-grid">
     @for (interview of interviews(); track interview._id) {
       <article class="panel interview-card">
@@ -26,6 +35,8 @@
         <p class="company">{{ interview.company }}</p>
         @if (interview.interviewDate) {
           <p class="muted">{{ interview.interviewDate | date:'medium' }}</p>
+        } @else {
+          <p class="muted">Date to be confirmed</p>
         }
         <a class="button" [routerLink]="['/interviews', interview._id]">
           Prepare for this interview

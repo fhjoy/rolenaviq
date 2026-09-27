@@ -15,7 +15,7 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router";
 
 import { Brand } from "@/components/brand/Brand";
@@ -777,12 +777,40 @@ function ProductShowcase() {
 }
 
 function InterviewPrepSection() {
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [step, setStep] = useState(0);
+  const completed = Math.min(step, 3);
+
+  useEffect(() => {
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let timer: ReturnType<typeof setInterval> | undefined;
+    let visible = false;
+    const sync = () => {
+      clearInterval(timer);
+      setStep(motion.matches ? 3 : 0);
+      if (visible && !motion.matches) {
+        timer = setInterval(() => setStep(value => (value + 1) % 5), 1800);
+      }
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      sync();
+    }, { threshold: 0.5 });
+    if (previewRef.current) observer.observe(previewRef.current);
+    motion.addEventListener("change", sync);
+    return () => {
+      clearInterval(timer);
+      observer.disconnect();
+      motion.removeEventListener("change", sync);
+    };
+  }, []);
+
   return (
     <section
       id="interview-prep"
-      className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8"
+      className="border-y bg-brand/5"
     >
-      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-2 lg:gap-16 lg:px-8">
         <div>
           <span className="inline-flex rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
             Interview prep
@@ -803,7 +831,7 @@ function InterviewPrepSection() {
           </Button>
         </div>
 
-        <div className="rounded-3xl border bg-muted/30 p-4 sm:p-5">
+        <div ref={previewRef} className="rounded-3xl border border-brand/20 bg-brand/5 p-4 sm:p-5">
           <div className="rounded-2xl border bg-card p-5 shadow-sm sm:p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -819,26 +847,22 @@ function InterviewPrepSection() {
             </div>
 
             <div className="mt-6 space-y-2" aria-hidden="true">
-              <div className="flex items-center gap-3 rounded-xl border bg-background px-3 py-3 text-sm">
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-brand" />
-                Research the team and role
-              </div>
-              <div className="landing-prep-focus flex items-center gap-3 rounded-xl border bg-background px-3 py-3 text-sm">
-                <span className="h-4 w-4 shrink-0 rounded-full border-2 border-brand/60" />
-                Practice a project story
-              </div>
-              <div className="flex items-center gap-3 rounded-xl border bg-background px-3 py-3 text-sm">
-                <span className="h-4 w-4 shrink-0 rounded-full border-2 border-brand/60" />
-                Prepare your questions
-              </div>
+              {["Research the team and role", "Practice a project story", "Prepare your questions"].map((task, index) => (
+                <div key={task} data-complete={index < completed} className={`landing-prep-task flex items-center gap-3 rounded-xl border px-3 py-3 text-sm ${index < completed ? "border-brand/30 bg-brand/10" : "bg-background"}`}>
+                  <span className="landing-prep-check relative h-5 w-5 shrink-0 rounded-full border-2 border-brand/40">
+                    <CheckCircle2 className="absolute -inset-0.5 h-5 w-5 text-brand" />
+                  </span>
+                  {task}
+                </div>
+              ))}
             </div>
 
             <div className="mt-6 flex items-center justify-between text-xs text-muted-foreground">
-              <span>Preparation in progress</span>
-              <span>1 of 3 steps</span>
+              <span>{completed === 3 ? "Ready for the conversation" : "Preparation in progress"}</span>
+              <span>{completed} of 3 steps</span>
             </div>
             <div className="mt-2 h-2 overflow-hidden rounded-full bg-brand/10">
-              <div className="h-full w-1/3 rounded-full bg-brand" />
+              <div className="h-full rounded-full bg-brand transition-[width] duration-500 motion-reduce:transition-none" style={{ width: `${completed / 3 * 100}%` }} />
             </div>
           </div>
         </div>

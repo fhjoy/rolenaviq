@@ -12,6 +12,7 @@
       }
     </p>
     <p class="muted">{{ progress() }} of {{ checklist.length + questions.length }} steps practiced or completed</p>
+    <progress class="prep-progress" [value]="progress()" [max]="checklist.length + questions.length" aria-label="Interview preparation progress"></progress>
   </section>
 
   <div class="prep-grid">
