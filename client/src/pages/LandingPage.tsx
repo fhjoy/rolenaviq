@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   BarChart3,
+  BookOpenCheck,
   BriefcaseBusiness,
   CalendarDays,
   CheckCircle2,
@@ -775,6 +776,77 @@ function ProductShowcase() {
   );
 }
 
+function InterviewPrepSection() {
+  return (
+    <section
+      id="interview-prep"
+      className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8"
+    >
+      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        <div>
+          <span className="inline-flex rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
+            Interview prep
+          </span>
+          <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+            Make a plan before the conversation.
+          </h2>
+          <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
+            Interviews from your applications appear in one place. Keep a
+            checklist, practice answers and notes together for each role.
+          </p>
+          <Button
+            className="mt-7"
+            render={<Link to="/login?demo=1&returnTo=%2Fprep%2F" />}
+          >
+            Try interview prep
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Button>
+        </div>
+
+        <div className="rounded-3xl border bg-muted/30 p-4 sm:p-5">
+          <div className="rounded-2xl border bg-card p-5 shadow-sm sm:p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-brand">
+                  Your interview plan
+                </p>
+                <h3 className="mt-2 text-lg font-semibold">Frontend Engineer</h3>
+                <p className="text-sm text-muted-foreground">Northstar Labs</p>
+              </div>
+              <span className="rounded-xl bg-brand/10 p-2.5 text-brand">
+                <BookOpenCheck className="h-5 w-5" aria-hidden="true" />
+              </span>
+            </div>
+
+            <div className="mt-6 space-y-2" aria-hidden="true">
+              <div className="flex items-center gap-3 rounded-xl border bg-background px-3 py-3 text-sm">
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-brand" />
+                Research the team and role
+              </div>
+              <div className="landing-prep-focus flex items-center gap-3 rounded-xl border bg-background px-3 py-3 text-sm">
+                <span className="h-4 w-4 shrink-0 rounded-full border-2 border-brand/60" />
+                Practice a project story
+              </div>
+              <div className="flex items-center gap-3 rounded-xl border bg-background px-3 py-3 text-sm">
+                <span className="h-4 w-4 shrink-0 rounded-full border-2 border-brand/60" />
+                Prepare your questions
+              </div>
+            </div>
+
+            <div className="mt-6 flex items-center justify-between text-xs text-muted-foreground">
+              <span>Preparation in progress</span>
+              <span>1 of 3 steps</span>
+            </div>
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-brand/10">
+              <div className="h-full w-1/3 rounded-full bg-brand" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ArchitectureNode({
   icon,
   label,
@@ -1134,6 +1206,7 @@ export function LandingPage() {
         <ChaosToClarity />
         <WorkflowJourney />
         <ProductShowcase />
+        <InterviewPrepSection />
         <ExploreCtaSection />
         <EngineeringSection />
       </main>

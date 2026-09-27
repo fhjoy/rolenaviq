@@ -444,6 +444,21 @@
   }
 }
 
+@keyframes landing-prep-focus {
+  0%, 100% {
+    border-color: var(--border);
+    box-shadow: none;
+  }
+  50% {
+    border-color: color-mix(in oklch, var(--brand) 55%, var(--border));
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--brand) 10%, transparent);
+  }
+}
+
+.landing-prep-focus {
+  animation: landing-prep-focus 4s ease-in-out infinite;
+}
+
 .landing-route-line {
   stroke-dasharray: 10 12;
   animation: landing-route-flow 7s linear infinite;
@@ -687,6 +702,7 @@
   .landing-calendar-popover-first,
   .landing-calendar-popover-second,
   .landing-analytics-bar,
+  .landing-prep-focus,
   .landing-demo-button::before,
   .landing-demo-button::after,
   .server-wake-dot {

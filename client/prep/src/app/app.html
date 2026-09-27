@@ -1,12 +1,12 @@
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header class="site-header">
   <a class="brand" routerLink="/" aria-label="RoleNaviq Interview Prep home">
-    <span class="brand-mark">RN</span>
+    <img class="brand-mark" src="rolenaviq-icon.svg" alt="" width="40" height="40">
     <span>RoleNaviq <small>Interview prep</small></span>
   </a>
   <nav aria-label="Interview preparation navigation">
-    <a routerLink="/">Interviews</a>
-    <a href="/dashboard">Back to workspace</a>
+    <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Interviews</a>
+    <a class="nav-link" href="/dashboard">Back to workspace</a>
   </nav>
 </header>
 
