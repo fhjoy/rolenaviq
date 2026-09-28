@@ -29,16 +29,24 @@ describe("interview preparation", () => {
       cy.contains("Angular Prep Test").should("be.visible");
       cy.visit(`/prep/interviews/${id}`);
       cy.contains("h1", "Frontend Developer").should("be.visible");
+      cy.contains("button", "Save preparation").should("be.disabled");
       cy.contains("label", "Research the company and its product").click();
       cy.get("#prep-notes").type("Review the team's product.");
-      cy.contains("button", "Save preparation").click();
-      cy.contains("span", "Saved").should("be.visible");
+      cy.intercept("PUT", `/api/prep/interviews/${id}`).as("savePreparation");
+      cy.contains("button", "Save preparation").should("be.enabled").click();
+      cy.wait("@savePreparation").its("response.statusCode").should("eq", 200);
+      cy.contains('[aria-live="polite"]', "Preparation saved successfully")
+        .should("be.visible");
+      cy.contains("button", "Save preparation").should("be.disabled");
 
       cy.reload();
       cy.get("#prep-notes").should("have.value", "Review the team's product.");
       cy.contains("label", "Research the company and its product")
         .find("input")
         .should("be.checked");
+      cy.contains("button", "Save preparation").should("be.disabled");
+      cy.get("#prep-notes").type(" Prepare a project story.");
+      cy.contains("button", "Save preparation").should("be.enabled");
     });
   });
 });
