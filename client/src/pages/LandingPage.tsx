@@ -811,7 +811,7 @@ function InterviewPrepSection() {
       className="border-y bg-brand/5"
     >
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-2 lg:gap-16 lg:px-8">
-        <div>
+        <div className="lg:col-start-2 lg:row-start-1">
           <span className="inline-flex rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
             Interview prep
           </span>
@@ -823,7 +823,7 @@ function InterviewPrepSection() {
             checklist, practice answers and notes together for each role.
           </p>
           <Button
-            className="mt-7"
+            className="landing-demo-button mt-7"
             render={<Link to="/login?demo=1&returnTo=%2Fprep%2F" />}
           >
             Try interview prep
@@ -831,7 +831,7 @@ function InterviewPrepSection() {
           </Button>
         </div>
 
-        <div ref={previewRef} className="rounded-3xl border border-brand/20 bg-brand/5 p-4 sm:p-5">
+        <div ref={previewRef} className="rounded-3xl border border-brand/20 bg-brand/5 p-4 sm:p-5 lg:col-start-1 lg:row-start-1">
           <div className="rounded-2xl border bg-card p-5 shadow-sm sm:p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
