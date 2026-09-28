@@ -1,7 +1,18 @@
 <section class="page-heading prep-hero">
+  <div class="prep-hero-copy">
   <span class="eyebrow">Interview preparation</span>
   <h1>Walk into your next interview ready.</h1>
   <p>Your interview-stage applications are already here. Pick one to make a plan.</p>
+  </div>
+  <aside class="prep-focus" aria-label="Preparation guide">
+    <span class="focus-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 7v14M3 3h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5v16h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z"/><path d="m15 10 2 2 3-4"/></svg>
+    </span>
+    <span class="eyebrow">A little practice. More confidence.</span>
+    <h2>Make your experience<br>your strongest answer.</h2>
+    <p>Gather your research, find the stories that matter, and say them out loud.</p>
+    <span class="focus-footer">Your next chapter starts with a conversation.</span>
+  </aside>
   <div class="prep-method" aria-label="Your preparation routine">
     <span><b>01</b> Research the role</span>
     <span><b>02</b> Shape your story</span>
@@ -30,7 +41,10 @@
   <div class="interview-grid">
     @for (interview of interviews(); track interview._id) {
       <article class="panel interview-card">
+        <div class="interview-card-top">
+          <span class="company-avatar" aria-hidden="true">{{ interview.company.slice(0, 1).toUpperCase() }}</span>
         <span class="badge">{{ interview.status === 'technical_interview' ? 'Technical interview' : 'Interview' }}</span>
+        </div>
         <h2>{{ interview.position }}</h2>
         <p class="company">{{ interview.company }}</p>
         @if (interview.interviewDate) {
