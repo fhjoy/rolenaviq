@@ -57,7 +57,14 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+      - run: npm ci --prefix prep
+      - run: npm --prefix prep run build:site
       - run: npm --prefix prep test -- --watch=false
+      - name: Check standalone Interview Prep assets
+        run: |
+          test -f prep/dist/site/prep/index.html
+          test -f prep/dist/site/prep/rolenaviq-logo-light.png
+          grep -q '<base href="/prep/">' prep/dist/site/prep/index.html
 
   e2e:
     name: Cypress browser tests
