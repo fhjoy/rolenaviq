@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && npm ci --prefix prep && npm --prefix prep run build && node scripts/copy-prep.mjs",
+    "build": "tsc -b && vite build",
+    "build:docker": "npm run build && npm ci --prefix prep && npm --prefix prep run build && node scripts/copy-prep.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
