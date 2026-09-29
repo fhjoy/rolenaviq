@@ -7,11 +7,15 @@
     },
     {
       "source": "/prep",
-      "destination": "/prep/index.html"
+      "destination": "https://rolenaviq-prep.vercel.app/prep/"
+    },
+    {
+      "source": "/prep/",
+      "destination": "https://rolenaviq-prep.vercel.app/prep/"
     },
     {
       "source": "/prep/:path*",
-      "destination": "/prep/index.html"
+      "destination": "https://rolenaviq-prep.vercel.app/prep/:path*"
     },
     {
       "source": "/:path*",
@@ -19,3 +23,4 @@
     }
   ]
 }
+
