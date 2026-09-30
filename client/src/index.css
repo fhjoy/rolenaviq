@@ -209,6 +209,13 @@
   }
 }
 
+@keyframes landing-architecture-travel {
+  0% { left: 0; opacity: 0; }
+  5% { opacity: 1; }
+  28% { left: calc(100% - 0.5rem); opacity: 1; }
+  33%, 100% { left: calc(100% - 0.5rem); opacity: 0; }
+}
+
 @keyframes server-wake-progress {
   0% {
     left: 0;
@@ -563,6 +570,53 @@
   animation: landing-arrow-pulse 1.6s ease-in-out infinite;
 }
 
+.landing-architecture-connector {
+  position: relative;
+  display: flex;
+  height: 1.75rem;
+  width: 3.5rem;
+  align-items: center;
+  justify-content: flex-end;
+  color: var(--brand);
+}
+
+.landing-architecture-connector::before {
+  position: absolute;
+  left: 0;
+  right: 0.7rem;
+  top: 50%;
+  height: 2px;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--brand) 32%, transparent);
+  content: "";
+}
+
+.landing-architecture-dot {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  z-index: 1;
+  height: 0.5rem;
+  width: 0.5rem;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--brand) 12%, transparent);
+  animation: landing-architecture-travel 4.8s ease-in-out infinite;
+}
+
+.landing-architecture-connector-vertical {
+  margin-block: 0.875rem;
+  transform: rotate(90deg);
+}
+
+@media (max-width: 639px) {
+  .landing-architecture-connector:not(.landing-architecture-connector-vertical) {
+    margin-block: 0.875rem;
+    transform: rotate(90deg);
+  }
+}
+
 .landing-board-status-applied,
 .landing-board-status-interview,
 .landing-board-offer-celebrate {
@@ -691,6 +745,7 @@
 @media (prefers-reduced-motion: reduce) {
   .landing-route-line,
   .landing-flow-dot,
+  .landing-architecture-dot,
   .landing-progress-dot,
   .landing-arrow-pulse,
   .landing-board-status-applied,
@@ -710,6 +765,10 @@
   }
 
   .landing-route-moving-marker {
+    display: none;
+  }
+
+  .landing-architecture-dot {
     display: none;
   }
 
