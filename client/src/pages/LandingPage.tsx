@@ -896,6 +896,34 @@ function ArchitectureNode({
   );
 }
 
+function ArchitectureConnector({
+  label,
+  stage,
+  vertical = false,
+}: {
+  label: string;
+  stage: number;
+  vertical?: boolean;
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-1 py-1 text-center">
+      <span
+        className={`landing-architecture-connector ${vertical ? "landing-architecture-connector-vertical" : ""}`}
+        aria-hidden="true"
+      >
+        <span
+          className="landing-architecture-dot"
+          style={{ animationDelay: `${stage * 1.6}s` }}
+        />
+        <ArrowRight className="relative z-10 h-4 w-4" />
+      </span>
+      <span className="text-[11px] font-medium text-muted-foreground">
+        {label}
+      </span>
+    </div>
+  );
+}
+
 function ExploreCtaSection() {
   return (
     <section
@@ -1041,31 +1069,38 @@ function EngineeringSection() {
               <div>
                 <p className="text-sm font-semibold">Production architecture</p>
                 <p className="text-xs text-muted-foreground">
-                  Separate frontends, one shared API.
+                  Route-based micro-frontends, one shared API.
                 </p>
               </div>
               <ShieldCheck className="h-5 w-5 text-brand" aria-hidden="true" />
             </div>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <div className="mt-6 grid items-stretch gap-3 sm:grid-cols-[minmax(0,1fr)_4rem_minmax(0,1fr)]">
               <ArchitectureNode
                 icon={<Code2 className="h-5 w-5" aria-hidden="true" />}
                 label="Workspace"
                 value="React · Vite"
                 detail="Main Vercel project"
               />
+              <ArchitectureConnector label="/prep/" stage={0} />
               <ArchitectureNode
                 icon={<BookOpenCheck className="h-5 w-5" aria-hidden="true" />}
                 label="Interview prep"
                 value="Angular"
                 detail="Separate Vercel project · /prep/"
               />
+            </div>
+
+            <ArchitectureConnector label="Both call /api/" stage={1} vertical />
+
+            <div className="grid items-stretch gap-3 sm:grid-cols-[minmax(0,1fr)_4rem_minmax(0,1fr)]">
               <ArchitectureNode
                 icon={<Server className="h-5 w-5" aria-hidden="true" />}
                 label="Shared API"
                 value="Node · Express"
                 detail="Render · /api/"
               />
+              <ArchitectureConnector label="data" stage={2} />
               <ArchitectureNode
                 icon={<Database className="h-5 w-5" aria-hidden="true" />}
                 label="Database"
