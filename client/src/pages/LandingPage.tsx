@@ -1091,7 +1091,11 @@ function EngineeringSection() {
               />
             </div>
 
-            <ArchitectureConnector label="Both call /api/" stage={1} vertical />
+            <div className="sm:grid sm:grid-cols-[minmax(0,1fr)_4rem_minmax(0,1fr)]">
+              <div className="flex justify-center">
+                <ArchitectureConnector label="Both call /api/" stage={1} vertical />
+              </div>
+            </div>
 
             <div className="grid items-stretch gap-3 sm:grid-cols-[minmax(0,1fr)_4rem_minmax(0,1fr)]">
               <ArchitectureNode
