@@ -36,16 +36,16 @@ const engineeringHighlights = [
   "React 19 + TypeScript",
   "Vite + Tailwind CSS",
   "TanStack Query",
+  "Angular interview prep",
+  "Route-based micro-frontends",
   "Node + Express REST API",
   "MongoDB + Mongoose",
   "HttpOnly JWT authentication",
   "Per-user authorization",
   "Vitest + Cypress tests",
-  "Angular interview prep",
   "Docker Compose",
   "GitHub Actions CI",
-  "Vercel + Render + Atlas",
-  "Responsive + accessible UI",
+  "Separate Vercel frontend builds",
 ];
 
 const engineeringRoadmap = [
@@ -981,26 +981,25 @@ function EngineeringSection() {
               Engineering · Portfolio case study
             </span>
             <h2 className="mt-5 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl">
-              This is how RoleNaviq is built — separate from what the product
-              does.
+              One workspace, built from separate parts.
             </h2>
           </div>
 
           <p className="max-w-md text-sm leading-6 text-primary-foreground/65">
-            A technical view for developers and recruiters who want to look
-            beyond the UI and understand the architecture, security and stack.
+            A closer look at how the React workspace, Angular interview prep
+            and shared API fit together.
           </p>
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
             <p className="text-sm font-semibold text-brand">
-              Production-oriented full-stack engineering
+              Modular full-stack architecture
             </p>
             <p className="mt-4 max-w-xl leading-7 text-primary-foreground/70">
-              RoleNaviq uses authenticated user data, server-side authorization,
-              API-driven state and separate production deployments for the
-              frontend, backend and database.
+              React and Angular are separate frontends on Vercel. They share
+              one Express API on Render and MongoDB Atlas for user data, with
+              access checked on the server.
             </p>
 
             <p className="mt-7 text-xs font-semibold uppercase tracking-[0.18em] text-primary-foreground/50">
@@ -1032,9 +1031,8 @@ function EngineeringSection() {
             </div>
 
             <p className="mt-4 text-xs leading-5 text-primary-foreground/50">
-              Angular powers interview prep alongside the React workspace.
-              A separate Python/FastAPI job analysis service and AI-assisted
-              matching are planned for later.
+              Python/FastAPI job analysis and AI-assisted matching are future
+              work; the current backend is a single, modular Express API.
             </p>
           </div>
 
@@ -1043,24 +1041,30 @@ function EngineeringSection() {
               <div>
                 <p className="text-sm font-semibold">Production architecture</p>
                 <p className="text-xs text-muted-foreground">
-                  Simple enough to understand. Real enough to deploy.
+                  Separate frontends, one shared API.
                 </p>
               </div>
               <ShieldCheck className="h-5 w-5 text-brand" aria-hidden="true" />
             </div>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
               <ArchitectureNode
                 icon={<Code2 className="h-5 w-5" aria-hidden="true" />}
-                label="Frontends"
-                value="React · Angular"
-                detail="Vercel"
+                label="Workspace"
+                value="React · Vite"
+                detail="Main Vercel project"
+              />
+              <ArchitectureNode
+                icon={<BookOpenCheck className="h-5 w-5" aria-hidden="true" />}
+                label="Interview prep"
+                value="Angular"
+                detail="Separate Vercel project · /prep/"
               />
               <ArchitectureNode
                 icon={<Server className="h-5 w-5" aria-hidden="true" />}
-                label="API"
+                label="Shared API"
                 value="Node · Express"
-                detail="Render"
+                detail="Render · /api/"
               />
               <ArchitectureNode
                 icon={<Database className="h-5 w-5" aria-hidden="true" />}
@@ -1070,24 +1074,11 @@ function EngineeringSection() {
               />
             </div>
 
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
-              <span>React + Angular</span>
-              <ArrowRight
-                className="landing-arrow-pulse h-3.5 w-3.5 text-brand"
-                aria-hidden="true"
-              />
-              <span>/api proxy</span>
-              <ArrowRight
-                className="landing-arrow-pulse h-3.5 w-3.5 text-brand"
-                aria-hidden="true"
-              />
-              <span>Express API</span>
-              <ArrowRight
-                className="landing-arrow-pulse h-3.5 w-3.5 text-brand"
-                aria-hidden="true"
-              />
-              <span>MongoDB Atlas</span>
-            </div>
+            <p className="mt-5 text-sm leading-6 text-muted-foreground">
+              The main site serves React and routes <code>/prep/</code> to
+              Angular. Both call <code>/api/</code>, which forwards requests to
+              Express and then MongoDB Atlas.
+            </p>
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               <div className="rounded-2xl border bg-muted/25 p-4">

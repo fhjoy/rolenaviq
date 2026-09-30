@@ -14,9 +14,15 @@ I built RoleNaviq to keep the moving parts of a job search in one place. Save op
 
 ## Built with
 
-- **Frontend:** React, TypeScript, Vite, Tailwind CSS, TanStack Query; Angular for interview preparation.
-- **Backend:** Node.js, Express, MongoDB, Mongoose, JWT authentication.
+- **Frontends:** React, TypeScript, Vite, Tailwind CSS, TanStack Query; Angular for interview preparation.
+- **Backend:** One Node.js/Express API, MongoDB, Mongoose, and JWT authentication with HttpOnly cookies.
 - **Testing and delivery:** Vitest, React Testing Library, Supertest, Cypress, Docker Compose, GitHub Actions.
+
+## How it fits together
+
+React runs the main workspace and Angular runs Interview Prep at `/prep/`. They are separate Vercel projects built from this repository. The main site routes `/prep/` to Angular and `/api/` to the Express API on Render, so both frontends use the same signed-in session. Express owns the application logic and stores user data in MongoDB Atlas.
+
+The backend is one modular API, not a set of independently deployed backend microservices. Python/FastAPI job analysis and AI-assisted matching are planned for later.
 
 ## Run locally
 
@@ -29,6 +35,7 @@ docker compose up --build
 ```
 
 Open [http://localhost:8080](http://localhost:8080). MongoDB data is kept in a Docker volume.
+The Docker frontend image serves both React and Angular through Nginx; production uses their separate Vercel projects instead.
 
 For development without Docker, use Node.js 24 and a MongoDB database. Copy `server/.env.example` to `server/.env` and `client/.env.example` to `client/.env`. Set `MONGODB_URI` and a private `JWT_SECRET` in `server/.env`, then run:
 
