@@ -1,5 +1,6 @@
 import { addMonths, format, subMonths } from "date-fns";
 import {
+  ArrowRight,
   CalendarDays,
   CalendarX,
   ChevronLeft,
@@ -11,6 +12,7 @@ import { Link } from "react-router";
 
 import { EmptyState } from "@/components/common/EmptyState";
 import { PageError } from "@/components/common/PageError";
+import { WorkspaceFeatureHero } from "@/components/layout/WorkspaceFeatureHero";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useApplications } from "@/features/applications/useApplications";
@@ -68,29 +70,25 @@ export function CalendarPage() {
 
   return (
     <div className="w-full">
-      <section className="workspace-page-intro flex flex-col justify-between gap-5 rounded-2xl border bg-card p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
-        <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand">
-            <CalendarDays className="h-5 w-5" aria-hidden="true" />
-          </div>
+      <WorkspaceFeatureHero
+        eyebrow="Know what is next"
+        title="Calendar"
+        description="Keep interview dates close to the applications they belong to, and make time to prepare for each conversation."
+        icon={CalendarDays}
+        metricValue={upcomingInterviews.length}
+        metricLabel={upcomingInterviews.length === 1 ? "upcoming interview" : "upcoming interviews"}
+        metricDescription="Open Interview Prep to turn each date into a plan."
+        actions={<>
+          <Button className="workspace-hero-primary" render={<Link to="/applications/new" />}>
+            <Plus className="h-4 w-4" aria-hidden="true" /> Add application
+          </Button>
+          <Button className="workspace-hero-secondary" variant="outline" render={<a href="/prep/" />}>
+            Interview prep <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Button>
+        </>}
+      />
 
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Calendar</h1>
-
-            <p className="mt-2 max-w-2xl text-muted-foreground">
-              Keep interview dates visible and stay prepared for the next
-              conversation in your job search.
-            </p>
-          </div>
-        </div>
-
-        <Button render={<Link to="/applications/new" />}>
-          <Plus className="h-4 w-4" aria-hidden="true" />
-          Add application
-        </Button>
-      </section>
-
-      <section className="mt-6 overflow-hidden rounded-2xl border bg-card shadow-sm">
+      <section className="workspace-feature-panel mt-6 overflow-hidden rounded-2xl border bg-card shadow-sm">
         <header className="flex flex-col gap-4 border-b p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
           <div>
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">

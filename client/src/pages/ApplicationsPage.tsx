@@ -1,9 +1,10 @@
-import { BriefcaseBusiness, Plus, Search, SearchX, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, BriefcaseBusiness, Plus, Search, SearchX, SlidersHorizontal } from "lucide-react";
 import { useRef, useState } from "react";
 import { Link } from "react-router";
 
 import { EmptyState } from "@/components/common/EmptyState";
 import { PageError } from "@/components/common/PageError";
+import { WorkspaceFeatureHero } from "@/components/layout/WorkspaceFeatureHero";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -67,26 +68,25 @@ export function ApplicationsPage() {
 
   return (
     <div>
-      <section className="workspace-page-intro flex flex-col justify-between gap-5 rounded-2xl border bg-card p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
-        <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand">
-            <BriefcaseBusiness className="h-5 w-5" aria-hidden="true" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Applications</h1>
-            <p className="mt-2 max-w-2xl text-muted-foreground">
-              Search, filter and manage every opportunity from one place.
-            </p>
-          </div>
-        </div>
+      <WorkspaceFeatureHero
+        eyebrow="Every opportunity, one view"
+        title="Applications"
+        description="Search, filter and keep every opportunity moving from one place. Your next step stays within reach."
+        icon={BriefcaseBusiness}
+        metricValue={pagination?.total ?? "—"}
+        metricLabel={(pagination?.total ?? 0) === 1 ? "application in this view" : "applications in this view"}
+        metricDescription="Your current search and filters shape this number."
+        actions={<>
+          <Button className="workspace-hero-primary" render={<Link to="/applications/new" />}>
+            <Plus className="h-4 w-4" aria-hidden="true" /> Add application
+          </Button>
+          <Button className="workspace-hero-secondary" variant="outline" render={<Link to="/board" />}>
+            Open board <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Button>
+        </>}
+      />
 
-        <Button render={<Link to="/applications/new" />}>
-          <Plus className="h-4 w-4" aria-hidden="true" />
-          Add application
-        </Button>
-      </section>
-
-      <section className="mt-6 rounded-2xl border bg-card p-4 shadow-sm sm:p-5">
+      <section className="workspace-feature-panel mt-6 rounded-2xl border bg-card p-4 shadow-sm sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
             <SlidersHorizontal className="h-4 w-4 text-brand" aria-hidden="true" />
