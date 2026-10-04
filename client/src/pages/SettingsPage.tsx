@@ -132,7 +132,7 @@ export function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-4xl">
-      <section className="flex items-start gap-4 rounded-2xl border bg-card p-5 shadow-sm sm:p-6">
+      <section className="workspace-page-intro flex items-start gap-4 rounded-2xl border bg-card p-5 shadow-sm sm:p-6">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand">
           <Settings className="h-5 w-5" aria-hidden="true" />
         </div>

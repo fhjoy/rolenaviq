@@ -125,7 +125,25 @@ textarea { width: 100%; resize: vertical; border: 1px solid var(--border); borde
 .question h3 { font-size: 1.15rem; margin: 1.2rem 0 .5rem; line-height: 1.4; }
 .question-hint { margin: 0 0 1.2rem; color: var(--muted); font-size: .85rem; }
 .question textarea { margin-top: auto; background: #fff; }
+.overview-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 1.5rem 0 2rem; }
+.overview-stats .panel { display: flex; flex-direction: column; gap: .2rem; }
+.overview-stats strong { color: var(--brand-dark); font-size: 1.6rem; }
+.overview-stats span { color: var(--muted); font-size: .85rem; }
 .question .task { margin-top: .7rem; }
+.prep-actions, .filter-row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin: 1.25rem 0; }
+.secondary-button { background: var(--card); color: var(--brand-dark); }
+.secondary-button:hover { background: #edf6f0; }
+.filter-row button { border-color: var(--border); background: var(--card); color: var(--muted); }
+.filter-row button:hover, .filter-row button.selected { background: #edf6f0; border-color: var(--brand-dark); color: var(--brand-dark); }
+.session-card { max-width: 48rem; }
+.session-card .question-meta { justify-content: space-between; }
+.session-card h2 { margin-top: 1.25rem; }
+.session-card .prep-progress { margin-top: 1rem; }
+.confidence-options { display: grid; gap: .7rem; margin: 2rem 0; border: 0; padding: 0; }
+.confidence-options legend { font-weight: 600; margin-bottom: .75rem; }
+.confidence-options label { display: flex; align-items: center; gap: .55rem; cursor: pointer; }
+.confidence-options input { accent-color: var(--brand-dark); }
+.session-history { max-width: 48rem; margin-top: 1.5rem; }
 .save-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-top: 1.5rem; padding: 1rem 1.25rem; border: 1px solid var(--border); border-radius: .9rem; background: var(--card); }
 .save-bar .muted { margin-right: auto; }
 .toast-region { position: fixed; z-index: 50; right: 24px; bottom: 24px; width: min(356px, calc(100vw - 32px)); }
@@ -144,9 +162,11 @@ textarea { width: 100%; resize: vertical; border: 1px solid var(--border); borde
   .container { padding-top: 2rem; }
   .nav-link { padding-inline: .65rem; }
   .question-grid { grid-template-columns: 1fr; }
+  .overview-stats { grid-template-columns: 1fr; }
   .question { padding: 1.25rem; }
   .toast-region { right: 16px; bottom: 16px; }
   .save-bar button { width: 100%; }
+  .prep-actions .button { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
   button, .button, .nav-link, .interview-card { transition: none; }

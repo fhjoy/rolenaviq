@@ -85,7 +85,7 @@ export function ApplicationDetailsPage() {
         Back to applications
       </Button>
 
-      <section className="mt-5 rounded-2xl border bg-card p-5 shadow-sm sm:p-6">
+      <section className="workspace-page-intro mt-5 rounded-2xl border bg-card p-5 shadow-sm sm:p-6">
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-3">

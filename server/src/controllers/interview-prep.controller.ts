@@ -3,7 +3,7 @@ import { isValidObjectId } from "mongoose";
 
 import Application from "../models/Application.js";
 import InterviewPrep from "../models/InterviewPrep.js";
-import { interviewPrepSchema } from "../validators/interview-prep.validator.js";
+import { interviewPrepSchema, practiceSessionSchema } from "../validators/interview-prep.validator.js";
 
 export const listInterviews = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -15,7 +15,21 @@ export const listInterviews = async (req: Request, res: Response): Promise<void>
       .sort({ interviewDate: 1 })
       .lean();
 
-    res.json({ applications });
+    const preparations = await InterviewPrep.find({
+      userId: req.userId,
+      applicationId: { $in: applications.map(application => application._id) },
+    }).select("applicationId completedTasks practice sessions").lean();
+    const progress = new Map(preparations.map(prep => [String(prep.applicationId), {
+      completedTasks: prep.completedTasks.length,
+      practicedQuestions: prep.practice.filter(item => item.practiced).length,
+      sessions: prep.sessions?.length ?? 0,
+    }]));
+    res.json({ applications: applications.map(application => ({
+      ...application,
+      progress: progress.get(String(application._id)) ?? {
+        completedTasks: 0, practicedQuestions: 0, sessions: 0,
+      },
+    })) });
   } catch (error) {
     console.error("List interviews error:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -55,10 +69,37 @@ export const getInterviewPrep = async (req: Request, res: Response): Promise<voi
 
     res.json({
       application,
-      prep: prep ?? { completedTasks: [], practice: [], notes: "" },
+      prep: prep ?? { completedTasks: [], practice: [], notes: "", sessions: [] },
     });
   } catch (error) {
     console.error("Get interview prep error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const recordPracticeSession = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const application = await findOwnedApplication(req, res);
+    if (!application) return;
+
+    const result = practiceSessionSchema.safeParse(req.body);
+    if (!result.success) {
+      res.status(400).json({ message: "Invalid practice session", errors: result.error.flatten().fieldErrors });
+      return;
+    }
+
+    const session = { completedAt: new Date(), results: result.data.results };
+    const prep = await InterviewPrep.findOneAndUpdate(
+      { applicationId: application._id, userId: req.userId },
+      {
+        $setOnInsert: { completedTasks: [], practice: [], notes: "" },
+        $push: { sessions: { $each: [session], $slice: -20 } },
+      },
+      { upsert: true, returnDocument: "after", runValidators: true },
+    );
+    res.status(201).json({ session: prep.sessions.at(-1) });
+  } catch (error) {
+    console.error("Record practice session error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

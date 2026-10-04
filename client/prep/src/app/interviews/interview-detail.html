@@ -1,6 +1,6 @@
 <a class="back-link" routerLink="/">← All interviews</a>
 
-@if (loading()) {
+@if (loading() || (!plan() && !error())) {
   <p role="status">Loading your preparation…</p>
 } @else if (application(); as interview) {
   <section class="page-heading plan-heading">
@@ -11,12 +11,14 @@
         · {{ interview.interviewDate | date:'medium' }}
       }
     </p>
-    <p class="muted">{{ progress() }} of {{ checklist.length + questions.length }} steps practiced or completed</p>
-    <progress class="prep-progress" [value]="progress()" [max]="checklist.length + questions.length" aria-label="Interview preparation progress"></progress>
+    <div class="plan-header-progress"><span>{{ progress() }} of {{ checklist.length + questions.length }} steps practiced or completed</span>
+      <progress class="prep-progress" [value]="progress()" [max]="checklist.length + questions.length" aria-label="Interview preparation progress"></progress>
+    </div>
   </section>
 
   <div class="prep-grid">
     <section class="panel" aria-labelledby="checklist-heading">
+      <span class="panel-kicker">01 / GET READY</span>
       <h2 id="checklist-heading">Preparation checklist</h2>
       <p class="muted">Keep the essentials in one place.</p>
       <div class="task-list">
@@ -30,6 +32,7 @@
     </section>
 
     <section class="panel" aria-labelledby="notes-heading">
+      <span class="panel-kicker">02 / REMEMBER</span>
       <h2 id="notes-heading">Your notes</h2>
       <p class="muted">Ideas, research, and things to remember.</p>
       <label for="prep-notes" class="sr-only">Interview preparation notes</label>
@@ -38,28 +41,14 @@
   </div>
 
   <section class="panel practice-section" aria-labelledby="practice-heading">
-    <span class="eyebrow">Rehearse with intention</span>
+    <span class="eyebrow">03 / Rehearse with intention</span>
     <h2 id="practice-heading">Practice questions</h2>
-    <p class="muted">Write a short answer, then mark the question as practiced.</p>
-    <div class="question-grid">
-      @for (question of questions; track question.id; let index = $index) {
-        <div class="question" [class.question-practiced]="practiced(question.id)">
-          <div class="question-meta">
-            <span class="question-number">0{{ index + 1 }}</span>
-            <span>{{ question.category }}</span>
-            @if (practiced(question.id)) { <span class="question-status">Practiced</span> }
-          </div>
-          <h3>{{ question.prompt }}</h3>
-          <p class="question-hint" [id]="'hint-' + question.id">{{ question.hint }}</p>
-          <label [for]="'answer-' + question.id" class="sr-only">Your answer to {{ question.prompt }}</label>
-          <textarea [id]="'answer-' + question.id" [attr.aria-describedby]="'hint-' + question.id" rows="4" maxlength="2000" [value]="answerFor(question.id)" (input)="setAnswer(question.id, $event)" placeholder="Start with a few key points…"></textarea>
-          <label class="task">
-            <input type="checkbox" [checked]="practiced(question.id)" (change)="togglePracticed(question.id)" />
-            <span>I practiced this answer</span>
-          </label>
-        </div>
-      }
+    <p class="muted">Choose from {{ questions.length }} questions, write your answers, then try a short practice session.</p>
+    <div class="prep-actions">
+      <a class="button" [routerLink]="['/interviews', applicationId, 'questions']">Open question bank</a>
+      <a class="button secondary-button" [routerLink]="['/interviews', applicationId, 'practice']">Start practice</a>
     </div>
+    <p class="muted">{{ plan()?.sessions?.length ?? 0 }} practice sessions completed</p>
   </section>
 
   <div class="save-bar">

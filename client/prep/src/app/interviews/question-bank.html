@@ -1,0 +1,35 @@
+<a class="back-link" [routerLink]="['/interviews', applicationId]">← Interview plan</a>
+@if (loading() || (!plan() && !error())) {
+  <p role="status">Loading questions…</p>
+} @else if (plan()) {
+  <section class="page-heading page-banner">
+    <span class="eyebrow">Question bank</span>
+    <h1>Prepare answers for {{ application()?.company }}</h1>
+    <p class="muted">{{ practicedCount() }} of {{ questions.length }} questions practiced. Keep answers short enough to say aloud.</p>
+  </section>
+  <div class="filter-row" role="group" aria-label="Filter questions by topic">
+    @for (item of categories; track item) {
+      <button type="button" [class.selected]="category() === item" [attr.aria-pressed]="category() === item" (click)="category.set(item)">{{ item }}</button>
+    }
+  </div>
+  <div class="question-grid">
+    @for (question of filtered(); track question.id) {
+      <section class="question panel" [class.question-practiced]="practiced(question.id)">
+        <div class="question-meta"><span class="question-number">{{ $index + 1 }}</span><span>{{ question.category }}</span>@if (practiced(question.id)) { <span class="question-status">Practiced</span> }</div>
+        <h2>{{ question.prompt }}</h2>
+        <p class="question-hint" [id]="'hint-' + question.id">{{ question.hint }}</p>
+        <label [for]="'answer-' + question.id" class="sr-only">Your answer to {{ question.prompt }}</label>
+        <textarea [id]="'answer-' + question.id" [attr.aria-describedby]="'hint-' + question.id" rows="4" maxlength="2000" [value]="answerFor(question.id)" (input)="setAnswer(question.id, $event)" placeholder="Write the points you want to say…"></textarea>
+        <label class="task"><input type="checkbox" [checked]="practiced(question.id)" (change)="togglePracticed(question.id)" /><span>I practiced this answer aloud</span></label>
+      </section>
+    }
+  </div>
+  <div class="save-bar">
+    <p class="muted">{{ dirty() ? 'You have unsaved changes.' : 'Your answers are up to date.' }}</p>
+    <button type="button" [disabled]="saving() || !dirty()" (click)="save()">{{ saving() ? 'Saving…' : 'Save answers' }}</button>
+  </div>
+  <p><a [routerLink]="['/interviews', applicationId, 'practice']">Ready for a practice session? →</a></p>
+} @else {
+  <div class="panel" role="alert"><p>{{ error() }}</p><button type="button" (click)="ngOnInit()">Try again</button></div>
+}
+@if (plan() && error()) { <p class="error" role="alert">{{ error() }}</p> }

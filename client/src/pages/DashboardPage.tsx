@@ -1,5 +1,7 @@
 import {
   ArrowRight,
+  ArrowUpRight,
+  BookOpenCheck,
   BriefcaseBusiness,
   CalendarCheck,
   MessageSquareReply,
@@ -38,43 +40,32 @@ export function DashboardPage() {
 
   return (
     <div className="w-full">
-      <section className="relative overflow-hidden rounded-2xl border bg-linear-to-br from-brand/10 via-card to-amber-200/8 p-6 sm:p-8">
-        <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-brand/10 blur-3xl" />
-
-        <div className="relative flex flex-col justify-between gap-6 2xl:flex-row 2xl:items-center">
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-brand">Welcome back</p>
-
-            <h1 className="mt-2 max-w-3xl text-2xl font-bold leading-tight tracking-tight sm:text-3xl 2xl:text-4xl">
-              {userData?.user.firstName
-                ? `${userData.user.firstName}, here's your job search at a glance.`
-                : "Your job search at a glance."}
-            </h1>
-
-            <p className="mt-3 max-w-2xl text-muted-foreground">
-              Keep track of your progress and focus on the opportunities that
-              need your attention next.
-            </p>
-          </div>
-
-          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row 2xl:shrink-0">
-            <Button
-              className="w-full sm:w-auto"
-              variant="outline"
-              render={<Link to="/applications" />}
-            >
-              View applications
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+      <section className="workspace-dashboard-hero">
+        <div className="workspace-hero-content">
+          <p className="workspace-eyebrow"><span aria-hidden="true" />Your search, in focus</p>
+          <h1>
+            {userData?.user.firstName
+              ? `Welcome back, ${userData.user.firstName}.`
+              : "Welcome back."}
+          </h1>
+          <p className="workspace-hero-description">
+            Every opportunity has a next step. Keep your progress in view and make the next move count.
+          </p>
+          <div className="workspace-hero-actions">
+            <Button className="workspace-hero-primary" render={<Link to="/applications/new" />}>
+              <Plus className="h-4 w-4" aria-hidden="true" /> Add application
             </Button>
-
-            <Button
-              className="w-full sm:w-auto"
-              render={<Link to="/applications/new" />}
-            >
-              <Plus className="h-4 w-4" aria-hidden="true" />
-              Add application
+            <Button className="workspace-hero-secondary" variant="outline" render={<Link to="/applications" />}>
+              View applications <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Button>
           </div>
+        </div>
+        <div className="workspace-route-card" aria-label="Your job search in numbers">
+          <div className="workspace-route-heading"><span>YOUR ROUTE</span><span aria-hidden="true">↗</span></div>
+          <div className="workspace-route-step"><span className="workspace-route-node" aria-hidden="true" /><span>Opportunities tracked</span><strong>{stats?.total ?? "—"}</strong></div>
+          <div className="workspace-route-step"><span className="workspace-route-node" aria-hidden="true" /><span>Interview stage</span><strong>{stats?.interviews ?? "—"}</strong></div>
+          <div className="workspace-route-step"><span className="workspace-route-node" aria-hidden="true" /><span>Offers received</span><strong>{stats?.offers ?? "—"}</strong></div>
+          <p>One clear view of what comes next.</p>
         </div>
       </section>
 
@@ -91,6 +82,10 @@ export function DashboardPage() {
 
       {stats && data && (
         <>
+          <div className="workspace-section-heading mt-8">
+            <div><span className="workspace-section-kicker">The big picture</span><h2>Your progress</h2></div>
+            <p>See where your search stands today.</p>
+          </div>
           <div className="mt-6 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <StatsCard
               title="Total applications"
@@ -141,6 +136,19 @@ export function DashboardPage() {
             />
           </div>
 
+          <div className="workspace-next-step mt-6">
+            <div className="workspace-next-icon"><BookOpenCheck className="h-6 w-6" aria-hidden="true" /></div>
+            <div className="workspace-next-copy">
+              <span className="workspace-section-kicker">Make the next conversation count</span>
+              <h2>Turn interview time into preparation time.</h2>
+              <p>Your interview plans, question bank and practice sessions are ready in Interview Prep.</p>
+            </div>
+            <a className="workspace-next-link" href="/prep/">Go to Interview Prep <ArrowUpRight className="h-4 w-4" aria-hidden="true" /></a>
+          </div>
+
+          <div className="workspace-section-heading mt-9">
+            <div><span className="workspace-section-kicker">Signals &amp; momentum</span><h2>Look at the whole journey</h2></div>
+          </div>
           <div className="mt-6 grid w-full grid-cols-1 gap-5 xl:grid-cols-2">
             <StatusChart data={data.statusDistribution} />
 

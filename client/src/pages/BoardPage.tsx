@@ -15,6 +15,7 @@ import { Link } from "react-router";
 import { toast } from "sonner";
 
 import { PageError } from "@/components/common/PageError";
+import { WorkspaceFeatureHero } from "@/components/layout/WorkspaceFeatureHero";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -270,34 +271,23 @@ export function BoardPage() {
 
   return (
     <div className="w-full">
-      <section className="flex flex-col justify-between gap-5 rounded-2xl border bg-card p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
-        <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand">
-            <Columns3 className="h-5 w-5" aria-hidden="true" />
-          </div>
-
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Board</h1>
-
-            <p className="mt-2 max-w-2xl text-muted-foreground">
-              Move applications forward through your job-search pipeline. Closed
-              applications can be reopened explicitly when needed.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <Button variant="outline" render={<Link to="/applications" />}>
-            View applications
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+      <WorkspaceFeatureHero
+        eyebrow="See your momentum"
+        title="Board"
+        description="Move applications through your pipeline and see what needs attention next. Reopen closed opportunities when the route changes."
+        icon={Columns3}
+        metricValue={applications.length}
+        metricLabel={applications.length === 1 ? "application on the board" : "applications on the board"}
+        metricDescription="Drag a card to move it to an allowed stage."
+        actions={<>
+          <Button className="workspace-hero-primary" render={<Link to="/applications/new" />}>
+            <Plus className="h-4 w-4" aria-hidden="true" /> Add application
           </Button>
-
-          <Button render={<Link to="/applications/new" />}>
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add application
+          <Button className="workspace-hero-secondary" variant="outline" render={<Link to="/applications" />}>
+            View applications <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Button>
-        </div>
-      </section>
+        </>}
+      />
 
       <div className="mt-6 flex items-center justify-between gap-4">
         <p className="text-sm text-muted-foreground">

@@ -17,7 +17,7 @@ interface RecentApplicationsProps {
 
 export function RecentApplications({ applications }: RecentApplicationsProps) {
   return (
-    <section className="overflow-hidden rounded-xl border bg-background shadow-sm">
+    <section className="workspace-recent-applications overflow-hidden rounded-xl border bg-background shadow-sm">
       <div className="flex flex-col justify-between gap-4 border-b p-5 sm:flex-row sm:items-center">
         <div>
           <h2 className="font-semibold">Recent applications</h2>

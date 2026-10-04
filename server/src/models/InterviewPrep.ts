@@ -6,6 +6,10 @@ export interface IInterviewPrep {
   completedTasks: string[];
   practice: { questionId: string; answer: string; practiced: boolean }[];
   notes: string;
+  sessions: {
+    completedAt: Date;
+    results: { questionId: string; confidence: number }[];
+  }[];
 }
 
 const interviewPrepSchema = new Schema<IInterviewPrep>(
@@ -31,6 +35,24 @@ const interviewPrepSchema = new Schema<IInterviewPrep>(
       default: [],
     },
     notes: { type: String, default: "", maxlength: 5000 },
+    sessions: {
+      type: [
+        new Schema(
+          {
+            completedAt: { type: Date, required: true },
+            results: {
+              type: [new Schema({
+                questionId: { type: String, required: true },
+                confidence: { type: Number, required: true, min: 1, max: 3 },
+              }, { _id: false })],
+              required: true,
+            },
+          },
+          { _id: false },
+        ),
+      ],
+      default: [],
+    },
   },
   { timestamps: true },
 );

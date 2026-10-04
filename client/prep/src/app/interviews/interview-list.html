@@ -1,8 +1,8 @@
 <section class="page-heading prep-hero">
   <div class="prep-hero-copy">
-  <span class="eyebrow">Interview preparation</span>
-  <h1>Walk into your next interview ready.</h1>
-  <p>Your interview-stage applications are already here. Pick one to make a plan.</p>
+    <span class="eyebrow">Your preparation space</span>
+    <h1>Walk into your next interview ready.</h1>
+    <p>Turn every interview into a conversation you feel ready for. Start with a role, build your story and practice it out loud.</p>
   </div>
   <aside class="prep-focus" aria-label="Preparation guide">
     <span class="focus-icon" aria-hidden="true">
@@ -11,7 +11,7 @@
     <span class="eyebrow">A little practice. More confidence.</span>
     <h2>Make your experience<br>your strongest answer.</h2>
     <p>Gather your research, find the stories that matter, and say them out loud.</p>
-    <span class="focus-footer">Your next chapter starts with a conversation.</span>
+    <span class="focus-footer">Your next chapter starts with a conversation. <span aria-hidden="true">↗</span></span>
   </aside>
   <div class="prep-method" aria-label="Your preparation routine">
     <span><b>01</b> Research the role</span>
@@ -38,6 +38,12 @@
     <h2>Your upcoming conversations</h2>
     <span class="muted">{{ interviews().length }} to prepare for</span>
   </div>
+  <p class="muted">Track your preparation and practise a little at a time.</p>
+  <div class="overview-stats" aria-label="Preparation overview">
+    <div class="panel"><span class="stat-index">01 / YOUR PIPELINE</span><strong>{{ interviews().length }}</strong><span>Interviews to prepare for</span></div>
+    <div class="panel"><span class="stat-index">02 / YOUR PROGRESS</span><strong>{{ practicedQuestions() }}</strong><span>Questions practiced</span></div>
+    <div class="panel"><span class="stat-index">03 / YOUR PRACTICE</span><strong>{{ sessions() }}</strong><span>Practice sessions</span></div>
+  </div>
   <div class="interview-grid">
     @for (interview of interviews(); track interview._id) {
       <article class="panel interview-card">
@@ -52,8 +58,11 @@
         } @else {
           <p class="muted">Date to be confirmed</p>
         }
+        <div class="interview-progress-label"><span>Questions practiced</span><strong>{{ interview.progress?.practicedQuestions ?? 0 }} / {{ questionCount }}</strong></div>
+        <progress class="prep-progress" [value]="interview.progress?.practicedQuestions ?? 0" [max]="questionCount" [attr.aria-label]="'Questions practiced for ' + interview.company"></progress>
+        <p class="muted card-session-count">{{ interview.progress?.sessions ?? 0 }} {{ (interview.progress?.sessions ?? 0) === 1 ? 'practice session' : 'practice sessions' }} completed</p>
         <a class="button" [routerLink]="['/interviews', interview._id]">
-          Prepare for this interview
+          Open interview plan <span aria-hidden="true">↗</span>
         </a>
       </article>
     }
