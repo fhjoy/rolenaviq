@@ -1,6 +1,6 @@
 <a class="back-link" routerLink="/">← All interviews</a>
 
-@if (loading()) {
+@if (loading() || (!plan() && !error())) {
   <p role="status">Loading your preparation…</p>
 } @else if (application(); as interview) {
   <section class="page-heading plan-heading">
@@ -40,26 +40,12 @@
   <section class="panel practice-section" aria-labelledby="practice-heading">
     <span class="eyebrow">Rehearse with intention</span>
     <h2 id="practice-heading">Practice questions</h2>
-    <p class="muted">Write a short answer, then mark the question as practiced.</p>
-    <div class="question-grid">
-      @for (question of questions; track question.id; let index = $index) {
-        <div class="question" [class.question-practiced]="practiced(question.id)">
-          <div class="question-meta">
-            <span class="question-number">0{{ index + 1 }}</span>
-            <span>{{ question.category }}</span>
-            @if (practiced(question.id)) { <span class="question-status">Practiced</span> }
-          </div>
-          <h3>{{ question.prompt }}</h3>
-          <p class="question-hint" [id]="'hint-' + question.id">{{ question.hint }}</p>
-          <label [for]="'answer-' + question.id" class="sr-only">Your answer to {{ question.prompt }}</label>
-          <textarea [id]="'answer-' + question.id" [attr.aria-describedby]="'hint-' + question.id" rows="4" maxlength="2000" [value]="answerFor(question.id)" (input)="setAnswer(question.id, $event)" placeholder="Start with a few key points…"></textarea>
-          <label class="task">
-            <input type="checkbox" [checked]="practiced(question.id)" (change)="togglePracticed(question.id)" />
-            <span>I practiced this answer</span>
-          </label>
-        </div>
-      }
+    <p class="muted">Choose from {{ questions.length }} questions, write your answers, then try a short practice session.</p>
+    <div class="prep-actions">
+      <a class="button" [routerLink]="['/interviews', applicationId, 'questions']">Open question bank</a>
+      <a class="button secondary-button" [routerLink]="['/interviews', applicationId, 'practice']">Start practice</a>
     </div>
+    <p class="muted">{{ plan()?.sessions?.length ?? 0 }} practice sessions completed</p>
   </section>
 
   <div class="save-bar">

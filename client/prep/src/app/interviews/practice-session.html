@@ -1,0 +1,47 @@
+<a class="back-link" [routerLink]="['/interviews', applicationId]">← Interview plan</a>
+@if (loading() || (!plan() && !error())) {
+  <p role="status">Loading practice…</p>
+} @else if (plan()) {
+  <section class="page-heading">
+    <span class="eyebrow">Practice session</span>
+    <h1>Practice for {{ application()?.company }}</h1>
+    <p class="muted">Five questions · answer aloud · rate how confident you feel. The timer is only a guide.</p>
+    @if (unsavedAnswers()) {
+      <p class="error" role="status">Your edited answers are not saved yet. Save them in the question bank before refreshing this page.</p>
+    }
+  </section>
+  @if (saved()) {
+    <div class="panel" role="status">
+      <h2>Session saved</h2>
+      <p>You completed {{ questions.length }} questions in {{ time() }} and felt confident about {{ confident() }}. Your answers can be refined in the question bank.</p>
+      <a class="button" [routerLink]="['/interviews', applicationId, 'questions']">Review your answers</a>
+    </div>
+  } @else {
+    <div class="panel session-card">
+      <div class="question-meta"><span>Question {{ index() + 1 }} of {{ questions.length }}</span><span aria-label="Elapsed time">{{ time() }}</span></div>
+      <progress class="prep-progress" [value]="index() + 1" [max]="questions.length" aria-label="Session progress"></progress>
+      <h2>{{ current().prompt }}</h2>
+      <p class="question-hint">{{ current().hint }}</p>
+      <fieldset class="confidence-options">
+        <legend>How confident was your answer?</legend>
+        <label><input type="radio" name="confidence" [checked]="rating() === 1" (change)="rate(1)" /> Needs work</label>
+        <label><input type="radio" name="confidence" [checked]="rating() === 2" (change)="rate(2)" /> Getting there</label>
+        <label><input type="radio" name="confidence" [checked]="rating() === 3" (change)="rate(3)" /> Confident</label>
+      </fieldset>
+      <button type="button" [disabled]="!rating() || recording()" (click)="next()">
+        {{ recording() ? 'Saving…' : index() === questions.length - 1 ? 'Finish and save session' : 'Next question' }}
+      </button>
+    </div>
+    @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
+  }
+  @if (recentSessions().length) {
+    <section class="panel session-history">
+      <h2>Recent sessions</h2>
+      @for (session of recentSessions(); track session.completedAt) {
+        <p class="muted">{{ session.completedAt | date:'mediumDate' }} · {{ session.results.length }} questions · {{ countConfident(session) }} confident</p>
+      }
+    </section>
+  }
+} @else {
+  <div class="panel" role="alert"><p>{{ error() }}</p><button type="button" (click)="retryLoad()">Try again</button></div>
+}

@@ -7,6 +7,7 @@ export interface InterviewApplication {
   position: string;
   status: 'interview' | 'technical_interview';
   interviewDate?: string;
+  progress?: { completedTasks: number; practicedQuestions: number; sessions: number };
 }
 
 export interface PracticeAnswer {
@@ -19,7 +20,15 @@ export interface PrepData {
   completedTasks: string[];
   practice: PracticeAnswer[];
   notes: string;
+  sessions: PracticeSession[];
 }
+
+export interface PracticeSession {
+  completedAt: string;
+  results: { questionId: string; confidence: 1 | 2 | 3 }[];
+}
+
+export type EditablePrepData = Pick<PrepData, 'completedTasks' | 'practice' | 'notes'>;
 
 @Injectable({ providedIn: 'root' })
 export class PrepApi {
@@ -42,10 +51,18 @@ export class PrepApi {
     );
   }
 
-  save(applicationId: string, prep: PrepData) {
+  save(applicationId: string, prep: EditablePrepData) {
     return this.http.put<{ application: InterviewApplication; prep: PrepData }>(
       `/api/prep/interviews/${encodeURIComponent(applicationId)}`,
       prep,
+      { withCredentials: true },
+    );
+  }
+
+  recordSession(applicationId: string, results: PracticeSession['results']) {
+    return this.http.post<{ session: PracticeSession }>(
+      `/api/prep/interviews/${encodeURIComponent(applicationId)}/sessions`,
+      { results },
       { withCredentials: true },
     );
   }

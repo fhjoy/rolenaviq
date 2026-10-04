@@ -38,6 +38,12 @@
     <h2>Your upcoming conversations</h2>
     <span class="muted">{{ interviews().length }} to prepare for</span>
   </div>
+  <p class="muted">Track your preparation and practise a little at a time.</p>
+  <div class="overview-stats" aria-label="Preparation overview">
+    <div class="panel"><strong>{{ interviews().length }}</strong><span>Interviews to prepare for</span></div>
+    <div class="panel"><strong>{{ practicedQuestions() }}</strong><span>Questions practiced</span></div>
+    <div class="panel"><strong>{{ sessions() }}</strong><span>Practice sessions</span></div>
+  </div>
   <div class="interview-grid">
     @for (interview of interviews(); track interview._id) {
       <article class="panel interview-card">
@@ -52,6 +58,7 @@
         } @else {
           <p class="muted">Date to be confirmed</p>
         }
+        <p class="muted">{{ interview.progress?.practicedQuestions ?? 0 }} questions practiced · {{ interview.progress?.sessions ?? 0 }} sessions</p>
         <a class="button" [routerLink]="['/interviews', interview._id]">
           Prepare for this interview
         </a>

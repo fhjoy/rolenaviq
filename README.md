@@ -9,12 +9,12 @@ I built RoleNaviq to keep the moving parts of a job search in one place. Save op
 - Track applications from saved roles through interviews and offers.
 - Switch between a searchable list, a board, a calendar, and a dashboard.
 - Keep job links, technologies, salary details, notes, and interview dates together.
-- Prepare for interviews with a checklist, practice questions, and saved notes.
+- Prepare for interviews with a checklist, a question bank, saved notes, and practice sessions.
 - Use your own account or explore the app with the demo login.
 
 ## Built with
 
-- **Frontends:** React, TypeScript, Vite, Tailwind CSS, TanStack Query; Angular for interview preparation.
+- **Frontends:** React, TypeScript, Vite, Tailwind CSS, TanStack Query; Angular with NgRx Store and Effects for interview preparation.
 - **Backend:** One Node.js/Express API, MongoDB, Mongoose, and JWT authentication with HttpOnly cookies.
 - **Testing and delivery:** Vitest, React Testing Library, Supertest, Cypress, Docker Compose, GitHub Actions.
 

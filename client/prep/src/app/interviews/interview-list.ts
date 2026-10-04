@@ -1,8 +1,10 @@
 import { DatePipe } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
 
-import { InterviewApplication, PrepApi } from '../core/prep-api';
+import { PrepActions } from '../state/prep.actions';
+import { selectInterviews, selectListError, selectListLoading } from '../state/prep.selectors';
 
 @Component({
   selector: 'app-interview-list',
@@ -10,27 +12,20 @@ import { InterviewApplication, PrepApi } from '../core/prep-api';
   templateUrl: './interview-list.html',
 })
 export class InterviewList implements OnInit {
-  private readonly api = inject(PrepApi);
-  readonly interviews = signal<InterviewApplication[]>([]);
-  readonly loading = signal(true);
-  readonly error = signal(false);
+  private readonly store = inject(Store);
+  readonly interviews = this.store.selectSignal(selectInterviews);
+  readonly loading = this.store.selectSignal(selectListLoading);
+  readonly error = this.store.selectSignal(selectListError);
+  readonly practicedQuestions = computed(() => this.interviews().reduce(
+    (total, interview) => total + (interview.progress?.practicedQuestions ?? 0), 0));
+  readonly sessions = computed(() => this.interviews().reduce(
+    (total, interview) => total + (interview.progress?.sessions ?? 0), 0));
 
   ngOnInit(): void {
     this.load();
   }
 
   load(): void {
-    this.loading.set(true);
-    this.error.set(false);
-    this.api.interviews().subscribe({
-      next: ({ applications }) => {
-        this.interviews.set(applications);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.error.set(true);
-        this.loading.set(false);
-      },
-    });
+    this.store.dispatch(PrepActions.loadInterviews());
   }
 }

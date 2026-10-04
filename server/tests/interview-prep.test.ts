@@ -57,6 +57,55 @@ describe("Interview preparation API", () => {
     expect(await InterviewPrep.countDocuments()).toBe(1);
   });
 
+  it("records a practice session and shows progress only to its owner", async () => {
+    const owner = await createAuthenticatedAgent();
+    const other = await createAuthenticatedAgent();
+    const created = await owner.agent.post("/api/applications").send(interview);
+    const id = created.body.application._id;
+    const path = `/api/prep/interviews/${id}`;
+    await owner.agent.put(path).send(preparation);
+
+    const session = await owner.agent.post(`${path}/sessions`).send({ results: [
+      { questionId: "introduction", confidence: 2 },
+      { questionId: "accessibility", confidence: 3 },
+    ] });
+    expect(session.status).toBe(201);
+    expect(session.body.session.results).toHaveLength(2);
+    expect((await owner.agent.get(path)).body.prep.sessions).toHaveLength(1);
+    expect((await owner.agent.get("/api/prep/interviews")).body.applications[0].progress)
+      .toEqual({ completedTasks: 1, practicedQuestions: 1, sessions: 1 });
+    expect((await other.agent.post(`${path}/sessions`).send({ results: [
+      { questionId: "introduction", confidence: 2 },
+    ] })).status).toBe(404);
+  });
+
+  it("records practice before any plan is saved and keeps the session after saving answers", async () => {
+    const { agent } = await createAuthenticatedAgent();
+    const created = await agent.post("/api/applications").send(interview);
+    const path = `/api/prep/interviews/${created.body.application._id}`;
+    const response = await agent.post(`${path}/sessions`).send({ results: [
+      { questionId: "testing", confidence: 1 },
+    ] });
+    expect(response.status).toBe(201);
+    await agent.put(path).send(preparation);
+    const after = await agent.get(path);
+    expect(after.body.prep.sessions).toHaveLength(1);
+    expect(after.body.prep.practice).toEqual(preparation.practice);
+  });
+
+  it("rejects duplicate questions and out-of-range confidence without saving", async () => {
+    const { agent } = await createAuthenticatedAgent();
+    const created = await agent.post("/api/applications").send(interview);
+    const path = `/api/prep/interviews/${created.body.application._id}/sessions`;
+    expect((await agent.post(path).send({ results: [
+      { questionId: "react", confidence: 2 }, { questionId: "react", confidence: 3 },
+    ] })).status).toBe(400);
+    expect((await agent.post(path).send({ results: [
+      { questionId: "react", confidence: 9 },
+    ] })).status).toBe(400);
+    expect(await InterviewPrep.countDocuments()).toBe(0);
+  });
+
   it("does not read or alter another user's preparation", async () => {
     const owner = await createAuthenticatedAgent();
     const other = await createAuthenticatedAgent();
