@@ -1,4 +1,5 @@
 import {
+  ArrowUpRight,
   BriefcaseBusiness,
   CalendarDays,
   Columns3,
@@ -8,7 +9,9 @@ import {
   Settings,
 } from "lucide-react";
 import { useState } from "react";
-import { Link, NavLink, Outlet } from "react-router";
+import { Link, NavLink, Outlet, useLocation } from "react-router";
+
+import "@/workspace.css";
 
 import { Brand } from "@/components/brand/Brand";
 import { SkipLink } from "@/components/common/SkipLink";
@@ -27,7 +30,7 @@ const navigation = [
 
 function Navigation({ onNavigate }: { onNavigate?: () => void }) {
   return (
-    <nav className="space-y-1" aria-label="Main navigation">
+    <nav className="workspace-navigation space-y-1" aria-label="Main navigation">
       {navigation.map((item) => {
         const Icon = item.icon;
 
@@ -38,10 +41,10 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
             onClick={onNavigate}
             className={({ isActive }) =>
               [
-                "group flex items-center gap-3 rounded-lg border-l-2 px-3 py-2.5 text-sm font-medium transition-colors",
+                "group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition-colors",
                 isActive
-                  ? "border-brand bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "border-transparent text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                  ? "workspace-nav-active"
+                  : "workspace-nav-inactive",
               ].join(" ")
             }
           >
@@ -50,7 +53,7 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
                 <Icon
                   className={[
                     "h-4 w-4 transition-colors",
-                    isActive ? "text-brand" : "group-hover:text-foreground",
+                    isActive ? "text-[#9be2ca]" : "group-hover:text-white",
                   ].join(" ")}
                   aria-hidden="true"
                 />
@@ -66,38 +69,40 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
-    <div className="flex h-full flex-col">
-      <div className="px-4 py-5">
-        <Brand to="/dashboard" showTagline />
+    <div className="workspace-sidebar flex h-full flex-col">
+      <div className="workspace-sidebar-brand px-5 pb-7 pt-6">
+        <Brand to="/dashboard" showTagline inverse />
       </div>
-      <Separator />
-      <div className="flex-1 px-3 py-4">
+      <Separator className="opacity-15" />
+      <div className="flex-1 px-3 py-5">
+        <p className="workspace-nav-label px-3 pb-3">Workspace</p>
         <Navigation onNavigate={onNavigate} />
 
-        <div className="mt-7 border-t px-1 pt-5">
-          <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            Preparation
-          </p>
+        <div className="workspace-prep-panel mt-8">
+          <div className="workspace-prep-icon" aria-hidden="true"><BookOpenCheck className="h-5 w-5" /></div>
+          <p className="workspace-prep-kicker">Next conversation</p>
+          <p className="workspace-prep-title">Make your story count.</p>
+          <p className="workspace-prep-copy">Keep your notes, questions and practice in one place.</p>
           <a
             href="/prep/"
             onClick={onNavigate}
-            className="group flex items-center gap-3 rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="workspace-prep-link group flex items-center justify-between rounded-lg text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9be2ca]"
           >
-            <BookOpenCheck className="h-4 w-4 group-hover:text-brand" aria-hidden="true" />
-            Interview prep
+            Open interview prep
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
           </a>
         </div>
       </div>
-      <div className="space-y-2 border-t p-3">
+      <div className="workspace-sidebar-footer space-y-1 border-t p-3">
         <NavLink
           to="/settings"
           onClick={onNavigate}
           className={({ isActive }) =>
             [
-              "group flex items-center gap-3 rounded-lg border-l-2 px-3 py-2.5 text-sm font-medium transition-colors",
+              "group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition-colors",
               isActive
-                ? "border-brand bg-sidebar-accent text-sidebar-accent-foreground"
-                : "border-transparent text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                ? "workspace-nav-active"
+                : "workspace-nav-inactive",
             ].join(" ")
           }
         >
@@ -106,7 +111,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
               <Settings
                 className={[
                   "h-4 w-4",
-                  isActive ? "text-brand" : "group-hover:text-foreground",
+                  isActive ? "text-[#9be2ca]" : "group-hover:text-white",
                 ].join(" ")}
                 aria-hidden="true"
               />
@@ -122,23 +127,33 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
 export function AppLayout() {
   const { data } = useCurrentUser();
+  const { pathname } = useLocation();
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
   const user = data?.user;
   const initials = [user?.firstName?.[0], user?.lastName?.[0]]
     .filter(Boolean)
     .join("")
     .toUpperCase();
+  const section = pathname.startsWith("/applications")
+    ? "Applications"
+    : pathname === "/board"
+      ? "Board"
+      : pathname === "/calendar"
+        ? "Calendar"
+        : pathname === "/settings"
+          ? "Settings"
+          : "Dashboard";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="workspace-shell min-h-screen">
       <SkipLink />
 
-      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r bg-sidebar lg:block">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-68 lg:block">
         <SidebarContent />
       </aside>
 
-      <div className="lg:pl-64">
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-background/88 px-4 backdrop-blur-xl supports-backdrop-filter:bg-background/75 md:px-6">
+      <div className="lg:pl-68">
+        <header className="workspace-header sticky top-0 z-20 flex h-17 items-center justify-between px-4 backdrop-blur-xl md:px-8">
           <div className="flex items-center gap-3">
             <Sheet open={mobileNavigationOpen} onOpenChange={setMobileNavigationOpen}>
               <SheetTrigger
@@ -153,7 +168,7 @@ export function AppLayout() {
               >
                 <Menu className="h-5 w-5" aria-hidden="true" />
               </SheetTrigger>
-              <SheetContent side="left" className="w-64 p-0">
+              <SheetContent side="left" className="w-68 border-0 p-0">
                 <SidebarContent onNavigate={() => setMobileNavigationOpen(false)} />
               </SheetContent>
             </Sheet>
@@ -161,15 +176,21 @@ export function AppLayout() {
             <div className="lg:hidden">
               <Brand to="/dashboard" />
             </div>
+            <div className="hidden items-center gap-2.5 text-sm sm:flex lg:ml-1">
+              <span className="workspace-location-dot" aria-hidden="true" />
+              <span className="text-muted-foreground">Workspace</span>
+              <span className="text-muted-foreground/45" aria-hidden="true">/</span>
+              <span className="font-semibold">{section}</span>
+            </div>
           </div>
 
           <Link
             to="/settings"
-            className="flex items-center gap-3 rounded-xl px-2 py-1.5 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="workspace-account flex items-center gap-3 rounded-xl px-2 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label="Open account settings"
           >
             <div
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-brand/12 text-sm font-semibold text-brand"
+              className="workspace-account-avatar flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold"
               aria-hidden="true"
             >
               {initials || "U"}
@@ -186,7 +207,7 @@ export function AppLayout() {
         <main
           id="main-content"
           tabIndex={-1}
-          className="min-w-0 w-full p-4 sm:p-6 xl:p-8"
+          className="workspace-main min-w-0 w-full p-4 sm:p-6 xl:p-8"
         >
           <Outlet />
         </main>

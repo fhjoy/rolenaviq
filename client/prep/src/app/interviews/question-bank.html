@@ -2,7 +2,7 @@
 @if (loading() || (!plan() && !error())) {
   <p role="status">Loading questions…</p>
 } @else if (plan()) {
-  <section class="page-heading">
+  <section class="page-heading page-banner">
     <span class="eyebrow">Question bank</span>
     <h1>Prepare answers for {{ application()?.company }}</h1>
     <p class="muted">{{ practicedCount() }} of {{ questions.length }} questions practiced. Keep answers short enough to say aloud.</p>
@@ -15,7 +15,7 @@
   <div class="question-grid">
     @for (question of filtered(); track question.id) {
       <section class="question panel" [class.question-practiced]="practiced(question.id)">
-        <div class="question-meta"><span>{{ question.category }}</span>@if (practiced(question.id)) { <span class="question-status">Practiced</span> }</div>
+        <div class="question-meta"><span class="question-number">{{ $index + 1 }}</span><span>{{ question.category }}</span>@if (practiced(question.id)) { <span class="question-status">Practiced</span> }</div>
         <h2>{{ question.prompt }}</h2>
         <p class="question-hint" [id]="'hint-' + question.id">{{ question.hint }}</p>
         <label [for]="'answer-' + question.id" class="sr-only">Your answer to {{ question.prompt }}</label>

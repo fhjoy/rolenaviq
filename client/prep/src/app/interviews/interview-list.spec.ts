@@ -33,8 +33,9 @@ describe('InterviewList', () => {
     const page = fixture.nativeElement as HTMLElement;
     expect(page.textContent).toContain('Northstar Labs');
     expect(page.textContent).toContain('Frontend Engineer');
-    expect(page.textContent).toContain('2 questions practiced');
-    expect(page.querySelector('a.button')?.textContent).toContain('Prepare for this interview');
+    expect(page.querySelector('.interview-progress-label')?.textContent).toContain('2 / 12');
+    expect(page.querySelector<HTMLProgressElement>('.interview-card progress')?.value).toBe(2);
+    expect(page.querySelector('a.button')?.textContent).toContain('Open interview plan');
     http.verify();
   });
 });

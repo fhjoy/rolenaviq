@@ -11,12 +11,14 @@
         · {{ interview.interviewDate | date:'medium' }}
       }
     </p>
-    <p class="muted">{{ progress() }} of {{ checklist.length + questions.length }} steps practiced or completed</p>
-    <progress class="prep-progress" [value]="progress()" [max]="checklist.length + questions.length" aria-label="Interview preparation progress"></progress>
+    <div class="plan-header-progress"><span>{{ progress() }} of {{ checklist.length + questions.length }} steps practiced or completed</span>
+      <progress class="prep-progress" [value]="progress()" [max]="checklist.length + questions.length" aria-label="Interview preparation progress"></progress>
+    </div>
   </section>
 
   <div class="prep-grid">
     <section class="panel" aria-labelledby="checklist-heading">
+      <span class="panel-kicker">01 / GET READY</span>
       <h2 id="checklist-heading">Preparation checklist</h2>
       <p class="muted">Keep the essentials in one place.</p>
       <div class="task-list">
@@ -30,6 +32,7 @@
     </section>
 
     <section class="panel" aria-labelledby="notes-heading">
+      <span class="panel-kicker">02 / REMEMBER</span>
       <h2 id="notes-heading">Your notes</h2>
       <p class="muted">Ideas, research, and things to remember.</p>
       <label for="prep-notes" class="sr-only">Interview preparation notes</label>
@@ -38,7 +41,7 @@
   </div>
 
   <section class="panel practice-section" aria-labelledby="practice-heading">
-    <span class="eyebrow">Rehearse with intention</span>
+    <span class="eyebrow">03 / Rehearse with intention</span>
     <h2 id="practice-heading">Practice questions</h2>
     <p class="muted">Choose from {{ questions.length }} questions, write your answers, then try a short practice session.</p>
     <div class="prep-actions">

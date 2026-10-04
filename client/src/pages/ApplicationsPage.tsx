@@ -67,7 +67,7 @@ export function ApplicationsPage() {
 
   return (
     <div>
-      <section className="flex flex-col justify-between gap-5 rounded-2xl border bg-card p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
+      <section className="workspace-page-intro flex flex-col justify-between gap-5 rounded-2xl border bg-card p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
         <div className="flex items-start gap-4">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand">
             <BriefcaseBusiness className="h-5 w-5" aria-hidden="true" />

@@ -2,7 +2,7 @@
 @if (loading() || (!plan() && !error())) {
   <p role="status">Loading practice…</p>
 } @else if (plan()) {
-  <section class="page-heading">
+  <section class="page-heading page-banner">
     <span class="eyebrow">Practice session</span>
     <h1>Practice for {{ application()?.company }}</h1>
     <p class="muted">Five questions · answer aloud · rate how confident you feel. The timer is only a guide.</p>

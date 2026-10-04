@@ -3,6 +3,7 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 
+import { questions } from './questions';
 import { PrepActions } from '../state/prep.actions';
 import { selectInterviews, selectListError, selectListLoading } from '../state/prep.selectors';
 
@@ -16,6 +17,7 @@ export class InterviewList implements OnInit {
   readonly interviews = this.store.selectSignal(selectInterviews);
   readonly loading = this.store.selectSignal(selectListLoading);
   readonly error = this.store.selectSignal(selectListError);
+  readonly questionCount = questions.length;
   readonly practicedQuestions = computed(() => this.interviews().reduce(
     (total, interview) => total + (interview.progress?.practicedQuestions ?? 0), 0));
   readonly sessions = computed(() => this.interviews().reduce(
