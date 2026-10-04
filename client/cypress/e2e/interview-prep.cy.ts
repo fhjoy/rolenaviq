@@ -77,7 +77,7 @@ describe("interview preparation", () => {
       cy.contains("button", "Finish and save session").click();
       cy.contains("Session saved").should("be.visible");
       cy.visit("/prep/");
-      cy.contains("article", "Practice Journey Test").should("contain", "1 sessions");
+      cy.contains("article", "Practice Journey Test").should("contain", "1 practice session completed");
     });
   });
 });

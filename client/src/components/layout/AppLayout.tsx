@@ -88,7 +88,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             onClick={onNavigate}
             className="workspace-prep-link group flex items-center justify-between rounded-lg text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9be2ca]"
           >
-            Open interview prep
+            Interview prep
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
           </a>
         </div>
