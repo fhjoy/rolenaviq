@@ -9,7 +9,8 @@
 .workspace-sidebar {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background: #122c2b;
   color: #e8f4ed;
   box-shadow: 8px 0 34px #142e2a0d;
