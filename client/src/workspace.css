@@ -1,4 +1,4 @@
-/* The signed-in workspace has its own visual system; the public landing page is untouched. */
+/* The signed-in workspace has its own visual system. */
 .workspace-shell {
   min-height: 100vh;
   background: #f6f7f2;
@@ -263,16 +263,16 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 1.25rem;
-  border: 1px solid #e5d6b5;
+  border: 1px solid #d5e9dc;
   border-radius: 1.2rem;
   padding: 1.35rem 1.5rem;
-  background: linear-gradient(105deg, #fff5e5 0%, #fffaf0 72%, #fffdf7 100%);
+  background: linear-gradient(105deg, #f4faf5 0%, #f9fcf8 72%, #fffefa 100%);
 }
-.workspace-next-step .workspace-section-kicker { color: #795c2d; }
-.dark .workspace-next-step { border-color: #76694e; background: linear-gradient(105deg, #39372c, #343b32); }
-.dark .workspace-next-step .workspace-section-kicker { color: #e4cf9d; }
-.workspace-next-icon { display: grid; place-items: center; flex: none; width: 3rem; height: 3rem; border-radius: .85rem; background: #f4e8cc; color: #795c2d; }
-.dark .workspace-next-icon { background: #554c32; color: #f0dba8; }
+.workspace-next-step .workspace-section-kicker { color: #236b53; }
+.dark .workspace-next-step { border-color: #416052; background: #263d35; }
+.dark .workspace-next-step .workspace-section-kicker { color: #b9ead1; }
+.workspace-next-icon { display: grid; place-items: center; flex: none; width: 3rem; height: 3rem; border-radius: .85rem; background: #e1f2e6; color: #236b53; }
+.dark .workspace-next-icon { background: #375748; color: #b9ead1; }
 .workspace-next-copy { flex: 1 1 21rem; }
 .workspace-next-copy h2 { margin-top: .25rem; font-size: 1.1rem; font-weight: 700; letter-spacing: -.025em; }
 .workspace-next-copy p { margin-top: .3rem; color: var(--muted-foreground); font-size: .84rem; }

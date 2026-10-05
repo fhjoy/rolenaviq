@@ -930,18 +930,18 @@ function ExploreCtaSection() {
       id="demo"
       className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8"
     >
-      <div className="relative overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-primary-foreground shadow-xl shadow-foreground/10 sm:px-10 lg:px-14 lg:py-14">
-        <div className="absolute right-0 top-0 h-72 w-72 translate-x-1/3 -translate-y-1/3 rounded-full bg-brand/25 blur-3xl" />
+      <div className="teal-hero relative overflow-hidden rounded-[2rem] border border-[#b8dfc6] px-6 py-12 shadow-xl shadow-[#244235]/10 sm:px-10 lg:px-14 lg:py-14 dark:border-[#416052]">
+        <div className="pointer-events-none absolute right-0 top-0 h-72 w-72 translate-x-1/3 -translate-y-1/3 rounded-full bg-white/70 blur-3xl dark:bg-brand/10" />
 
         <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <p className="text-sm font-semibold text-brand">
+            <p className="teal-hero-kicker text-sm font-semibold">
               Ready to explore the route?
             </p>
             <h2 className="mt-2 text-3xl font-bold tracking-tight">
               See the complete RoleNaviq workflow yourself.
             </h2>
-            <p className="mt-3 max-w-2xl text-primary-foreground/70">
+            <p className="teal-hero-copy mt-3 max-w-2xl">
               Open the live demo and move through the dashboard, application
               board, calendar and real job-search workflow.
             </p>
@@ -956,8 +956,7 @@ function ExploreCtaSection() {
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button
               size="lg"
-              variant="secondary"
-              className="landing-demo-button"
+              className="landing-demo-button bg-[#194d3c] text-white hover:bg-[#267459] dark:bg-[#b9ead1] dark:text-[#173b30] dark:hover:bg-[#e3fae9]"
               render={<Link to="/login?demo=1" />}
             >
               Explore live demo
@@ -967,7 +966,7 @@ function ExploreCtaSection() {
             <Button
               size="lg"
               variant="outline"
-              className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+              className="border-[#86b79c] bg-white/80 text-[#194d3c] hover:bg-white hover:text-[#194d3c] dark:border-[#b6dcc0]/50 dark:bg-white/5 dark:text-[#f3faf5] dark:hover:bg-white/15 dark:hover:text-white"
               render={<Link to="/register" />}
             >
               Create account
@@ -975,19 +974,19 @@ function ExploreCtaSection() {
           </div>
         </div>
 
-        <div className="relative mt-8 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm sm:flex-row sm:items-center sm:justify-between">
+        <div className="teal-hero-detail relative mt-8 flex flex-col gap-3 rounded-2xl p-4 text-sm sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <KeyRound
-              className="h-4 w-4 shrink-0 text-brand"
+              className="teal-hero-kicker h-4 w-4 shrink-0"
               aria-hidden="true"
             />
-            <span className="text-primary-foreground/70">
+            <span className="teal-hero-copy">
               Demo credentials are ready for you.
             </span>
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
             <span>{DEMO_EMAIL}</span>
-            <span className="text-primary-foreground/60">{DEMO_PASSWORD}</span>
+            <span className="teal-hero-copy">{DEMO_PASSWORD}</span>
           </div>
         </div>
       </div>

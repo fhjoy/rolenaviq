@@ -181,10 +181,10 @@ textarea:focus { border-color: #74b390; outline: 2px solid #8fd6ad6b; outline-of
 .practice-section {
   position: relative;
   overflow: hidden;
-  border: 1px solid #c0e0c8;
+  border: 1px solid #d5e9dc;
   border-radius: 1.2rem;
   padding: 1.5rem;
-  background: linear-gradient(105deg, #fff5e5 0%, #fffaf0 72%, #fffdf7 100%);
+  background: linear-gradient(105deg, #f4faf5 0%, #f9fcf8 72%, #fffefa 100%);
   box-shadow: 0 8px 22px #1d4b3410;
 }
 .practice-section .eyebrow { color: #28765d; }

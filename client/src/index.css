@@ -137,6 +137,22 @@
   }
 }
 
+/* A consistent, readable hero surface for the public demo and auth story. */
+.teal-hero {
+  background: linear-gradient(105deg, #e7f5eb 0%, #f1f9f2 68%, #fffdf5 100%);
+  color: #193e34;
+}
+.teal-hero-kicker, .teal-hero-icon { color: #236b53; }
+.teal-hero-copy { color: #4b685c; }
+.teal-hero-icon { border: 1px solid #c7e2d0; background: #ffffffa8; }
+.teal-hero-detail { border: 1px solid #c7e2d0; background: #ffffffa8; }
+.teal-hero a:focus-visible { outline: 2px solid #194d3c; outline-offset: 3px; }
+.dark .teal-hero { background: #213a34; color: #f3faf5; }
+.dark .teal-hero-kicker, .dark .teal-hero-icon { color: #b9ead1; }
+.dark .teal-hero-copy { color: #c7dfd2; }
+.dark .teal-hero-icon, .dark .teal-hero-detail { border-color: #b6dcc04d; background: #ffffff12; }
+.dark .teal-hero a:focus-visible { outline-color: #b9ead1; }
+
 
 @keyframes landing-route-flow {
   to {
