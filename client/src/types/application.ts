@@ -24,6 +24,7 @@ export interface Application {
   position: string;
 
   jobUrl?: string;
+  jobDescription?: string;
   location?: string;
 
   workplaceType?: WorkplaceType;

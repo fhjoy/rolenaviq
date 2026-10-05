@@ -11,7 +11,7 @@
   isolation: isolate;
   overflow-x: hidden;
   overflow-y: auto;
-  background: linear-gradient(160deg, #d4e9da, #e4f2e5 72%, #edf7ed);
+  background: linear-gradient(160deg, #c9e2d1, #d4e9d8 72%, #dceee0);
   color: #193e34;
   box-shadow: 8px 0 34px #24423512;
 }
@@ -27,6 +27,7 @@
 
 .workspace-sidebar-brand img { max-width: 12.5rem; }
 .workspace-sidebar-brand span span:last-child { color: #466556; }
+.workspace-sidebar-divider { background: #a8cdb4; }
 .workspace-nav-label, .workspace-prep-kicker {
   color: #236b53;
   font-size: .66rem;
@@ -94,6 +95,7 @@
 .dark .workspace-sidebar { background: #213a34; color: #f3faf5; }
 .dark .workspace-sidebar::before { background: radial-gradient(circle at 10% 8%, #73b99826, transparent 38%); }
 .dark .workspace-sidebar-brand span span:last-child { color: #b8cfc4; }
+.dark .workspace-sidebar-divider { background: #a8d0b747; }
 .dark .workspace-nav-label, .dark .workspace-prep-kicker { color: #a2dbb9; }
 .dark .workspace-nav-inactive, .dark .workspace-sidebar-footer [data-slot="button"] { color: #c7dfd2; }
 .dark .workspace-nav-inactive:hover, .dark .workspace-sidebar-footer [data-slot="button"]:hover { background: #ffffff14; color: #fff; }
@@ -261,19 +263,24 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 1.25rem;
-  border: 1px solid #b8dfc6;
+  border: 1px solid #e5d6b5;
   border-radius: 1.2rem;
   padding: 1.35rem 1.5rem;
-  background: linear-gradient(105deg, #e9f6ec 0%, #f3faf3 72%, #fffdf5 100%);
+  background: linear-gradient(105deg, #fff5e5 0%, #fffaf0 72%, #fffdf7 100%);
 }
-.dark .workspace-next-step { border-color: #5f8068; background: linear-gradient(105deg, #213c36, #243a34); }
-.workspace-next-icon { display: grid; place-items: center; flex: none; width: 3rem; height: 3rem; border-radius: .85rem; background: #c9e9d3; color: #267354; }
+.workspace-next-step .workspace-section-kicker { color: #795c2d; }
+.dark .workspace-next-step { border-color: #76694e; background: linear-gradient(105deg, #39372c, #343b32); }
+.dark .workspace-next-step .workspace-section-kicker { color: #e4cf9d; }
+.workspace-next-icon { display: grid; place-items: center; flex: none; width: 3rem; height: 3rem; border-radius: .85rem; background: #f4e8cc; color: #795c2d; }
+.dark .workspace-next-icon { background: #554c32; color: #f0dba8; }
 .workspace-next-copy { flex: 1 1 21rem; }
 .workspace-next-copy h2 { margin-top: .25rem; font-size: 1.1rem; font-weight: 700; letter-spacing: -.025em; }
 .workspace-next-copy p { margin-top: .3rem; color: var(--muted-foreground); font-size: .84rem; }
 .workspace-next-link { display: inline-flex; align-items: center; gap: .55rem; min-height: 2.5rem; border-radius: .65rem; padding: .6rem .9rem; background: #194d3c; color: #fff; font-size: .82rem; font-weight: 650; text-decoration: none; transition: background .2s, transform .2s; }
 .workspace-next-link:hover { background: #267459; transform: translateY(-2px); }
 .workspace-next-link:focus-visible { outline: 2px solid #267459; outline-offset: 3px; }
+.dark .workspace-next-link { background: #b9ead1; color: #173b30; }
+.dark .workspace-next-link:hover { background: #e3fae9; }
 
 .workspace-recent-applications { border-radius: 1.15rem; }
 .workspace-recent-applications a:hover { background: #ebf5ed; }

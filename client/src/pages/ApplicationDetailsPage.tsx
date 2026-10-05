@@ -171,6 +171,19 @@ export function ApplicationDetailsPage() {
         </Card>
       </div>
 
+      {application.jobDescription && (
+        <Card className="mt-6 border-border/70 bg-card shadow-sm">
+          <CardHeader>
+            <CardTitle>Job description</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="whitespace-pre-wrap break-words leading-7 text-muted-foreground">
+              {application.jobDescription}
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
       {(application.technologies.length > 0 || application.notes) && (
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           {application.technologies.length > 0 && (

@@ -28,6 +28,7 @@ export interface IApplication {
   position: string;
 
   jobUrl?: string;
+  jobDescription?: string;
   location?: string;
 
   workplaceType?: (typeof workplaceTypes)[number];
@@ -74,6 +75,12 @@ const applicationSchema = new Schema<IApplication>(
     jobUrl: {
       type: String,
       trim: true,
+    },
+
+    jobDescription: {
+      type: String,
+      trim: true,
+      maxlength: 20000,
     },
 
     location: {

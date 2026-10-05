@@ -122,6 +122,25 @@ export function ApplicationForm({
               </p>
             )}
           </div>
+
+          <div className="space-y-2 sm:col-span-2">
+            <Label htmlFor="jobDescription">Job description</Label>
+            <Textarea
+              id="jobDescription"
+              rows={9}
+              maxLength={20000}
+              placeholder="Paste the responsibilities and requirements from the job posting..."
+              {...register("jobDescription")}
+            />
+            <p className="text-xs text-muted-foreground">
+              Optional. Keep a copy here even if the job posting is later removed.
+            </p>
+            {errors.jobDescription && (
+              <p role="alert" className="text-sm text-destructive">
+                {errors.jobDescription.message}
+              </p>
+            )}
+          </div>
         </CardContent>
       </Card>
 

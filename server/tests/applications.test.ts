@@ -38,6 +38,42 @@ describe("Applications API", () => {
     expect(storedApplication?.userId.toString()).toBe(userId);
   });
 
+  it("saves, returns, and clears an optional job description", async () => {
+    const { agent } = await createAuthenticatedAgent();
+
+    const created = await agent.post("/api/applications").send({
+      ...validApplication,
+      jobDescription: "  Build accessible React interfaces.  ",
+    });
+
+    expect(created.status).toBe(201);
+    expect(created.body.application.jobDescription).toBe("Build accessible React interfaces.");
+
+    const id = created.body.application._id;
+    const fetched = await agent.get(`/api/applications/${id}`);
+    expect(fetched.body.application.jobDescription).toBe("Build accessible React interfaces.");
+
+    const cleared = await agent.patch(`/api/applications/${id}`).send({
+      jobDescription: null,
+    });
+
+    expect(cleared.status).toBe(200);
+    expect(cleared.body.application).not.toHaveProperty("jobDescription");
+    expect((await Application.findById(id))?.jobDescription).toBeUndefined();
+  });
+
+  it("limits the length of saved job descriptions", async () => {
+    const { agent } = await createAuthenticatedAgent();
+
+    const response = await agent.post("/api/applications").send({
+      ...validApplication,
+      jobDescription: "x".repeat(20001),
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.body.errors.jobDescription).toBeDefined();
+  });
+
   it("ignores a client supplied userId and keeps ownership with the authenticated user", async () => {
     const { agent, userId } = await createAuthenticatedAgent();
     const maliciousUserId = new Types.ObjectId().toString();

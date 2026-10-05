@@ -4,6 +4,7 @@
   --muted: #64736d;
   --border: #d7e2d7;
   --card: #fffefa;
+  --prep-heading-surface: linear-gradient(105deg, #e7f5eb 0%, #f1f9f2 68%, #fffdf5 100%);
 }
 
 body {
@@ -55,7 +56,7 @@ h2 { letter-spacing: -.035em; }
   border-color: #b8dfc6;
   border-radius: 1.65rem;
   padding: clamp(1.6rem, 4.5vw, 3.5rem);
-  background: linear-gradient(105deg, #e7f5eb 0%, #f1f9f2 68%, #fffdf5 100%);
+  background: var(--prep-heading-surface);
   color: #193e34;
   box-shadow: 0 12px 30px #2442350d;
 }
@@ -158,7 +159,7 @@ button:hover, .button:hover { background: #17523e; }
   border: 1px solid #b8dfc6;
   border-radius: 1.4rem;
   padding: clamp(1.5rem, 4vw, 2.7rem);
-  background: linear-gradient(105deg, #e7f5eb 0%, #f1f9f2 68%, #fffdf5 100%);
+  background: var(--prep-heading-surface);
   color: #193e34;
   box-shadow: 0 12px 30px #2442350d;
 }
@@ -183,7 +184,7 @@ textarea:focus { border-color: #74b390; outline: 2px solid #8fd6ad6b; outline-of
   border: 1px solid #c0e0c8;
   border-radius: 1.2rem;
   padding: 1.5rem;
-  background: linear-gradient(105deg, #e7f5eb 0%, #f1f9f2 68%, #fffdf5 100%);
+  background: linear-gradient(105deg, #fff5e5 0%, #fffaf0 72%, #fffdf7 100%);
   box-shadow: 0 8px 22px #1d4b3410;
 }
 .practice-section .eyebrow { color: #28765d; }
@@ -199,7 +200,7 @@ textarea:focus { border-color: #74b390; outline: 2px solid #8fd6ad6b; outline-of
   border: 1px solid #c8e2d0;
   border-radius: 1.3rem;
   padding: clamp(1.5rem, 4vw, 2.5rem);
-  background: linear-gradient(105deg, #e7f5eb 0%, #f1f9f2 68%, #fffdf5 100%);
+  background: var(--prep-heading-surface);
   box-shadow: 0 10px 24px #24513b10;
 }
 .page-banner::before { position: absolute; top: 0; left: 2rem; width: 3rem; height: 3px; border-radius: 0 0 4px 4px; background: #3aa47b; content: ""; }

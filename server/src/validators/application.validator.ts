@@ -28,6 +28,8 @@ const applicationFieldsSchema = z.object({
 
   jobUrl: httpUrlSchema.optional(),
 
+  jobDescription: z.string().trim().max(20000).optional(),
+
   location: z.string().trim().max(150).optional(),
 
   workplaceType: z.enum(workplaceTypes).optional(),
@@ -70,6 +72,8 @@ export const updateApplicationSchema = applicationFieldsSchema
   .partial()
   .extend({
     jobUrl: httpUrlSchema.nullable().optional(),
+
+    jobDescription: z.string().trim().max(20000).nullable().optional(),
 
     location: z.string().trim().max(150).nullable().optional(),
 
