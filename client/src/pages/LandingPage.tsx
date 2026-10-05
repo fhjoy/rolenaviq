@@ -808,7 +808,7 @@ function InterviewPrepSection() {
   return (
     <section
       id="interview-prep"
-      className="border-y bg-brand/5"
+      className="border-y bg-muted/25"
     >
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-2 lg:gap-16 lg:px-8">
         <div className="lg:col-start-2 lg:row-start-1">
@@ -998,12 +998,12 @@ function EngineeringSection() {
   return (
     <section
       id="engineering"
-      className="teal-hero landing-engineering-section border-t border-[#b8dfc6] dark:border-[#416052]"
+      className="landing-engineering-section"
     >
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-        <div className="mb-12 flex flex-col gap-4 border-b border-[#c7e2d0] pb-8 sm:flex-row sm:items-end sm:justify-between dark:border-[#b6dcc0]/30">
+        <div className="mb-12 flex flex-col gap-4 border-b border-white/20 pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <span className="teal-hero-kicker inline-flex items-center gap-2 rounded-full border border-[#a7d2b8] bg-white/60 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] dark:border-[#b6dcc0]/40 dark:bg-white/5">
+            <span className="landing-engineering-kicker inline-flex items-center gap-2 rounded-full border border-white/25 bg-[#102d2e]/25 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em]">
               <Code2 className="h-3.5 w-3.5" aria-hidden="true" />
               Engineering · Portfolio case study
             </span>
@@ -1012,7 +1012,7 @@ function EngineeringSection() {
             </h2>
           </div>
 
-          <p className="teal-hero-copy max-w-md text-sm leading-6">
+          <p className="landing-engineering-copy max-w-md text-sm leading-6">
             A closer look at how the React workspace, Angular interview prep
             and shared API fit together.
           </p>
@@ -1020,50 +1020,50 @@ function EngineeringSection() {
 
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
-            <p className="teal-hero-kicker text-sm font-semibold">
+            <p className="landing-engineering-kicker text-sm font-semibold">
               Modular full-stack architecture
             </p>
-            <p className="teal-hero-copy mt-4 max-w-xl leading-7">
+            <p className="landing-engineering-copy mt-4 max-w-xl leading-7">
               React and Angular are separate frontends on Vercel. They share
               one Express API on Render and MongoDB Atlas for user data, with
               access checked on the server.
             </p>
 
-            <p className="teal-hero-copy mt-7 text-xs font-semibold uppercase tracking-[0.18em]">
+            <p className="landing-engineering-copy mt-7 text-xs font-semibold uppercase tracking-[0.18em]">
               Implemented
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {engineeringHighlights.map((item) => (
                 <span
                   key={item}
-                  className="rounded-full border border-[#c7e2d0] bg-white/65 px-3 py-1.5 text-xs font-medium text-[#194d3c] dark:border-[#b6dcc0]/30 dark:bg-white/5 dark:text-[#f3faf5]"
+                  className="rounded-full border border-white/20 bg-[#102d2e]/25 px-3 py-1.5 text-xs font-medium text-[#f8fcf7]"
                 >
                   {item}
                 </span>
               ))}
             </div>
 
-            <p className="teal-hero-kicker mt-7 text-xs font-semibold uppercase tracking-[0.18em]">
+            <p className="landing-engineering-kicker mt-7 text-xs font-semibold uppercase tracking-[0.18em]">
               Planned next
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {engineeringRoadmap.map((item) => (
                 <span
                   key={item}
-                  className="rounded-full border border-dashed border-[#86b79c] bg-white/45 px-3 py-1.5 text-xs font-medium text-[#236b53] dark:border-[#b6dcc0]/50 dark:bg-white/5 dark:text-[#b9ead1]"
+                  className="rounded-full border border-dashed border-[#b9ead1]/50 bg-[#102d2e]/25 px-3 py-1.5 text-xs font-medium text-[#e7ffef]"
                 >
                   {item}
                 </span>
               ))}
             </div>
 
-            <p className="teal-hero-copy mt-4 text-xs leading-5">
+            <p className="landing-engineering-copy mt-4 text-xs leading-5">
               Python/FastAPI job analysis and AI-assisted matching are future
               work; the current backend is a single, modular Express API.
             </p>
           </div>
 
-          <div className="rounded-[2rem] border border-[#b8dfc6] bg-background p-5 text-foreground shadow-xl shadow-[#244235]/10 sm:p-6 dark:border-[#b6dcc0]/30 dark:shadow-black/20">
+          <div className="rounded-[2rem] border border-white/20 bg-background p-5 text-foreground shadow-2xl shadow-black/15 sm:p-6">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-semibold">Production architecture</p>
