@@ -12,6 +12,7 @@ describe("application workflow", () => {
     expect(canMoveApplication("saved", "applied")).toBe(true);
     expect(canMoveApplication("applied", "interview")).toBe(true);
     expect(canMoveApplication("screening", "offer")).toBe(true);
+    expect(canMoveApplication("interview", "screening")).toBe(false);
   });
 
   it("does not allow normal movement out of terminal statuses", () => {

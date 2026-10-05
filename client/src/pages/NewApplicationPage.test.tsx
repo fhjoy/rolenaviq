@@ -63,6 +63,7 @@ describe("NewApplicationPage", () => {
 
     await user.type(screen.getByLabelText("Company"), "Northstar Labs");
     await user.type(screen.getByLabelText("Position"), "Frontend Engineer");
+    await user.type(screen.getByLabelText("Job description"), "  Build accessible React interfaces.  ");
     await user.type(
       screen.getByLabelText("Technologies"),
       "React, TypeScript, Node.js",
@@ -88,6 +89,7 @@ describe("NewApplicationPage", () => {
     expect(submittedBody).toMatchObject({
       company: "Northstar Labs",
       position: "Frontend Engineer",
+      jobDescription: "Build accessible React interfaces.",
       status: "interview",
       technologies: ["React", "TypeScript", "Node.js"],
     });

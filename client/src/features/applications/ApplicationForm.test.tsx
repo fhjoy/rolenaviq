@@ -11,6 +11,7 @@ const defaultValues: ApplicationFormData = {
   company: "",
   position: "",
   jobUrl: "",
+  jobDescription: "",
   location: "",
   workplaceType: "",
   employmentType: "",
@@ -111,6 +112,7 @@ describe("ApplicationForm", () => {
 
     await user.type(screen.getByLabelText("Company"), "Northstar Labs");
     await user.type(screen.getByLabelText("Position"), "Frontend Engineer");
+    await user.type(screen.getByLabelText("Job description"), "Build accessible React interfaces.");
     await user.selectOptions(
       screen.getByLabelText("Status"),
       "interview",
@@ -129,6 +131,7 @@ describe("ApplicationForm", () => {
       expect.objectContaining({
         company: "Northstar Labs",
         position: "Frontend Engineer",
+        jobDescription: "Build accessible React interfaces.",
         status: "interview",
         interviewDate: "2026-10-20T10:30",
       }),

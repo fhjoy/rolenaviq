@@ -48,18 +48,8 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
               ].join(" ")
             }
           >
-            {({ isActive }) => (
-              <>
-                <Icon
-                  className={[
-                    "h-4 w-4 transition-colors",
-                    isActive ? "text-[#9be2ca]" : "group-hover:text-white",
-                  ].join(" ")}
-                  aria-hidden="true"
-                />
-                {item.name}
-              </>
-            )}
+            <Icon className="h-4 w-4 transition-colors" aria-hidden="true" />
+            {item.name}
           </NavLink>
         );
       })}
@@ -70,15 +60,16 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <div className="workspace-sidebar flex h-full flex-col">
-      <div className="workspace-sidebar-brand px-5 pb-7 pt-6">
-        <Brand to="/dashboard" showTagline inverse />
+      <div className="workspace-sidebar-brand px-5 pb-4 pt-6">
+        <Brand to="/dashboard" showTagline />
       </div>
-      <Separator className="opacity-15" />
       <div className="flex-1 px-3 py-5">
+        <Separator className="workspace-sidebar-divider mb-5" />
         <p className="workspace-nav-label px-3 pb-3">Workspace</p>
         <Navigation onNavigate={onNavigate} />
 
-        <div className="workspace-prep-panel mt-8">
+        <Separator className="workspace-sidebar-divider mb-6 mt-7" />
+        <div className="workspace-prep-panel">
           <div className="workspace-prep-icon" aria-hidden="true"><BookOpenCheck className="h-5 w-5" /></div>
           <p className="workspace-prep-kicker">Next conversation</p>
           <p className="workspace-prep-title">Make your story count.</p>
@@ -106,18 +97,8 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             ].join(" ")
           }
         >
-          {({ isActive }) => (
-            <>
-              <Settings
-                className={[
-                  "h-4 w-4",
-                  isActive ? "text-[#9be2ca]" : "group-hover:text-white",
-                ].join(" ")}
-                aria-hidden="true"
-              />
-              Settings
-            </>
-          )}
+          <Settings className="h-4 w-4" aria-hidden="true" />
+          Settings
         </NavLink>
         <LogoutButton />
       </div>

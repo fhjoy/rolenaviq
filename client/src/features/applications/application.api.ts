@@ -33,6 +33,7 @@ export interface CreateApplicationData {
   company: string;
   position: string;
   jobUrl?: string;
+  jobDescription?: string;
   location?: string;
   workplaceType?: WorkplaceType;
   employmentType?: EmploymentType;
@@ -47,6 +48,7 @@ export type UpdateApplicationData = Partial<
   Omit<
     CreateApplicationData,
     | "jobUrl"
+    | "jobDescription"
     | "location"
     | "workplaceType"
     | "employmentType"
@@ -56,6 +58,7 @@ export type UpdateApplicationData = Partial<
   >
 > & {
   jobUrl?: string | null;
+  jobDescription?: string | null;
   location?: string | null;
   workplaceType?: WorkplaceType | null;
   employmentType?: EmploymentType | null;

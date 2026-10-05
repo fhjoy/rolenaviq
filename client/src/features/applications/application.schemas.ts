@@ -26,6 +26,8 @@ export const applicationFormSchema = z
 
     jobUrl: jobUrlSchema,
 
+    jobDescription: z.string().max(20000).optional(),
+
     location: z.string().trim().optional(),
 
     workplaceType: z.union([

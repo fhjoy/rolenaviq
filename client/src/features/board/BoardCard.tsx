@@ -24,7 +24,7 @@ export function BoardCard({
     application.status === "rejected" || application.status === "withdrawn";
   const isDragDisabled = isTerminalStatus(application.status);
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, isDragging } =
     useDraggable({
       id: application._id,
       disabled: isDragDisabled,
@@ -38,15 +38,19 @@ export function BoardCard({
     opacity: isDragging ? 0.25 : 1,
   };
 
+  // Pointer dragging starts on the whole card; the grip stays keyboard-accessible.
   return (
     <article
       ref={setNodeRef}
+      onPointerDown={(event) => listeners?.onPointerDown?.(event)}
       style={style}
       className={[
         "rounded-xl border bg-background p-4 shadow-sm transition-all",
         isDragging
           ? "border-brand/40 shadow-none"
-          : "border-border/70 hover:-translate-y-0.5 hover:shadow-md",
+          : isDragDisabled
+            ? "border-border/70 hover:-translate-y-0.5 hover:shadow-md"
+            : "cursor-grab border-border/70 hover:-translate-y-0.5 hover:shadow-md active:cursor-grabbing",
       ].join(" ")}
     >
       <div className="flex items-start justify-between gap-3">
@@ -65,8 +69,9 @@ export function BoardCard({
         </div>
 
         <button
+          ref={setActivatorNodeRef}
           type="button"
-          {...(!isDragDisabled ? listeners : {})}
+          onKeyDown={(event) => listeners?.onKeyDown?.(event)}
           {...(!isDragDisabled ? attributes : {})}
           disabled={isDragDisabled}
           className={[

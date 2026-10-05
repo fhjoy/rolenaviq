@@ -11,6 +11,7 @@ const defaultValues: ApplicationFormData = {
   company: "",
   position: "",
   jobUrl: "",
+  jobDescription: "",
   location: "",
   workplaceType: "",
   employmentType: "",
@@ -53,6 +54,7 @@ export function NewApplicationPage() {
     mutation.mutate({
       ...data,
       jobUrl: data.jobUrl || undefined,
+      jobDescription: data.jobDescription?.trim() || undefined,
       location: data.location || undefined,
       workplaceType: data.workplaceType || undefined,
       employmentType: data.employmentType || undefined,
