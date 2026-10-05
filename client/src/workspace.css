@@ -26,9 +26,9 @@
 }
 
 .workspace-sidebar-brand img { max-width: 12.5rem; }
-.workspace-sidebar-brand span span:last-child { color: #527263; }
+.workspace-sidebar-brand span span:last-child { color: #466556; }
 .workspace-nav-label, .workspace-prep-kicker {
-  color: #287c62;
+  color: #236b53;
   font-size: .66rem;
   font-weight: 750;
   letter-spacing: .16em;
@@ -81,7 +81,7 @@
   color: #19634f;
 }
 .workspace-prep-title { position: relative; margin: .45rem 0; font-size: 1rem; font-weight: 700; line-height: 1.35; }
-.workspace-prep-copy { position: relative; margin: 0; color: #4b685c; font-size: .79rem; line-height: 1.6; }
+.workspace-prep-copy { position: relative; margin: 0; color: #466556; font-size: .79rem; line-height: 1.6; }
 .workspace-prep-link {
   position: relative;
   margin-top: 1.15rem;
