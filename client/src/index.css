@@ -153,6 +153,26 @@
 .dark .teal-hero-icon, .dark .teal-hero-detail { border-color: #b6dcc04d; background: #ffffff12; }
 .dark .teal-hero a:focus-visible { outline-color: #b9ead1; }
 
+/* Match the subtle square grid used by the signed-in workspace headings. */
+.landing-engineering-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.landing-engineering-section::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background-image: linear-gradient(#3781600b 1px, transparent 1px), linear-gradient(90deg, #3781600b 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  mask-image: linear-gradient(90deg, transparent, #000 75%);
+}
+.dark .landing-engineering-section::before {
+  background-image: linear-gradient(#ddf5e50b 1px, transparent 1px), linear-gradient(90deg, #ddf5e50b 1px, transparent 1px);
+}
+
 
 @keyframes landing-route-flow {
   to {
