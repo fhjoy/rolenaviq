@@ -18,7 +18,10 @@ vi.mock("@/features/dashboard/MonthlyActivityChart", () => ({
 
 const API_URL = "http://localhost/api";
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+});
 
 function application(number: number) {
   return {
@@ -49,6 +52,41 @@ function pagedResponse(page: number) {
 }
 
 describe("infinite applications", () => {
+  it("loads each next page on scroll even if the intersection observer misses it", async () => {
+    vi.stubGlobal("IntersectionObserver", class {
+      observe() {}
+      disconnect() {}
+    });
+    vi.stubGlobal("requestAnimationFrame", () => 1);
+    vi.stubGlobal("cancelAnimationFrame", () => {});
+
+    server.use(
+      http.get(`${API_URL}/applications`, ({ request }) => {
+        const page = Number(new URL(request.url).searchParams.get("page"));
+        return HttpResponse.json({
+          applications: Array.from({ length: 10 }, (_, index) => application((page - 1) * 10 + index + 1)),
+          pagination: { page, limit: 10, total: 30, totalPages: 3, hasNextPage: page < 3, hasPreviousPage: page > 1 },
+        });
+      }),
+    );
+
+    renderWithProviders(<ApplicationsPage />, { route: "/applications" });
+    expect(await screen.findByText("Role 1")).toBeInTheDocument();
+
+    const footer = screen.getByText("Showing 10 of 30 applications").parentElement!;
+    vi.spyOn(footer, "getBoundingClientRect").mockReturnValue({
+      top: window.innerHeight - 20,
+      bottom: window.innerHeight + 20,
+    } as DOMRect);
+
+    act(() => window.dispatchEvent(new Event("scroll")));
+    expect(await screen.findByText("Role 20")).toBeInTheDocument();
+
+    act(() => window.dispatchEvent(new Event("scroll")));
+    expect(await screen.findByText("Role 30")).toBeInTheDocument();
+    expect(screen.getByText("Showing 30 of 30 applications")).toBeInTheDocument();
+  });
+
   it("fetches the next page when the list reaches the viewport", async () => {
     let onIntersect: IntersectionObserverCallback | undefined;
     vi.stubGlobal("IntersectionObserver", class {
