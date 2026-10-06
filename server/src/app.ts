@@ -34,6 +34,7 @@ app.get("/api/health", (_req, res) => {
   res.status(200).json({
     status: "ok",
     service: "RoleNaviq API",
+    commit: process.env.RENDER_GIT_COMMIT ?? null,
   });
 });
 
