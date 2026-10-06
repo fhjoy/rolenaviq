@@ -35,12 +35,15 @@ describe("board and calendar workflows", () => {
     cy.contains("Upcoming interviews")
       .parent()
       .parent()
-      .should("contain.text", "2 scheduled");
+      .should("contain.text", "5 scheduled");
 
     cy.contains("article", "Frontend Engineer")
       .should("contain.text", "Northstar Labs");
 
     cy.contains("article", "Full Stack Developer")
       .should("contain.text", "Cloudforge");
+
+    cy.contains("article", "UX Engineer")
+      .should("contain.text", "Wavefront Health");
   });
 });
