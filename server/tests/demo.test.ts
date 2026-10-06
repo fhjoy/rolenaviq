@@ -24,7 +24,25 @@ describe("Demo account", () => {
       userId: demoUserId,
     });
 
-    expect(initialCount).toBeGreaterThan(0);
+    expect(initialCount).toBe(30);
+
+    const pages = await Promise.all(
+      [1, 2, 3].map((page) =>
+        agent.get("/api/applications").query({ page, limit: 10 }),
+      ),
+    );
+
+    expect(pages.map((page) => page.body.applications.length)).toEqual([10, 10, 10]);
+    expect(pages.map((page) => page.body.pagination.hasNextPage)).toEqual([
+      true,
+      true,
+      false,
+    ]);
+    expect(
+      new Set(pages.flatMap((page) =>
+        page.body.applications.map((application: { _id: string }) => application._id),
+      )).size,
+    ).toBe(30);
 
     const oneApplication = await Application.findOne({
       userId: demoUserId,
