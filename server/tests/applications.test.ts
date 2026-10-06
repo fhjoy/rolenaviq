@@ -296,4 +296,28 @@ describe("Applications API", () => {
       ),
     ).toEqual(["Delta", "Epsilon"]);
   });
+
+  it("uses a consistent order for applications with the same sort value", async () => {
+    const { agent } = await createAuthenticatedAgent();
+
+    for (let index = 0; index < 3; index++) {
+      await agent.post("/api/applications").send({
+        ...validApplication,
+        company: "Same company",
+        position: `Position ${index}`,
+      });
+    }
+
+    const full = await agent.get("/api/applications").query({ sort: "company" });
+    const pages = await Promise.all(
+      [1, 2, 3].map((page) =>
+        agent.get("/api/applications").query({ sort: "company", limit: 1, page }),
+      ),
+    );
+
+    expect(pages.map((page) => page.status)).toEqual([200, 200, 200]);
+    expect(pages.map((page) => page.body.applications[0]._id)).toEqual(
+      full.body.applications.map((application: { _id: string }) => application._id),
+    );
+  });
 });
