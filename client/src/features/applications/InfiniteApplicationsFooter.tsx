@@ -19,14 +19,14 @@ export function InfiniteApplicationsFooter({
   isFetchNextPageError,
   onLoadMore,
 }: InfiniteApplicationsFooterProps) {
-  const sentinelRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (
       !hasNextPage ||
       isFetchingNextPage ||
       isFetchNextPageError ||
-      !sentinelRef.current ||
+      !footerRef.current ||
       typeof IntersectionObserver === "undefined"
     ) {
       return;
@@ -39,12 +39,12 @@ export function InfiniteApplicationsFooter({
       { rootMargin: "0px 0px 240px 0px" },
     );
 
-    observer.observe(sentinelRef.current);
+    observer.observe(footerRef.current);
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, isFetchNextPageError, onLoadMore]);
 
   return (
-    <div className="mt-6 border-t px-4 py-5 text-center">
+    <div ref={footerRef} className="mt-6 border-t px-4 py-5 text-center">
       <p className="text-sm text-muted-foreground" aria-live="polite">
         Showing {loadedCount} of {total} applications
       </p>
@@ -55,7 +55,6 @@ export function InfiniteApplicationsFooter({
       )}
       {hasNextPage && (
         <>
-          <div ref={sentinelRef} className="h-1" aria-hidden="true" />
           <Button
             type="button"
             variant="outline"
