@@ -55,7 +55,7 @@ export function InfiniteApplicationsFooter({
       )}
       {hasNextPage && (
         <>
-          <div ref={sentinelRef} aria-hidden="true" />
+          <div ref={sentinelRef} className="h-1" aria-hidden="true" />
           <Button
             type="button"
             variant="outline"
