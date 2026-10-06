@@ -7,22 +7,29 @@ I built RoleNaviq to keep the moving parts of a job search in one place. Save op
 ## What it does
 
 - Track applications from saved roles through interviews and offers.
-- Switch between a searchable list, a board, a calendar, and a dashboard.
+- Switch between a searchable list that loads as you scroll, a board, a calendar, and a dashboard.
 - Keep job links, technologies, salary details, notes, and interview dates together.
 - Prepare for interviews with a checklist, a question bank, saved notes, and practice sessions.
 - Use your own account or explore the app with the demo login.
 
-## Built with
+## Architecture
 
-- **Frontends:** React, TypeScript, Vite, Tailwind CSS, TanStack Query; Angular with NgRx Store and Effects for interview preparation.
-- **Backend:** One Node.js/Express API, MongoDB, Mongoose, and JWT authentication with HttpOnly cookies.
-- **Testing and delivery:** Vitest, React Testing Library, Supertest, Cypress, Docker Compose, GitHub Actions.
+This is one repository with two frontends and one API:
 
-## How it fits together
+| Part | Location | What it does | Production |
+| --- | --- | --- | --- |
+| React workspace | `client/src/` | Applications, board, calendar, dashboard, account | Vercel |
+| Angular Interview Prep | `client/prep/` | Plans, questions, notes, practice sessions | Separate Vercel project |
+| Express API | `server/src/` | Authentication, application and prep data, dashboard stats | Render + MongoDB Atlas |
 
-React runs the main workspace and Angular runs Interview Prep at `/prep/`. They are separate Vercel projects built from this repository. The main site routes `/prep/` to Angular and `/api/` to the Express API on Render, so both frontends use the same signed-in session. Express owns the application logic and stores user data in MongoDB Atlas.
+The React site serves `/` and rewrites `/prep/` to Angular and `/api/` to Express. Both frontends use the same API and signed-in cookie. This is a **route-based micro-frontend** setup: React and Angular have separate builds and deployments, while sharing this repository and backend. There is no Module Federation or separate Python service today. Python/FastAPI job analysis and AI features are future work.
 
-The backend is one modular API, not a set of independently deployed backend microservices. Python/FastAPI job analysis and AI-assisted matching are planned for later.
+## Tech
+
+- **React workspace:** React, TypeScript, Vite, React Router, Tailwind CSS, TanStack Query, React Hook Form and Zod.
+- **Interview Prep:** Angular, TypeScript, Angular Router and NgRx Store/Effects.
+- **API and data:** Node.js, Express, MongoDB Atlas, Mongoose, Zod and JWT in HttpOnly cookies.
+- **Tests and delivery:** Vitest, React Testing Library, Supertest, mongodb-memory-server, Cypress, Docker Compose, GitHub Actions, Vercel and Render.
 
 ## Run locally
 

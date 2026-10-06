@@ -113,9 +113,10 @@ export const getApplications = async (
 
     const sortDescending = sort.startsWith("-");
     const sortField = sortDescending ? sort.substring(1) : sort;
-    const sortOption = {
+    const sortOption: Record<string, 1 | -1> = {
       [sortField]: sortDescending ? -1 : 1,
-    } as Record<string, 1 | -1>;
+      _id: sortDescending ? -1 : 1,
+    };
     const skip = (page - 1) * limit;
 
     const [applications, total] = await Promise.all([

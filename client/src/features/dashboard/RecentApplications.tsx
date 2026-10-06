@@ -1,4 +1,5 @@
 import { ArrowRight, BriefcaseBusiness } from "lucide-react";
+import type { ReactNode } from "react";
 import { Link } from "react-router";
 
 import { Badge } from "@/components/ui/badge";
@@ -13,9 +14,19 @@ import type { Application } from "@/types/application";
 
 interface RecentApplicationsProps {
   applications: Application[];
+  isPending: boolean;
+  isError: boolean;
+  onRetry: () => void;
+  footer: ReactNode;
 }
 
-export function RecentApplications({ applications }: RecentApplicationsProps) {
+export function RecentApplications({
+  applications,
+  isPending,
+  isError,
+  onRetry,
+  footer,
+}: RecentApplicationsProps) {
   return (
     <section className="workspace-recent-applications overflow-hidden rounded-xl border bg-background shadow-sm">
       <div className="flex flex-col justify-between gap-4 border-b p-5 sm:flex-row sm:items-center">
@@ -33,7 +44,18 @@ export function RecentApplications({ applications }: RecentApplicationsProps) {
         </Button>
       </div>
 
-      {applications.length === 0 ? (
+      {isPending ? (
+        <p className="px-5 py-12 text-center text-sm text-muted-foreground" role="status">
+          Loading applications...
+        </p>
+      ) : isError ? (
+        <div className="px-5 py-12 text-center">
+          <p role="alert">Could not load recent applications.</p>
+          <Button className="mt-4" variant="outline" onClick={onRetry}>
+            Try again
+          </Button>
+        </div>
+      ) : applications.length === 0 ? (
         <div className="flex flex-col items-center px-5 py-12 text-center">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <BriefcaseBusiness className="h-5 w-5" aria-hidden="true" />
@@ -50,39 +72,42 @@ export function RecentApplications({ applications }: RecentApplicationsProps) {
           </Button>
         </div>
       ) : (
-        <div className="divide-y">
-          {applications.map((application) => (
-            <Link
-              key={application._id}
-              to={`/applications/${application._id}`}
-              className="group flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-muted/40"
-            >
-              <div className="flex min-w-0 items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <BriefcaseBusiness className="h-4 w-4" aria-hidden="true" />
-                </div>
-
-                <div className="min-w-0">
-                  <p className="truncate font-medium">{application.position}</p>
-
-                  <p className="truncate text-sm text-muted-foreground">
-                    {application.company}
-                  </p>
-                </div>
-              </div>
-
-              <Badge
-                variant="outline"
-                className={[
-                  "shrink-0",
-                  applicationStatusStyles[application.status],
-                ].join(" ")}
+        <>
+          <div className="divide-y">
+            {applications.map((application) => (
+              <Link
+                key={application._id}
+                to={`/applications/${application._id}`}
+                className="group flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-muted/40"
               >
-                {applicationStatusLabels[application.status]}
-              </Badge>
-            </Link>
-          ))}
-        </div>
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                    <BriefcaseBusiness className="h-4 w-4" aria-hidden="true" />
+                  </div>
+
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{application.position}</p>
+
+                    <p className="truncate text-sm text-muted-foreground">
+                      {application.company}
+                    </p>
+                  </div>
+                </div>
+
+                <Badge
+                  variant="outline"
+                  className={[
+                    "shrink-0",
+                    applicationStatusStyles[application.status],
+                  ].join(" ")}
+                >
+                  {applicationStatusLabels[application.status]}
+                </Badge>
+              </Link>
+            ))}
+          </div>
+          {footer}
+        </>
       )}
     </section>
   );

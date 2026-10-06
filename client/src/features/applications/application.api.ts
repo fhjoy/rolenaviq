@@ -11,6 +11,7 @@ import type {
 
 export function getApplications(
   params: ApplicationQueryParams = {},
+  signal?: AbortSignal,
 ): Promise<ApplicationsResponse> {
   const searchParams = new URLSearchParams();
 
@@ -26,6 +27,7 @@ export function getApplications(
 
   return apiRequest<ApplicationsResponse>(
     `/applications${queryString ? `?${queryString}` : ""}`,
+    { signal },
   );
 }
 

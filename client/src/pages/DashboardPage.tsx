@@ -16,7 +16,8 @@ import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 
 import { useCurrentUser } from "@/features/auth/useCurrentUser";
-import { useApplications } from "@/features/applications/useApplications";
+import { InfiniteApplicationsFooter } from "@/features/applications/InfiniteApplicationsFooter";
+import { useInfiniteApplications } from "@/features/applications/useInfiniteApplications";
 import { MonthlyActivityChart } from "@/features/dashboard/MonthlyActivityChart";
 import { RecentApplications } from "@/features/dashboard/RecentApplications";
 import { StatsCard } from "@/features/dashboard/StatsCard";
@@ -30,11 +31,12 @@ export function DashboardPage() {
 
   const { data, isLoading, isError } = useDashboardStats();
 
-  const { data: recentApplicationsData } = useApplications({
-    page: 1,
+  const recentApplications = useInfiniteApplications({
     limit: 10,
     sort: "-createdAt",
   });
+  const loadedApplications =
+    recentApplications.data?.pages.flatMap((page) => page.applications) ?? [];
 
   const stats = data?.stats;
 
@@ -157,7 +159,20 @@ export function DashboardPage() {
 
           <div className="mt-6 w-full">
             <RecentApplications
-              applications={recentApplicationsData?.applications ?? []}
+              applications={loadedApplications}
+              isPending={recentApplications.isPending}
+              isError={recentApplications.isError && !recentApplications.data}
+              onRetry={() => void recentApplications.refetch()}
+              footer={loadedApplications.length > 0 && (
+                <InfiniteApplicationsFooter
+                  loadedCount={loadedApplications.length}
+                  total={recentApplications.data?.pages[0]?.pagination.total ?? 0}
+                  hasNextPage={recentApplications.hasNextPage}
+                  isFetchingNextPage={recentApplications.isFetchingNextPage}
+                  isFetchNextPageError={recentApplications.isFetchNextPageError}
+                  onLoadMore={() => void recentApplications.fetchNextPage()}
+                />
+              )}
             />
           </div>
         </>
