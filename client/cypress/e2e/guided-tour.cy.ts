@@ -25,8 +25,13 @@ describe("guided demo route", () => {
     cy.contains("Guided tour · Step 1 of 3").should("not.exist");
   });
 
-  it("lets a demo visitor start the tour after signing in normally", () => {
+  it("shows the tour on first demo login and lets visitors replay it later", () => {
     cy.loginDemo();
+    cy.contains("Guided tour · Step 1 of 3").should("be.visible");
+    cy.contains("a", "Skip tour").click();
+    cy.contains("Guided tour · Step 1 of 3").should("not.exist");
+    cy.reload();
+    cy.contains("Guided tour · Step 1 of 3").should("not.exist");
     cy.contains("a", "Take guided tour").click();
     cy.location("search").should("eq", "?tour=1");
     cy.contains("Guided tour · Step 1 of 3").should("be.visible");

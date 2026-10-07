@@ -11,10 +11,12 @@ interface DemoTourCardProps {
   action: string;
   external?: boolean;
   loading?: boolean;
+  onContinue?: () => void;
+  onSkip?: () => void;
 }
 
 export function DemoTourCard({
-  step, title, description, destination, action, external = false, loading = false,
+  step, title, description, destination, action, external = false, loading = false, onContinue, onSkip,
 }: DemoTourCardProps) {
   return (
     <section aria-labelledby={`demo-tour-step-${step}`} className="mt-6 rounded-2xl border border-[#b5d9bf] bg-[#f8fcf8] p-5 text-foreground shadow-sm dark:border-[#7aac88] dark:bg-[#315247] sm:p-6">
@@ -23,11 +25,11 @@ export function DemoTourCard({
       <p className="mt-2 max-w-2xl text-sm leading-6">{description}</p>
       <div className="mt-5 flex flex-wrap items-center gap-4">
         {destination ? (
-          <Button render={external ? <a href={destination} /> : <Link to={destination} />}>
+          <Button render={external ? <a href={destination} onClick={onContinue} /> : <Link to={destination} onClick={onContinue} />}>
             {action} <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Button>
         ) : <span role="status" className="text-sm">{loading ? "Finding the example application…" : "The example is unavailable. You can still explore the workspace."}</span>}
-        <Link className="text-sm font-medium underline underline-offset-4" to="/dashboard">Skip tour</Link>
+        <Link className="text-sm font-medium underline underline-offset-4" to="/dashboard" onClick={onSkip}>Skip tour</Link>
       </div>
     </section>
   );
