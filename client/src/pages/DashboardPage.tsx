@@ -13,6 +13,7 @@ import {
 
 import { Link, useSearchParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -29,10 +30,34 @@ import { DashboardSkeleton } from "@/features/dashboard/DashboardSkeleton";
 import { DemoTourCard } from "@/components/common/DemoTourCard";
 import { getApplications } from "@/features/applications/application.api";
 
+function hasSeenDemoTour(userId: string) {
+  try {
+    return window.localStorage.getItem(`rolenaviq:guided-tour:${userId}`) === "seen";
+  } catch {
+    return false;
+  }
+}
+
 export function DashboardPage() {
   const { data: userData } = useCurrentUser();
   const [searchParams] = useSearchParams();
-  const showTour = searchParams.get("tour") === "1" && userData?.user.isDemo === true;
+  const [dismissedForUser, setDismissedForUser] = useState<string | null>(null);
+  const demoUserId = userData?.user.isDemo ? userData.user.id : undefined;
+  const tourParam = searchParams.get("tour");
+  const showTour = demoUserId !== undefined && (
+    tourParam === "1" ||
+    (tourParam === null && dismissedForUser !== demoUserId && !hasSeenDemoTour(demoUserId))
+  );
+
+  const markTourSeen = () => {
+    if (!demoUserId) return;
+    try {
+      window.localStorage.setItem(`rolenaviq:guided-tour:${demoUserId}`, "seen");
+    } catch {
+      // The card can still be dismissed for this visit when storage is unavailable.
+    }
+    setDismissedForUser(demoUserId);
+  };
   const featured = useQuery({
     queryKey: ["demo-tour", userData?.user.id, "northstar"],
     queryFn: () => getApplications({ search: "Northstar Labs", limit: 10 }),
@@ -97,6 +122,8 @@ export function DashboardPage() {
           destination={example ? `/applications/${example._id}?tour=1` : undefined}
           action="View example application"
           loading={featured.isPending}
+          onContinue={markTourSeen}
+          onSkip={markTourSeen}
         />
       )}
 
