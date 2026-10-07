@@ -285,7 +285,7 @@ function HeroNavigationPreview() {
 
 function ChaosToClarity() {
   return (
-    <section className="border-y bg-muted/25">
+    <section className="landing-soft-section border-y">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold text-brand">
@@ -738,7 +738,7 @@ function ProductShowcase() {
   ];
 
   return (
-    <section id="features" className="border-y bg-card/35">
+    <section id="features" className="landing-soft-section border-y">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold text-brand">
@@ -815,7 +815,7 @@ function InterviewPrepSection() {
   return (
     <section
       id="interview-prep"
-      className="border-y bg-muted/25"
+      className="landing-soft-section border-y"
     >
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-2 lg:gap-16 lg:px-8">
         <div className="lg:col-start-2 lg:row-start-1">
@@ -933,7 +933,7 @@ function ArchitectureConnector({
 
 function GuidedTourSection() {
   return (
-    <section id="guided-tour" aria-labelledby="guided-tour-heading" className="border-y border-[#d8e9dd] bg-[#f3f9f4] dark:border-[#416052] dark:bg-[#1e3029]">
+    <section id="guided-tour" aria-labelledby="guided-tour-heading" className="border-y bg-background">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-14 lg:px-8">
         <div>
           <p className="text-sm font-semibold text-[#24523e] dark:text-[#c0e9ce]">New to RoleNaviq?</p>
@@ -982,15 +982,8 @@ function ExploreCtaSection() {
             </h2>
             <p className="teal-hero-copy mt-3 max-w-2xl">
               Open the live demo and move through the dashboard, application
-              board, calendar and interview preparation. Follow a short tour
-              if you would like a starting point.
+              board, calendar and interview preparation at your own pace.
             </p>
-
-            {/* <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
-              <span>Product tour</span>
-              <FlowConnector />
-              <span>Dashboard</span>
-            </div> */}
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -1001,15 +994,6 @@ function ExploreCtaSection() {
             >
               Explore live demo
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Button>
-
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-[#86b79c] bg-[#e1f1e6] text-[#194d3c] hover:bg-[#d1e9da] hover:text-[#194d3c] dark:border-[#b6dcc0]/50 dark:bg-[#315546] dark:text-[#f3faf5] dark:hover:bg-[#416b57] dark:hover:text-white"
-              render={<Link to={guidedTourLogin} />}
-            >
-              Take the guided tour
             </Button>
 
             <Button

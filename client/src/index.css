@@ -137,6 +137,14 @@
   }
 }
 
+/* Two quiet surfaces keep the landing sections in the same color family. */
+.landing-soft-section { background: #f1f7f2; border-color: #d7e7da; }
+.landing-soft-section .text-brand { color: #236b53; }
+.landing-soft-section .text-muted-foreground { color: #4b685c; }
+.dark .landing-soft-section { background: #20362e; border-color: #416052; }
+.dark .landing-soft-section .text-brand { color: #b9ead1; }
+.dark .landing-soft-section .text-muted-foreground { color: #c7dfd2; }
+
 /* A consistent, readable hero surface for the public demo and auth story. */
 .teal-hero {
   background: linear-gradient(105deg, #e7f5eb 0%, #f1f9f2 68%, #fffdf5 100%);

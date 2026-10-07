@@ -17,7 +17,7 @@ export function DemoTourCard({
   step, title, description, destination, action, external = false, loading = false,
 }: DemoTourCardProps) {
   return (
-    <section aria-labelledby={`demo-tour-step-${step}`} className="mt-6 rounded-2xl border border-[#a8d0b7] bg-[#e9f5ed] p-5 text-foreground shadow-sm dark:border-[#537c68] dark:bg-[#203e33] sm:p-6">
+    <section aria-labelledby={`demo-tour-step-${step}`} className="mt-6 rounded-2xl border border-[#b5d9bf] bg-[#f8fcf8] p-5 text-foreground shadow-sm dark:border-[#7aac88] dark:bg-[#315247] sm:p-6">
       <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#24523e] dark:text-[#c0e9ce]">Guided tour · Step {step} of 3</p>
       <h2 id={`demo-tour-step-${step}`} className="mt-2 text-xl font-semibold">{title}</h2>
       <p className="mt-2 max-w-2xl text-sm leading-6">{description}</p>

@@ -101,7 +101,7 @@ export function DashboardPage() {
       )}
 
       {searchParams.get("tour") === "done" && userData?.user.isDemo === true && (
-        <section aria-labelledby="demo-tour-done" className="mt-6 rounded-2xl border border-[#a8d0b7] bg-[#e9f5ed] p-5 dark:border-[#537c68] dark:bg-[#203e33] sm:p-6">
+        <section aria-labelledby="demo-tour-done" className="mt-6 rounded-2xl border border-[#b5d9bf] bg-[#f8fcf8] p-5 dark:border-[#7aac88] dark:bg-[#315247] sm:p-6">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#24523e] dark:text-[#c0e9ce]">Guided tour complete</p>
           <h2 id="demo-tour-done" className="mt-2 text-xl font-semibold">You have a plan for the conversation.</h2>
           <p className="mt-2 text-sm">Your saved preparation stays in this demo workspace. Explore the board or calendar next.</p>
