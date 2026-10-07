@@ -11,7 +11,8 @@ import {
   XCircle,
 } from "lucide-react";
 
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 
@@ -25,9 +26,21 @@ import { StatusChart } from "@/features/dashboard/StatusChart";
 import { useDashboardStats } from "@/features/dashboard/useDashboardStats";
 import { PageError } from "@/components/common/PageError";
 import { DashboardSkeleton } from "@/features/dashboard/DashboardSkeleton";
+import { DemoTourCard } from "@/components/common/DemoTourCard";
+import { getApplications } from "@/features/applications/application.api";
 
 export function DashboardPage() {
   const { data: userData } = useCurrentUser();
+  const [searchParams] = useSearchParams();
+  const showTour = searchParams.get("tour") === "1" && userData?.user.isDemo === true;
+  const featured = useQuery({
+    queryKey: ["demo-tour", userData?.user.id, "northstar"],
+    queryFn: () => getApplications({ search: "Northstar Labs", limit: 10 }),
+    enabled: showTour,
+  });
+  const example = featured.data?.applications.find(
+    (application) => application.company === "Northstar Labs" && application.status === "interview",
+  );
 
   const { data, isLoading, isError } = useDashboardStats();
 
@@ -70,6 +83,30 @@ export function DashboardPage() {
           <p>One clear view of what comes next.</p>
         </div>
       </section>
+
+      {showTour && (
+        <DemoTourCard
+          step={1}
+          title="Start with an interview in your dashboard"
+          description="Your demo has 30 applications. Open the Northstar Labs example to see its status, interview date and job description."
+          destination={example ? `/applications/${example._id}?tour=1` : undefined}
+          action="View example application"
+          loading={featured.isPending}
+        />
+      )}
+
+      {searchParams.get("tour") === "done" && userData?.user.isDemo === true && (
+        <section aria-labelledby="demo-tour-done" className="mt-6 rounded-2xl border border-[#a8d0b7] bg-[#e9f5ed] p-5 dark:border-[#537c68] dark:bg-[#203e33] sm:p-6">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#24523e] dark:text-[#c0e9ce]">Guided tour complete</p>
+          <h2 id="demo-tour-done" className="mt-2 text-xl font-semibold">You have a plan for the conversation.</h2>
+          <p className="mt-2 text-sm">Your saved preparation stays in this demo workspace. Explore the board or calendar next.</p>
+          <div className="mt-4 flex flex-wrap gap-5 text-sm font-semibold underline underline-offset-4">
+            <Link to="/board">Explore the board</Link>
+            <Link to="/calendar">Open the calendar</Link>
+            <Link to="/dashboard">Dismiss</Link>
+          </div>
+        </section>
+      )}
 
       {isLoading && <DashboardSkeleton />}
 

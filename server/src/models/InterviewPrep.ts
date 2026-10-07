@@ -2,6 +2,7 @@ import { Schema, model, Types } from "mongoose";
 
 export interface IInterviewPrep {
   userId: Types.ObjectId;
+  expiresAt?: Date;
   applicationId: Types.ObjectId;
   completedTasks: string[];
   practice: { questionId: string; answer: string; practiced: boolean }[];
@@ -15,6 +16,7 @@ export interface IInterviewPrep {
 const interviewPrepSchema = new Schema<IInterviewPrep>(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    expiresAt: { type: Date },
     applicationId: {
       type: Schema.Types.ObjectId,
       ref: "Application",
@@ -58,5 +60,6 @@ const interviewPrepSchema = new Schema<IInterviewPrep>(
 );
 
 interviewPrepSchema.index({ userId: 1, applicationId: 1 }, { unique: true });
+interviewPrepSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export default model<IInterviewPrep>("InterviewPrep", interviewPrepSchema);

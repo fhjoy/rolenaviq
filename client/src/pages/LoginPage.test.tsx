@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation } from "react-router";
 import { describe, expect, it } from "vitest";
 
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/config/demo";
@@ -12,11 +12,16 @@ import { LoginPage } from "./LoginPage";
 
 const API_URL = "http://localhost/api";
 
+function DashboardDestination() {
+  const { search } = useLocation();
+  return <div>Dashboard destination {search}</div>;
+}
+
 function renderLogin(route = "/login") {
   return renderWithProviders(
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/dashboard" element={<div>Dashboard destination</div>} />
+      <Route path="/dashboard" element={<DashboardDestination />} />
     </Routes>,
     {
       route,
@@ -95,7 +100,7 @@ describe("LoginPage", () => {
     );
 
     expect(
-      await screen.findByText("Dashboard destination"),
+      await screen.findByText("Dashboard destination", { exact: false }),
     ).toBeInTheDocument();
   });
 
@@ -146,5 +151,14 @@ describe("LoginPage", () => {
         name: "Enter demo",
       }),
     ).toBeInTheDocument();
+  });
+
+  it("starts the guided route only after a demo login", async () => {
+    server.use(http.post(`${API_URL}/auth/login`, () => HttpResponse.json({
+      user: { id: "private-demo", firstName: "Demo", lastName: "Role", email: DEMO_EMAIL, isDemo: true },
+    })));
+    renderLogin("/login?demo=1&returnTo=%2Fdashboard%3Ftour%3D1");
+    await userEvent.setup().click(screen.getByRole("button", { name: "Enter demo" }));
+    expect(await screen.findByText("Dashboard destination ?tour=1")).toBeInTheDocument();
   });
 });

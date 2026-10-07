@@ -943,7 +943,8 @@ function ExploreCtaSection() {
             </h2>
             <p className="teal-hero-copy mt-3 max-w-2xl">
               Open the live demo and move through the dashboard, application
-              board, calendar and real job-search workflow.
+              board, calendar and interview preparation. Follow a short tour
+              if you would like a starting point.
             </p>
 
             {/* <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
@@ -953,7 +954,7 @@ function ExploreCtaSection() {
             </div> */}
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Button
               size="lg"
               className="landing-demo-button bg-[#194d3c] text-white hover:bg-[#267459] dark:bg-[#b9ead1] dark:text-[#173b30] dark:hover:bg-[#e3fae9]"
@@ -961,6 +962,15 @@ function ExploreCtaSection() {
             >
               Explore live demo
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Button>
+
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-[#86b79c] bg-white/80 text-[#194d3c] hover:bg-white hover:text-[#194d3c] dark:border-[#b6dcc0]/50 dark:bg-white/5 dark:text-[#f3faf5] dark:hover:bg-white/15 dark:hover:text-white"
+              render={<Link to="/login?demo=1&returnTo=%2Fdashboard%3Ftour%3D1" />}
+            >
+              Take the guided tour
             </Button>
 
             <Button

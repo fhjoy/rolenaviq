@@ -95,6 +95,10 @@ h3 { font-size: 1rem; }
 p { line-height: 1.6; }
 .muted { color: var(--muted); }
 .panel { border: 1px solid var(--border); border-radius: .9rem; background: var(--card); padding: 1.5rem; box-shadow: 0 4px 16px #25303b09; }
+.guided-tour { margin-bottom: 1.5rem; border-color: #a8d0b7; background: #e9f5ed; }
+.guided-tour p { max-width: 42rem; }
+.guided-tour-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem 1.5rem; margin-top: 1rem; }
+.guided-tour-actions .back-link { margin: 0; }
 .interview-grid, .prep-grid, .question-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); }
 .interview-card { display: flex; flex-direction: column; align-items: flex-start; gap: .35rem; border-top: 3px solid #82bbaa; transition: border-color .2s, box-shadow .2s; }
 .interview-card:hover { border-color: #82bbaa; box-shadow: 0 8px 24px #25303b10; }

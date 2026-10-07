@@ -27,7 +27,7 @@ import type { User } from "@/types/auth";
 
 function ProfileForm({ user }: { user: User }) {
   const queryClient = useQueryClient();
-  const isDemoUser = user.email === DEMO_EMAIL;
+  const isDemoUser = user.isDemo || user.email === DEMO_EMAIL;
 
   const {
     register,
@@ -72,7 +72,7 @@ function ProfileForm({ user }: { user: User }) {
           <div>
             <p className="font-medium">Demo profile is protected</p>
             <p className="mt-1 text-muted-foreground">
-              You can explore applications, the board and the calendar, but the public demo account details cannot be changed.
+              You can explore applications, the board and the calendar. Demo profile details cannot be changed.
             </p>
           </div>
         </div>

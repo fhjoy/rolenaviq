@@ -5,6 +5,8 @@ export interface IUser {
   lastName: string;
   email: string;
   passwordHash: string;
+  isDemo: boolean;
+  expiresAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -36,11 +38,15 @@ const userSchema = new Schema<IUser>(
       required: true,
       select: false,
     },
+    isDemo: { type: Boolean, default: false },
+    expiresAt: { type: Date },
   },
   {
     timestamps: true,
   },
 );
+
+userSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const User = model<IUser>("User", userSchema);
 

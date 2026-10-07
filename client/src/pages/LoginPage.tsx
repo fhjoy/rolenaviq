@@ -48,7 +48,9 @@ export function LoginPage() {
     mutationFn: loginUser,
     onSuccess: (data) => {
       queryClient.setQueryData(["auth", "me"], { user: data.user });
-      if (returnTo?.startsWith("/prep/") && !returnTo.includes("\\")) {
+      if (isDemoLogin && returnTo === "/dashboard?tour=1" && data.user.isDemo) {
+        navigate(returnTo);
+      } else if (returnTo?.startsWith("/prep/") && !returnTo.includes("\\")) {
         window.location.assign(returnTo);
       } else {
         navigate("/dashboard");
@@ -84,7 +86,7 @@ export function LoginPage() {
           </CardTitle>
           <CardDescription>
             {isDemoLogin
-              ? "The demo credentials are already filled in. Sign in to explore the dashboard, board and calendar."
+              ? "The demo credentials are already filled in. Sign in to explore your own temporary workspace."
               : "Sign in to continue managing your job search."}
           </CardDescription>
         </CardHeader>
@@ -122,9 +124,9 @@ export function LoginPage() {
 
           {isDemoLogin && (
             <div className="mb-5 rounded-xl border border-brand/20 bg-brand/8 p-4 text-sm">
-              <p className="font-medium">Public demo account</p>
+              <p className="font-medium">Your demo workspace</p>
               <p className="mt-1 text-muted-foreground">
-                Feel free to move applications and explore the workflow. Demo data is restored on the next demo login, while the demo profile itself stays protected.
+                Feel free to move applications and explore the workflow. Your changes are separate from other visitors and expire after seven days. The demo profile stays protected.
               </p>
             </div>
           )}

@@ -1,7 +1,7 @@
 import { ArrowLeft, BookOpenCheck, CalendarDays, ExternalLink, Pencil, Trash2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 import { toast } from "sonner";
 
 import { PageError } from "@/components/common/PageError";
@@ -18,6 +18,8 @@ import {
 } from "@/features/applications/application-display";
 import { deleteApplication } from "@/features/applications/application.api";
 import { useApplication } from "@/features/applications/useApplication";
+import { useCurrentUser } from "@/features/auth/useCurrentUser";
+import { DemoTourCard } from "@/components/common/DemoTourCard";
 
 function formatDate(value?: string) {
   if (!value) return "—";
@@ -35,6 +37,8 @@ function formatDateTime(value?: string) {
 export function ApplicationDetailsPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { data: userData } = useCurrentUser();
   const queryClient = useQueryClient();
   const { data, isLoading, isError, refetch } = useApplication(id);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -77,6 +81,8 @@ export function ApplicationDetailsPage() {
   }
 
   const application = data.application;
+  const showTour = searchParams.get("tour") === "1" && userData?.user.isDemo === true;
+  const prepUrl = `/prep/interviews/${application._id}${showTour ? "?tour=1" : ""}`;
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -104,7 +110,7 @@ export function ApplicationDetailsPage() {
 
           <div className="flex flex-wrap gap-2">
             {(application.status === "interview" || application.status === "technical_interview") && (
-              <Button variant="outline" render={<a href={`/prep/interviews/${application._id}`} />}>
+              <Button variant="outline" render={<a href={prepUrl} />}>
                 <BookOpenCheck className="h-4 w-4" aria-hidden="true" />
                 Prepare for interview
               </Button>
@@ -135,6 +141,17 @@ export function ApplicationDetailsPage() {
           </div>
         </div>
       </section>
+
+      {showTour && (
+        <DemoTourCard
+          step={2}
+          title="Turn the application into a preparation plan"
+          description="Check the interview date and job description below. Then open Interview Prep to make a checklist and save your notes."
+          destination={prepUrl}
+          action="Open interview plan"
+          external
+        />
+      )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">
         <Card className="border-border/70 bg-card shadow-sm">

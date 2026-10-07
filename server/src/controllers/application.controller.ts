@@ -3,6 +3,7 @@ import { type QueryFilter, isValidObjectId } from "mongoose";
 
 import Application, { type IApplication } from "../models/Application.js";
 import InterviewPrep from "../models/InterviewPrep.js";
+import User from "../models/User.js";
 import {
   createApplicationSchema,
   updateApplicationSchema,
@@ -39,9 +40,16 @@ export const createApplication = async (
       return;
     }
 
+    const owner = await User.findById(req.userId).select("expiresAt");
+    if (!owner || (owner.expiresAt && owner.expiresAt <= new Date())) {
+      res.status(401).json({ message: "Session expired" });
+      return;
+    }
+
     const application = await Application.create({
       ...result.data,
       userId: req.userId,
+      expiresAt: owner.expiresAt,
     });
 
     res.status(201).json({

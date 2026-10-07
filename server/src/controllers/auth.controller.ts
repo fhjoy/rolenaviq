@@ -1,11 +1,13 @@
 import { type Request, type Response } from "express";
 import bcrypt from "bcryptjs";
+import { randomUUID } from "node:crypto";
 
 import { registerSchema } from "../validators/auth.validator.js";
 import { loginSchema } from "../validators/auth.validator.js";
 import { generateToken } from "../utils/token.js";
 import User from "../models/User.js";
 import Application from "../models/Application.js";
+import type { IUser } from "../models/User.js";
 import { updateProfileSchema } from "../validators/auth.validator.js";
 import {
   authCookieOptions,
@@ -16,6 +18,7 @@ import {
   DEMO_FIRST_NAME,
   DEMO_LAST_NAME,
   DEMO_PASSWORD,
+  DEMO_SESSION_MS,
 } from "../config/demo.js";
 import { createDemoApplications } from "../utils/demo-data.js";
 
@@ -28,32 +31,36 @@ function isDuplicateKeyError(error: unknown): boolean {
   );
 }
 
-async function ensureDemoUser() {
-  let user = await User.findOne({ email: DEMO_EMAIL }).select("+passwordHash");
+function publicUser(user: IUser & { _id: unknown }) {
+  return {
+    id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.isDemo ? DEMO_EMAIL : user.email,
+    isDemo: user.isDemo,
+  };
+}
 
-  if (!user) {
-    const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 12);
-
-    user = await User.create({
-      firstName: DEMO_FIRST_NAME,
-      lastName: DEMO_LAST_NAME,
-      email: DEMO_EMAIL,
-      passwordHash,
-    });
-  } else if (
-    user.firstName !== DEMO_FIRST_NAME ||
-    user.lastName !== DEMO_LAST_NAME
-  ) {
-    user.firstName = DEMO_FIRST_NAME;
-    user.lastName = DEMO_LAST_NAME;
-    await user.save();
-  }
-
-  await Application.deleteMany({
-    userId: user._id,
+async function createDemoSession() {
+  const expiresAt = new Date(Date.now() + DEMO_SESSION_MS);
+  const user = await User.create({
+    firstName: DEMO_FIRST_NAME,
+    lastName: DEMO_LAST_NAME,
+    email: `demo+${randomUUID()}@rolenaviq.app`,
+    passwordHash: await bcrypt.hash(randomUUID(), 12),
+    isDemo: true,
+    expiresAt,
   });
 
-  await Application.insertMany(createDemoApplications(user._id));
+  try {
+    await Application.insertMany(
+      createDemoApplications(user._id).map(application => ({ ...application, expiresAt })),
+    );
+  } catch (error) {
+    await User.deleteOne({ _id: user._id });
+    await Application.deleteMany({ userId: user._id });
+    throw error;
+  }
 
   return user;
 }
@@ -100,12 +107,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     res.status(201).json({
       message: "User registered successfully",
-      user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-      },
+      user: publicUser(user),
     });
   } catch (error) {
     if (isDuplicateKeyError(error)) {
@@ -136,18 +138,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const normalizedEmail = email.toLowerCase();
 
     if (normalizedEmail === DEMO_EMAIL && password === DEMO_PASSWORD) {
-      const demoUser = await ensureDemoUser();
+      const demoUser = await createDemoSession();
       const token = generateToken(demoUser._id.toString());
 
       res.cookie("token", token, authCookieOptions);
       res.status(200).json({
         message: "Demo login successful",
-        user: {
-          id: demoUser._id,
-          firstName: demoUser.firstName,
-          lastName: demoUser.lastName,
-          email: demoUser.email,
-        },
+        user: publicUser(demoUser),
       });
       return;
     }
@@ -170,12 +167,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.cookie("token", token, authCookieOptions);
     res.status(200).json({
       message: "Login successful",
-      user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-      },
+      user: publicUser(user),
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -190,18 +182,13 @@ export const getCurrentUser = async (
   try {
     const user = await User.findById(req.userId);
 
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
+    if (!user || (user.expiresAt && user.expiresAt <= new Date())) {
+      res.status(401).json({ message: "Session expired" });
       return;
     }
 
     res.status(200).json({
-      user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-      },
+      user: publicUser(user),
     });
   } catch (error) {
     console.error("Get current user error:", error);
@@ -226,7 +213,7 @@ export const updateProfile = async (
       return;
     }
 
-    if (currentUser.email === DEMO_EMAIL) {
+    if (currentUser.isDemo || currentUser.email === DEMO_EMAIL) {
       res.status(403).json({ message: "The demo account profile is read-only" });
       return;
     }
@@ -273,12 +260,7 @@ export const updateProfile = async (
 
     res.status(200).json({
       message: "Profile updated successfully",
-      user: {
-        id: user._id.toString(),
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-      },
+      user: publicUser(user),
     });
   } catch (error) {
     if (isDuplicateKeyError(error)) {

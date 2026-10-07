@@ -10,7 +10,7 @@ I built RoleNaviq to keep the moving parts of a job search in one place. Save op
 - Switch between a searchable list that loads as you scroll, a board, a calendar, and a dashboard.
 - Keep job links, technologies, salary details, notes, and interview dates together.
 - Prepare for interviews with a checklist, a question bank, saved notes, and practice sessions.
-- Use your own account or explore the app with the demo login.
+- Use your own account or take a guided tour with the demo login. Each demo visitor gets a separate workspace that expires after seven days.
 
 ## Architecture
 
