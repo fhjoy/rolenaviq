@@ -1,7 +1,8 @@
 describe("guided demo route", () => {
   it("moves from React through Angular and returns after saving a plan", () => {
     cy.visit("/");
-    cy.contains("a", "Take the guided tour").click();
+    cy.get("main > section").first().contains("a", "Take guided tour").should("have.attr", "href", "/login?demo=1&returnTo=%2Fdashboard%3Ftour%3D1");
+    cy.get("#guided-tour").contains("a", "Start guided tour").click();
     cy.location("pathname").should("eq", "/login");
     cy.contains("button", "Enter demo").click();
 
@@ -22,5 +23,12 @@ describe("guided demo route", () => {
 
     cy.location("pathname").should("eq", "/dashboard");
     cy.contains("Guided tour · Step 1 of 3").should("not.exist");
+  });
+
+  it("lets a demo visitor start the tour after signing in normally", () => {
+    cy.loginDemo();
+    cy.contains("a", "Take guided tour").click();
+    cy.location("search").should("eq", "?tour=1");
+    cy.contains("Guided tour · Step 1 of 3").should("be.visible");
   });
 });

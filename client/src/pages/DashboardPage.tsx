@@ -73,6 +73,11 @@ export function DashboardPage() {
             <Button className="workspace-hero-secondary" variant="outline" render={<Link to="/applications" />}>
               View applications <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Button>
+            {userData?.user.isDemo === true && !showTour && (
+              <Button className="workspace-hero-secondary" variant="outline" render={<Link to="/dashboard?tour=1" />}>
+                Take guided tour <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Button>
+            )}
           </div>
         </div>
         <div className="workspace-route-card" aria-label="Your job search in numbers">
