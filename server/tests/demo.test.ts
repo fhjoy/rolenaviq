@@ -7,28 +7,42 @@ import {
   DEMO_PASSWORD,
 } from "../src/config/demo.js";
 import Application from "../src/models/Application.js";
+import InterviewPrep from "../src/models/InterviewPrep.js";
+import User from "../src/models/User.js";
 
 describe("Demo account", () => {
-  it("restores the demo application dataset on every valid demo login", async () => {
-    const agent = request.agent(app);
+  it("gives each visitor an independent, temporary workspace", async () => {
+    const firstVisitor = request.agent(app);
+    const secondVisitor = request.agent(app);
 
-    const firstLogin = await agent.post("/api/auth/login").send({
+    const firstLogin = await firstVisitor.post("/api/auth/login").send({
       email: DEMO_EMAIL,
       password: DEMO_PASSWORD,
     });
-
+    const secondLogin = await secondVisitor.post("/api/auth/login").send({
+      email: DEMO_EMAIL,
+      password: DEMO_PASSWORD,
+    });
     expect(firstLogin.status).toBe(200);
+    expect(secondLogin.status).toBe(200);
+    expect(firstLogin.body.user).toMatchObject({ email: DEMO_EMAIL, isDemo: true });
+    expect(secondLogin.body.user).toMatchObject({ email: DEMO_EMAIL, isDemo: true });
 
     const demoUserId = String(firstLogin.body.user.id);
+    const otherUserId = String(secondLogin.body.user.id);
+    expect(demoUserId).not.toBe(otherUserId);
+    const owner = await User.findById(demoUserId);
+    expect(owner?.email).not.toBe(DEMO_EMAIL);
+    expect(owner?.expiresAt?.getTime()).toBeGreaterThan(Date.now());
     const initialCount = await Application.countDocuments({
       userId: demoUserId,
     });
-
     expect(initialCount).toBe(30);
+    expect(await Application.countDocuments({ userId: otherUserId })).toBe(30);
 
     const pages = await Promise.all(
       [1, 2, 3].map((page) =>
-        agent.get("/api/applications").query({ page, limit: 10 }),
+        firstVisitor.get("/api/applications").query({ page, limit: 10 }),
       ),
     );
 
@@ -50,7 +64,8 @@ describe("Demo account", () => {
 
     expect(oneApplication).not.toBeNull();
 
-    await Application.findByIdAndDelete(oneApplication?._id);
+    const deletion = await firstVisitor.delete(`/api/applications/${oneApplication?._id}`);
+    expect(deletion.status).toBe(200);
 
     expect(
       await Application.countDocuments({
@@ -58,17 +73,41 @@ describe("Demo account", () => {
       }),
     ).toBe(initialCount - 1);
 
-    const secondLogin = await agent.post("/api/auth/login").send({
+    expect(await Application.countDocuments({ userId: otherUserId })).toBe(30);
+
+    const freshLogin = await firstVisitor.post("/api/auth/login").send({
       email: DEMO_EMAIL,
       password: DEMO_PASSWORD,
     });
 
-    expect(secondLogin.status).toBe(200);
+    expect(freshLogin.status).toBe(200);
+    expect(String(freshLogin.body.user.id)).not.toBe(demoUserId);
     expect(
       await Application.countDocuments({
-        userId: demoUserId,
+        userId: freshLogin.body.user.id,
       }),
     ).toBe(initialCount);
+    expect(await Application.countDocuments({ userId: demoUserId })).toBe(29);
+
+    const created = await secondVisitor.post("/api/applications").send({
+      company: "Visitor's company", position: "Engineer", status: "saved", technologies: [],
+    });
+    expect(created.status).toBe(201);
+    expect((await Application.findById(created.body.application._id))?.expiresAt).toEqual(
+      (await User.findById(otherUserId))?.expiresAt,
+    );
+
+    const interview = await Application.findOne({ userId: otherUserId, company: "Northstar Labs" });
+    const saved = await secondVisitor.put(`/api/prep/interviews/${interview?._id}`).send({
+      completedTasks: ["company-research"], practice: [], notes: "Visitor's notes",
+    });
+    expect(saved.status).toBe(200);
+    expect((await InterviewPrep.findOne({ applicationId: interview?._id }))?.expiresAt).toEqual(
+      (await User.findById(otherUserId))?.expiresAt,
+    );
+
+    const me = await secondVisitor.get("/api/auth/me");
+    expect(me.body.user).toMatchObject({ id: otherUserId, email: DEMO_EMAIL, isDemo: true });
   });
 
   it("keeps the demo profile read-only", async () => {

@@ -23,6 +23,13 @@ import { Button } from "@/components/ui/button";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/config/demo";
 import { warmUpApi } from "@/services/api";
 
+const guidedTourLogin = "/login?demo=1&returnTo=%2Fdashboard%3Ftour%3D1";
+const guidedTourSteps = [
+  { number: "01", title: "See your dashboard", detail: "Get your bearings in a demo workspace with sample applications." },
+  { number: "02", title: "Open an application", detail: "See the role, interview date and job description together." },
+  { number: "03", title: "Prepare for the interview", detail: "Tick a task and save your plan in Interview Prep." },
+];
+
 const workflowStages = [
   { label: "Saved", detail: "Capture the opportunity" },
   { label: "Applied", detail: "Know what went out" },
@@ -278,7 +285,7 @@ function HeroNavigationPreview() {
 
 function ChaosToClarity() {
   return (
-    <section className="border-y bg-muted/25">
+    <section className="landing-soft-section border-y">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold text-brand">
@@ -731,7 +738,7 @@ function ProductShowcase() {
   ];
 
   return (
-    <section id="features" className="border-y bg-card/35">
+    <section id="features" className="landing-soft-section border-y">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold text-brand">
@@ -808,7 +815,7 @@ function InterviewPrepSection() {
   return (
     <section
       id="interview-prep"
-      className="border-y bg-muted/25"
+      className="landing-soft-section border-y"
     >
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-2 lg:gap-16 lg:px-8">
         <div className="lg:col-start-2 lg:row-start-1">
@@ -924,6 +931,38 @@ function ArchitectureConnector({
   );
 }
 
+function GuidedTourSection() {
+  return (
+    <section id="guided-tour" aria-labelledby="guided-tour-heading" className="border-y bg-background">
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-14 lg:px-8">
+        <div>
+          <p className="text-sm font-semibold text-[#24523e] dark:text-[#c0e9ce]">New to RoleNaviq?</p>
+          <h2 id="guided-tour-heading" className="mt-3 max-w-xl text-3xl font-bold tracking-tight sm:text-4xl">Take a short tour before you explore.</h2>
+          <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
+            Follow one example from the dashboard through an application to an interview plan. You can skip the tour at any point and keep exploring.
+          </p>
+          <Button size="lg" className="landing-demo-button mt-7" render={<Link to={guidedTourLogin} />}>
+            Start guided tour <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Button>
+          <p className="mt-3 text-sm text-muted-foreground">Your demo workspace is separate from other visitors.</p>
+        </div>
+
+        <ol className="grid gap-3" aria-label="Guided tour steps">
+          {guidedTourSteps.map(step => (
+            <li key={step.number} className="flex gap-4 rounded-2xl border border-[#c8e1d0] bg-card p-4 shadow-sm dark:border-[#537c68] sm:p-5">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e1f1e6] text-sm font-bold text-[#24523e] dark:bg-[#315546] dark:text-[#d2f5de]" aria-hidden="true">{step.number}</span>
+              <div>
+                <h3 className="font-semibold">{step.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">{step.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
 function ExploreCtaSection() {
   return (
     <section
@@ -943,17 +982,11 @@ function ExploreCtaSection() {
             </h2>
             <p className="teal-hero-copy mt-3 max-w-2xl">
               Open the live demo and move through the dashboard, application
-              board, calendar and real job-search workflow.
+              board, calendar and interview preparation at your own pace.
             </p>
-
-            {/* <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand">
-              <span>Product tour</span>
-              <FlowConnector />
-              <span>Dashboard</span>
-            </div> */}
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Button
               size="lg"
               className="landing-demo-button bg-[#194d3c] text-white hover:bg-[#267459] dark:bg-[#b9ead1] dark:text-[#173b30] dark:hover:bg-[#e3fae9]"
@@ -1235,6 +1268,15 @@ export function LandingPage() {
                 <Button
                   size="lg"
                   variant="outline"
+                  className="border-brand/30 bg-brand/10 text-foreground hover:bg-brand/15"
+                  render={<Link to={guidedTourLogin} />}
+                >
+                  Take guided tour
+                </Button>
+
+                <Button
+                  size="lg"
+                  variant="outline"
                   render={<Link to="/register" />}
                 >
                   Create account
@@ -1260,6 +1302,7 @@ export function LandingPage() {
         <WorkflowJourney />
         <ProductShowcase />
         <InterviewPrepSection />
+        <GuidedTourSection />
         <ExploreCtaSection />
         <EngineeringSection />
       </main>

@@ -15,17 +15,21 @@ describe('Interview preparation saving', () => {
     prep: { completedTasks: [], practice: [], notes: '', sessions: [] },
   };
 
-  async function setup() {
+  async function setup(tour = false) {
     await TestBed.configureTestingModule({
       imports: [InterviewDetail],
       providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting(),
         provideStore({ [prepFeature.name]: prepFeature.reducer }), provideEffects(PrepEffects),
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ applicationId: 'test-id' }) } } }],
+        { provide: ActivatedRoute, useValue: { snapshot: {
+          paramMap: convertToParamMap({ applicationId: 'test-id' }),
+          queryParamMap: convertToParamMap(tour ? { tour: '1' } : {}),
+        } } }],
     }).compileComponents();
     const fixture = TestBed.createComponent(InterviewDetail);
     fixture.detectChanges();
     const http = TestBed.inject(HttpTestingController);
     http.expectOne(url).flush(response);
+    if (tour) http.expectOne('/api/auth/me').flush({ user: { id: 'demo-id', isDemo: true } });
     await fixture.whenStable();
     fixture.detectChanges();
     return { fixture, page: fixture.componentInstance, http };
@@ -66,6 +70,23 @@ describe('Interview preparation saving', () => {
     expect(retry.request.body.completedTasks).toEqual(['company-research', 'role-research']);
     retry.flush(response);
     expect(page.dirty()).toBe(false);
+    http.verify();
+  });
+
+  it('shows the guided finish link after a demo visitor saves a task', async () => {
+    const { fixture, page, http } = await setup(true);
+    const text = () => (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(text()).toContain('Guided tour · Step 3 of 3');
+    expect(text()).not.toContain('Finish tour');
+
+    page.toggleTask('company-research');
+    page.save();
+    http.expectOne({ method: 'PUT', url }).flush({
+      ...response, prep: { ...response.prep, completedTasks: ['company-research'] },
+    });
+    fixture.detectChanges();
+    const finish = (fixture.nativeElement as HTMLElement).querySelector<HTMLAnchorElement>('.guided-tour a.button');
+    expect(finish?.getAttribute('href')).toBe('/dashboard?tour=done');
     http.verify();
   });
 });

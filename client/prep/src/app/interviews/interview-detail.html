@@ -16,6 +16,22 @@
     </div>
   </section>
 
+  @if (showTour()) {
+    <section class="panel guided-tour" aria-labelledby="guided-tour-heading">
+      <span class="eyebrow">Guided tour · Step 3 of 3</span>
+      <h2 id="guided-tour-heading">Make this interview yours</h2>
+      <p>Tick a preparation task below and save your plan. Your work stays in this demo workspace, separate from other visitors.</p>
+      <div class="guided-tour-actions">
+        @if (tourReady()) {
+          <a class="button" href="/dashboard?tour=done">Finish tour</a>
+        } @else {
+          <span class="muted" role="status">Finish after you tick a task and save your plan.</span>
+        }
+        <a class="back-link" href="/dashboard">Skip tour</a>
+      </div>
+    </section>
+  }
+
   <div class="prep-grid">
     <section class="panel" aria-labelledby="checklist-heading">
       <span class="panel-kicker">01 / GET READY</span>

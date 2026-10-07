@@ -35,7 +35,7 @@ export class PrepApi {
   private readonly http = inject(HttpClient);
 
   currentUser() {
-    return this.http.get<{ user: { id: string } }>('/api/auth/me', { withCredentials: true });
+    return this.http.get<{ user: { id: string; isDemo?: boolean } }>('/api/auth/me', { withCredentials: true });
   }
 
   interviews() {

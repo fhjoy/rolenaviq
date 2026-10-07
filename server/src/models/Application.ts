@@ -23,6 +23,7 @@ export const employmentTypes = [
 
 export interface IApplication {
   userId: Types.ObjectId;
+  expiresAt?: Date;
 
   company: string;
   position: string;
@@ -59,6 +60,7 @@ const applicationSchema = new Schema<IApplication>(
       required: true,
       index: true,
     },
+    expiresAt: { type: Date },
 
     company: {
       type: String,
@@ -150,6 +152,7 @@ applicationSchema.index({
   status: 1,
   createdAt: -1,
 });
+applicationSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const Application = model<IApplication>("Application", applicationSchema);
 

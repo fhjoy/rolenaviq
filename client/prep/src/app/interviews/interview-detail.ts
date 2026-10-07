@@ -5,6 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
+import { PrepApi } from '../core/prep-api';
 
 import { checklist, questions } from './questions';
 import { PrepActions } from '../state/prep.actions';
@@ -19,6 +20,7 @@ export class InterviewDetail implements OnInit {
   private readonly store = inject(Store);
   private readonly actions$ = inject(Actions);
   private readonly route = inject(ActivatedRoute);
+  private readonly api = inject(PrepApi);
   private readonly destroyRef = inject(DestroyRef);
   readonly applicationId = this.route.snapshot.paramMap.get('applicationId') ?? '';
   private toastTimer?: ReturnType<typeof setTimeout>;
@@ -32,12 +34,19 @@ export class InterviewDetail implements OnInit {
   readonly error = this.store.selectSignal(selectError(this.applicationId));
   readonly dirty = this.store.selectSignal(selectDirty(this.applicationId));
   readonly toast = signal('');
+  readonly showTour = signal(false);
   readonly completedTasks = computed(() => this.plan()?.completedTasks ?? []);
   readonly notes = computed(() => this.plan()?.notes ?? '');
   readonly progress = computed(() => this.completedTasks().length +
     (this.plan()?.practice.filter(item => item.practiced).length ?? 0));
+  readonly tourReady = computed(() => this.completedTasks().length > 0 && !this.dirty() && !this.saving());
 
   ngOnInit(): void {
+    if (this.route.snapshot.queryParamMap.get('tour') === '1') {
+      this.api.currentUser().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: ({ user }) => this.showTour.set(user.isDemo === true),
+      });
+    }
     this.destroyRef.onDestroy(() => clearTimeout(this.toastTimer));
     this.actions$.pipe(
       ofType(PrepActions.planSaved),

@@ -47,7 +47,7 @@ async function findOwnedApplication(req: Request, res: Response) {
   const application = await Application.findOne({
     _id: applicationId,
     userId: req.userId,
-  }).select("company position status interviewDate");
+  }).select("company position status interviewDate expiresAt");
 
   if (!application) {
     res.status(404).json({ message: "Application not found" });
@@ -92,7 +92,7 @@ export const recordPracticeSession = async (req: Request, res: Response): Promis
     const prep = await InterviewPrep.findOneAndUpdate(
       { applicationId: application._id, userId: req.userId },
       {
-        $setOnInsert: { completedTasks: [], practice: [], notes: "" },
+        $setOnInsert: { completedTasks: [], practice: [], notes: "", expiresAt: application.expiresAt },
         $push: { sessions: { $each: [session], $slice: -20 } },
       },
       { upsert: true, returnDocument: "after", runValidators: true },
@@ -120,7 +120,7 @@ export const saveInterviewPrep = async (req: Request, res: Response): Promise<vo
 
     const prep = await InterviewPrep.findOneAndUpdate(
       { applicationId: application._id, userId: req.userId },
-      { $set: result.data },
+      { $set: { ...result.data, expiresAt: application.expiresAt } },
       { upsert: true, returnDocument: "after", runValidators: true },
     );
 
