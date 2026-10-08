@@ -933,20 +933,25 @@ function ArchitectureConnector({
 
 function GuidedTourSection() {
   const stepsRef = useRef<HTMLOListElement>(null);
-  const [stepsRevealed, setStepsRevealed] = useState(false);
+  const [revealedSteps, setRevealedSteps] = useState(() => guidedTourSteps.map(() => false));
+  const canObserveSteps = typeof window !== "undefined" && "IntersectionObserver" in window;
 
   useEffect(() => {
     const steps = stepsRef.current;
     if (!steps || !("IntersectionObserver" in window)) return;
+    const cards = Array.from(steps.children);
 
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setStepsRevealed(true);
-        observer.disconnect();
-      }
-    }, { threshold: 0.25 });
+    const observer = new IntersectionObserver(entries => {
+      const visibleCards = entries.filter(entry => entry.isIntersecting);
+      if (visibleCards.length === 0) return;
 
-    observer.observe(steps);
+      setRevealedSteps(previous => previous.map((revealed, index) =>
+        revealed || visibleCards.some(entry => entry.target === cards[index])
+      ));
+      visibleCards.forEach(entry => observer.unobserve(entry.target));
+    }, { rootMargin: "0px 0px -25% 0px", threshold: 0.6 });
+
+    cards.forEach(card => observer.observe(card));
     return () => observer.disconnect();
   }, []);
 
@@ -965,9 +970,9 @@ function GuidedTourSection() {
           <p className="mt-3 text-sm text-muted-foreground">Your demo workspace is separate from other visitors.</p>
         </div>
 
-        <ol ref={stepsRef} className="landing-tour-steps grid gap-3" data-revealed={stepsRevealed} aria-label="Guided tour steps">
-          {guidedTourSteps.map(step => (
-            <li key={step.number} className="flex gap-4 rounded-2xl border border-[#c8e1d0] bg-card p-4 shadow-sm dark:border-[#537c68] sm:p-5">
+        <ol ref={stepsRef} className="landing-tour-steps grid gap-3" data-observed={canObserveSteps} aria-label="Guided tour steps">
+          {guidedTourSteps.map((step, index) => (
+            <li key={step.number} data-revealed={revealedSteps[index]} className="flex gap-4 rounded-2xl border border-[#c8e1d0] bg-card p-4 shadow-sm dark:border-[#537c68] sm:p-5">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e1f1e6] text-sm font-bold text-[#24523e] dark:bg-[#315546] dark:text-[#d2f5de]" aria-hidden="true">{step.number}</span>
               <div>
                 <h3 className="font-semibold">{step.title}</h3>
