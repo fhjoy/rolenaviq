@@ -480,6 +480,37 @@
   }
 }
 
+@keyframes landing-tour-step-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(0.9rem) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .landing-tour-steps[data-observed="true"] > li[data-revealed="false"] {
+    opacity: 0;
+    transform: translateY(0.9rem) scale(0.985);
+  }
+
+  .landing-tour-steps[data-observed="true"] > li[data-revealed="true"] {
+    animation: landing-tour-step-reveal 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .landing-tour-steps[data-observed="true"] > li:nth-child(2) {
+    animation-delay: 180ms;
+  }
+
+  .landing-tour-steps[data-observed="true"] > li:nth-child(3) {
+    animation-delay: 360ms;
+  }
+}
+
 @keyframes landing-analytics-bar-rise {
   0%,
   4% {
