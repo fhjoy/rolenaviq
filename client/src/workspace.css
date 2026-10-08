@@ -1,26 +1,10 @@
 /* The signed-in workspace has its own visual system. */
 .workspace-shell {
-  --background: #f7faf7;
-  --card: #ffffff;
-  --popover: #ffffff;
-  --secondary: #f0f6f1;
-  --muted: #edf3ee;
-  --border: #d7e3d9;
-  --input: #cadbce;
   min-height: 100vh;
-  background: var(--background);
+  background: #f6f7f2;
 }
 
-.dark .workspace-shell {
-  --background: #17251f;
-  --card: #1f302a;
-  --popover: #1f302a;
-  --secondary: #284238;
-  --muted: #294237;
-  --border: #416052;
-  --input: #54705e;
-  background: var(--background);
-}
+.dark .workspace-shell { background: #141f20; }
 
 .workspace-sidebar {
   position: relative;
@@ -143,8 +127,8 @@
 
 .workspace-main {
   min-height: calc(100vh - 4.25rem);
-  background: radial-gradient(ellipse 55rem 32rem at 110% -8%, #d9eee370, transparent 69%),
-    radial-gradient(ellipse 40rem 28rem at -12% 75%, #e2f2e875, transparent 75%);
+  background: radial-gradient(ellipse 55rem 32rem at 110% -8%, #d9eee38c, transparent 69%),
+    radial-gradient(ellipse 40rem 28rem at -12% 75%, #ede9d94d, transparent 75%);
 }
 .workspace-main > * { max-width: 105rem; margin-inline: auto; }
 .dark .workspace-main { background: radial-gradient(ellipse 50rem 28rem at 100% -10%, #315a4f3d, transparent 70%); }
@@ -252,9 +236,9 @@
 .dark .workspace-route-card p { border-color: #a8d0b747; color: #c7dfd2; }
 .dark .workspace-feature-icon { border-color: #a8d0b75c; background: #a8d0b71c; color: #b4e4c8; }
 .workspace-feature-panel {
-  border-color: var(--border);
+  border-color: #d6e3d9;
   border-radius: 1.15rem;
-  background: var(--card);
+  background: #fffefa;
   box-shadow: 0 6px 20px #2442350e;
 }
 .dark .workspace-feature-panel { border-color: #ffffff20; background: var(--card); }
@@ -282,7 +266,7 @@
   border: 1px solid #d5e9dc;
   border-radius: 1.2rem;
   padding: 1.35rem 1.5rem;
-  background: linear-gradient(105deg, #f4faf5 0%, #f9fcf8 72%, #ffffff 100%);
+  background: linear-gradient(105deg, #f4faf5 0%, #f9fcf8 72%, #fffefa 100%);
 }
 .workspace-next-step .workspace-section-kicker { color: #236b53; }
 .dark .workspace-next-step { border-color: #416052; background: #263d35; }
@@ -298,34 +282,20 @@
 .dark .workspace-next-link { background: #b9ead1; color: #173b30; }
 .dark .workspace-next-link:hover { background: #e3fae9; }
 
-.workspace-recent-applications { border-color: var(--border); border-radius: 1.15rem; background: var(--card); }
+.workspace-recent-applications { border-radius: 1.15rem; }
 .workspace-recent-applications a:hover { background: #ebf5ed; }
 .dark .workspace-recent-applications a:hover { background: #ffffff0e; }
 .workspace-page-intro {
   position: relative;
-  isolation: isolate;
   overflow: hidden;
-  border-color: #b8dfc6;
+  border-color: #cbded1;
   border-radius: 1.3rem;
-  background: linear-gradient(105deg, #e7f5eb 0%, #f1f9f2 68%, #fffdf5 100%);
-  color: #193e34;
-  box-shadow: 0 12px 30px #2442350d;
+  background: radial-gradient(circle at 95% 0%, #d6eee1, transparent 39%), linear-gradient(110deg, #fffefa, #f3f8f1);
+  box-shadow: 0 8px 23px #1749350b;
 }
-.workspace-page-intro::before {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background-image: linear-gradient(#3781600b 1px, transparent 1px), linear-gradient(90deg, #3781600b 1px, transparent 1px);
-  background-size: 3rem 3rem;
-  mask-image: linear-gradient(90deg, transparent, #000 75%);
-  content: "";
-  pointer-events: none;
-}
+.workspace-page-intro::before { position: absolute; top: 0; left: 1.5rem; width: 3rem; height: 3px; border-radius: 0 0 4px 4px; background: #379b79; content: ""; }
 .workspace-page-intro h1 { letter-spacing: -.045em; }
-.workspace-page-intro p { color: #4b685c; }
-.dark .workspace-page-intro { border-color: #416052; background: #213a34; color: #f3faf5; }
-.dark .workspace-page-intro::before { background-image: linear-gradient(#ddf5e50b 1px, transparent 1px), linear-gradient(90deg, #ddf5e50b 1px, transparent 1px); }
-.dark .workspace-page-intro p { color: #c7dfd2; }
+.dark .workspace-page-intro { border-color: #406457; background: radial-gradient(circle at 95% 0%, #375748, transparent 42%), #1c302d; }
 
 @media (max-width: 1024px) {
   .workspace-sidebar { min-height: 100%; }
