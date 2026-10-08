@@ -934,6 +934,7 @@ function ArchitectureConnector({
 function GuidedTourSection() {
   const stepsRef = useRef<HTMLOListElement>(null);
   const [revealedSteps, setRevealedSteps] = useState(() => guidedTourSteps.map(() => false));
+  const [activeSteps, setActiveSteps] = useState(() => guidedTourSteps.map(() => false));
   const canObserveSteps = typeof window !== "undefined" && "IntersectionObserver" in window;
 
   useEffect(() => {
@@ -943,12 +944,14 @@ function GuidedTourSection() {
 
     const observer = new IntersectionObserver(entries => {
       const visibleCards = entries.filter(entry => entry.isIntersecting);
-      if (visibleCards.length === 0) return;
-
-      setRevealedSteps(previous => previous.map((revealed, index) =>
-        revealed || visibleCards.some(entry => entry.target === cards[index])
+      if (visibleCards.length > 0) {
+        setRevealedSteps(previous => previous.map((revealed, index) =>
+          revealed || visibleCards.some(entry => entry.target === cards[index])
+        ));
+      }
+      setActiveSteps(previous => previous.map((active, index) =>
+        entries.find(entry => entry.target === cards[index])?.isIntersecting ?? active
       ));
-      visibleCards.forEach(entry => observer.unobserve(entry.target));
     }, { rootMargin: "0px 0px -25% 0px", threshold: 0.6 });
 
     cards.forEach(card => observer.observe(card));
@@ -972,7 +975,7 @@ function GuidedTourSection() {
 
         <ol ref={stepsRef} className="landing-tour-steps grid gap-3" data-observed={canObserveSteps} aria-label="Guided tour steps">
           {guidedTourSteps.map((step, index) => (
-            <li key={step.number} data-revealed={revealedSteps[index]} className="flex gap-4 rounded-2xl border border-[#c8e1d0] bg-card p-4 shadow-sm dark:border-[#537c68] sm:p-5">
+            <li key={step.number} data-revealed={revealedSteps[index]} data-active={activeSteps[index]} className="flex gap-4 rounded-2xl border border-[#c8e1d0] bg-card p-4 shadow-sm dark:border-[#537c68] sm:p-5">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e1f1e6] text-sm font-bold text-[#24523e] dark:bg-[#315546] dark:text-[#d2f5de]" aria-hidden="true">{step.number}</span>
               <div>
                 <h3 className="font-semibold">{step.title}</h3>
