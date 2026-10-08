@@ -480,15 +480,23 @@
   }
 }
 
-@keyframes landing-tour-step-reveal {
-  from {
+@keyframes landing-tour-step-cycle {
+  0%,
+  2% {
     opacity: 0;
     transform: translateY(0.9rem) scale(0.985);
   }
 
-  to {
+  10%,
+  72% {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+
+  80%,
+  100% {
+    opacity: 0;
+    transform: translateY(0.3rem) scale(0.99);
   }
 }
 
@@ -499,7 +507,12 @@
   }
 
   .landing-tour-steps[data-observed="true"] > li[data-revealed="true"] {
-    animation: landing-tour-step-reveal 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation: landing-tour-step-cycle 7.5s ease-in-out infinite both;
+    animation-play-state: paused;
+  }
+
+  .landing-tour-steps[data-observed="true"] > li[data-active="true"] {
+    animation-play-state: running;
   }
 
   .landing-tour-steps[data-observed="true"] > li:nth-child(2) {
