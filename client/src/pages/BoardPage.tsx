@@ -2,7 +2,8 @@ import {
   DndContext,
   DragOverlay,
   KeyboardSensor,
-  PointerSensor,
+  MouseSensor,
+  TouchSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -102,11 +103,12 @@ export function BoardPage() {
   const [interviewDate, setInterviewDate] = useState("");
 
   const sensors = useSensors(
-    useSensor(PointerSensor, {
+    useSensor(MouseSensor, {
       activationConstraint: {
         distance: 5,
       },
     }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 8 } }),
     useSensor(KeyboardSensor),
   );
 
@@ -156,20 +158,7 @@ export function BoardPage() {
     setActiveApplication(application ?? null);
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    const application = active.data.current?.application as
-      | Application
-      | undefined;
-
-    setActiveApplication(null);
-
-    if (!over || !application) {
-      return;
-    }
-
-    const newStatus = over.id as ApplicationStatus;
-
+  const moveApplication = (application: Application, newStatus: ApplicationStatus) => {
     if (application.status === newStatus) {
       return;
     }
@@ -195,6 +184,13 @@ export function BoardPage() {
       id: application._id,
       status: newStatus,
     });
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    const application = active.data.current?.application as Application | undefined;
+    setActiveApplication(null);
+    if (over && application) moveApplication(application, over.id as ApplicationStatus);
   };
 
   const handleReopen = (application: Application) => {
@@ -278,7 +274,7 @@ export function BoardPage() {
         icon={Columns3}
         metricValue={applications.length}
         metricLabel={applications.length === 1 ? "application on the board" : "applications on the board"}
-        metricDescription="Drag a card to move it to an allowed stage."
+        metricDescription="Drag a card or use Move to stage for an allowed move."
         actions={<>
           <Button className="workspace-hero-primary" render={<Link to="/applications/new" />}>
             <Plus className="h-4 w-4" aria-hidden="true" /> Add application
@@ -308,7 +304,7 @@ export function BoardPage() {
         onDragCancel={() => setActiveApplication(null)}
         onDragEnd={handleDragEnd}
       >
-        <div className="mt-4 overflow-x-auto pb-6 [scrollbar-width:thin]">
+        <div className="mt-4 overflow-x-auto pb-6 [scrollbar-width:thin]" role="region" aria-label="Application board, scroll horizontally to see all stages" tabIndex={0}>
           <div className="flex min-w-max snap-x snap-mandatory gap-4">
             {boardColumns.map((column) => {
               const columnApplications = applications.filter(
@@ -325,6 +321,7 @@ export function BoardPage() {
                   title={column.title}
                   applications={columnApplications}
                   onReopen={handleReopen}
+                  onMove={moveApplication}
                   updatingApplicationId={
                     updateStatusMutation.isPending
                       ? updateStatusMutation.variables?.id

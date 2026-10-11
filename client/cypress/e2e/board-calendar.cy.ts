@@ -46,4 +46,22 @@ describe("board and calendar workflows", () => {
     cy.contains("article", "UX Engineer")
       .should("contain.text", "Wavefront Health");
   });
+
+  it("shows demo follow-ups and lets a small-screen visitor move a card without dragging", () => {
+    cy.viewport(390, 844);
+    cy.visit("/dashboard");
+    cy.contains("h2", "Next actions").closest("section")
+      .should("contain.text", "Email the recruiter for an update");
+
+    cy.visit("/board");
+    cy.contains("article", "Senior Frontend Developer")
+      .should("contain.text", "BrightPixel")
+      .find("select")
+      .select("screening");
+    cy.contains("Moved to Screening", { timeout: 15_000 }).should("be.visible");
+
+    cy.visit("/calendar");
+    cy.contains("h2", "Follow-ups").parent()
+      .should("contain.text", "Email the recruiter for an update");
+  });
 });

@@ -1,13 +1,14 @@
-import { addMonths, format, subMonths } from "date-fns";
+import { addMonths, format, isBefore, startOfDay, subMonths } from "date-fns";
 import {
   ArrowRight,
   CalendarDays,
   CalendarX,
   ChevronLeft,
   ChevronRight,
+  ListTodo,
   Plus,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 
 import { EmptyState } from "@/components/common/EmptyState";
@@ -15,18 +16,24 @@ import { PageError } from "@/components/common/PageError";
 import { WorkspaceFeatureHero } from "@/components/layout/WorkspaceFeatureHero";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useApplications } from "@/features/applications/useApplications";
+import { useInfiniteApplications } from "@/features/applications/useInfiniteApplications";
+import { localFollowUpDate } from "@/features/applications/follow-up-date";
 import { InterviewCard } from "@/features/calendar/InterviewCard";
 import { MonthlyCalendar } from "@/features/calendar/MonthlyCalendar";
 
 export function CalendarPage() {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
 
-  const { data, isLoading, isError, refetch } = useApplications({
-    page: 1,
+  const { data, isLoading, isError, refetch, fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError } = useInfiniteApplications({
     limit: 100,
     sort: "-createdAt",
   });
+
+  useEffect(() => {
+    if (hasNextPage && !isFetchingNextPage && !isFetchNextPageError) {
+      void fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, isFetchNextPageError, fetchNextPage]);
 
   if (isLoading) {
     return (
@@ -38,7 +45,7 @@ export function CalendarPage() {
     );
   }
 
-  if (isError) {
+  if (isError && !data) {
     return (
       <PageError
         title="Unable to load calendar"
@@ -49,7 +56,7 @@ export function CalendarPage() {
     );
   }
 
-  const applications = data?.applications ?? [];
+  const applications = data?.pages.flatMap((page) => page.applications) ?? [];
   const now = new Date();
 
   const interviews = applications
@@ -67,13 +74,16 @@ export function CalendarPage() {
   const pastInterviews = interviews
     .filter((application) => new Date(application.interviewDate!) < now)
     .reverse();
+  const followUps = applications
+    .filter((application) => application.nextAction && application.followUpDate)
+    .sort((a, b) => a.followUpDate!.localeCompare(b.followUpDate!));
 
   return (
     <div className="w-full">
       <WorkspaceFeatureHero
         eyebrow="Know what is next"
         title="Calendar"
-        description="Keep interview dates close to the applications they belong to, and make time to prepare for each conversation."
+        description="Keep interview dates and follow-up actions close to the applications they belong to."
         icon={CalendarDays}
         metricValue={upcomingInterviews.length}
         metricLabel={upcomingInterviews.length === 1 ? "upcoming interview" : "upcoming interviews"}
@@ -88,11 +98,21 @@ export function CalendarPage() {
         </>}
       />
 
+      {isFetchingNextPage && (
+        <p className="mt-4 text-sm text-muted-foreground" role="status">Loading the rest of your calendar...</p>
+      )}
+      {isFetchNextPageError && (
+        <div className="mt-4" role="alert">
+          <p>Some calendar items could not be loaded.</p>
+          <Button variant="outline" className="mt-2 min-h-11" onClick={() => void fetchNextPage()}>Try again</Button>
+        </div>
+      )}
+
       <section className="workspace-feature-panel mt-6 overflow-hidden rounded-2xl border bg-card shadow-sm">
         <header className="flex flex-col gap-4 border-b p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
           <div>
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Interview schedule
+              Interview and follow-up schedule
             </p>
 
             <h2 className="mt-1 text-xl font-semibold">
@@ -105,6 +125,7 @@ export function CalendarPage() {
               type="button"
               variant="outline"
               size="icon"
+              className="size-11"
               aria-label="Previous month"
               onClick={() =>
                 setSelectedMonth((current) => subMonths(current, 1))
@@ -116,6 +137,7 @@ export function CalendarPage() {
             <Button
               type="button"
               variant="outline"
+              className="min-h-11"
               onClick={() => setSelectedMonth(new Date())}
             >
               Today
@@ -125,6 +147,7 @@ export function CalendarPage() {
               type="button"
               variant="outline"
               size="icon"
+              className="size-11"
               aria-label="Next month"
               onClick={() =>
                 setSelectedMonth((current) => addMonths(current, 1))
@@ -135,7 +158,33 @@ export function CalendarPage() {
           </div>
         </header>
 
+        <p className="px-4 pt-3 text-xs text-muted-foreground sm:hidden">Scroll the calendar sideways to see the whole week.</p>
         <MonthlyCalendar month={selectedMonth} applications={applications} />
+      </section>
+
+      <section className="mt-8" aria-labelledby="follow-ups-heading">
+        <h2 id="follow-ups-heading" className="text-xl font-semibold">Follow-ups</h2>
+        {followUps.length === 0 ? (
+          <p className="mt-4 rounded-xl border bg-card p-5 text-sm text-muted-foreground">
+            No follow-ups planned. Add a next action and date to an application.
+          </p>
+        ) : (
+          <ul className="mt-4 grid gap-3 xl:grid-cols-2">
+            {followUps.map((application) => {
+              const day = localFollowUpDate(application.followUpDate!);
+              const overdue = isBefore(day, startOfDay(now));
+              return (
+                <li key={application._id}>
+                  <Link to={`/applications/${application._id}`} className="flex min-h-16 items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:border-brand/40 hover:bg-brand/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+                    <ListTodo className="h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+                    <span className="min-w-0 flex-1"><span className="block font-medium">{application.nextAction}</span><span className="text-sm text-muted-foreground">{application.company} · {application.position}</span></span>
+                    <span className="shrink-0 text-sm font-medium">{overdue ? "Overdue · " : ""}{format(day, "d MMM")}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </section>
 
       <section className="mt-8">

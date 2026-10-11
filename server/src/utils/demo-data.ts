@@ -7,6 +7,11 @@ function daysFromNow(days: number, hour = 10, minute = 0): Date {
   return date;
 }
 
+function followUpDaysFromNow(days: number): Date {
+  const date = daysFromNow(days);
+  return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+}
+
 function dateInNextMonth(day: number, hour = 10, minute = 0): Date {
   const date = new Date();
   date.setDate(1);
@@ -37,6 +42,8 @@ export function createDemoApplications(userId: IApplication["userId"]) {
       jobDescription: "Build accessible React interfaces with TypeScript, collaborate with product and design, and connect features to REST APIs.",
       appliedAt: daysAgo(18),
       interviewDate: daysFromNow(2, 10, 30),
+      nextAction: "Review the team's product before the interview",
+      followUpDate: followUpDaysFromNow(1),
       notes: "Second-round interview with the product engineering team.",
       createdAt: daysAgo(19),
       updatedAt: daysAgo(2),
@@ -66,6 +73,8 @@ export function createDemoApplications(userId: IApplication["userId"]) {
       employmentType: "full_time",
       status: "screening",
       technologies: ["Vue", "TypeScript", "REST"],
+      nextAction: "Email the recruiter for an update",
+      followUpDate: followUpDaysFromNow(3),
       appliedAt: daysAgo(9),
       notes: "Recruiter screening completed; waiting for engineering feedback.",
       createdAt: daysAgo(11),
@@ -80,6 +89,8 @@ export function createDemoApplications(userId: IApplication["userId"]) {
       employmentType: "full_time",
       status: "applied",
       technologies: ["React", "Accessibility", "Cypress"],
+      nextAction: "Follow up on the application",
+      followUpDate: followUpDaysFromNow(4),
       appliedAt: daysAgo(4),
       createdAt: daysAgo(5),
       updatedAt: daysAgo(4),

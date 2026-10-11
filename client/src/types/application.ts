@@ -40,6 +40,8 @@ export interface Application {
 
   appliedAt?: string;
   interviewDate?: string;
+  nextAction?: string;
+  followUpDate?: string;
 
   notes?: string;
 

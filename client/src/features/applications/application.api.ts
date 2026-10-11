@@ -43,6 +43,8 @@ export interface CreateApplicationData {
   technologies: string[];
   appliedAt?: string;
   interviewDate?: string;
+  nextAction?: string;
+  followUpDate?: string;
   notes?: string;
 }
 
@@ -56,6 +58,8 @@ export type UpdateApplicationData = Partial<
     | "employmentType"
     | "appliedAt"
     | "interviewDate"
+    | "nextAction"
+    | "followUpDate"
     | "notes"
   >
 > & {
@@ -66,6 +70,8 @@ export type UpdateApplicationData = Partial<
   employmentType?: EmploymentType | null;
   appliedAt?: string | null;
   interviewDate?: string | null;
+  nextAction?: string | null;
+  followUpDate?: string | null;
   notes?: string | null;
   reopen?: boolean;
 };

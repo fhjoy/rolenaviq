@@ -81,5 +81,20 @@ describe("Dashboard API", () => {
       Rejected: 1,
       Withdrawn: 0,
     });
+    expect(response.body.nextActions).toEqual([]);
+  });
+
+  it("returns the nearest follow-ups only for their owner", async () => {
+    const owner = await createAuthenticatedAgent();
+    const other = await createAuthenticatedAgent();
+    const records = [
+      { userId: new Types.ObjectId(owner.userId), company: "Tomorrow", followUpDate: new Date("2026-10-12"), nextAction: "Email recruiter" },
+      { userId: new Types.ObjectId(owner.userId), company: "Today", followUpDate: new Date("2026-10-11"), nextAction: "Send portfolio" },
+      { userId: new Types.ObjectId(other.userId), company: "Private", followUpDate: new Date("2026-10-10"), nextAction: "Private task" },
+    ];
+    await Application.insertMany(records.map((record) => ({ ...record, position: "Engineer", technologies: [] })));
+    const response = await owner.agent.get("/api/dashboard/stats");
+    expect(response.status).toBe(200);
+    expect(response.body.nextActions.map((action: { company: string }) => action.company)).toEqual(["Today", "Tomorrow"]);
   });
 });

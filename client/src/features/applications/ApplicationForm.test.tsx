@@ -19,6 +19,8 @@ const defaultValues: ApplicationFormData = {
   technologies: "",
   appliedAt: "",
   interviewDate: "",
+  nextAction: "",
+  followUpDate: "",
   notes: "",
 };
 
@@ -135,6 +137,24 @@ describe("ApplicationForm", () => {
         status: "interview",
         interviewDate: "2026-10-20T10:30",
       }),
+      expect.anything(),
+    );
+  });
+
+  it("requires a date with a next action and submits both", async () => {
+    const user = userEvent.setup();
+    const onSubmit = renderForm();
+    await user.type(screen.getByLabelText("Company"), "OrbitWorks");
+    await user.type(screen.getByLabelText("Position"), "Engineer");
+    await user.type(screen.getByLabelText("What will you do next?"), "Email the recruiter");
+    await user.click(screen.getByRole("button", { name: "Save application" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Add both a next action and a follow-up date");
+    expect(onSubmit).not.toHaveBeenCalled();
+
+    await user.type(screen.getByLabelText("Follow-up date"), "2026-10-22");
+    await user.click(screen.getByRole("button", { name: "Save application" }));
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({ nextAction: "Email the recruiter", followUpDate: "2026-10-22" }),
       expect.anything(),
     );
   });

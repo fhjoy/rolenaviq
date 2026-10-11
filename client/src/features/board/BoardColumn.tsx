@@ -11,6 +11,7 @@ interface BoardColumnProps {
   title: string;
   applications: Application[];
   onReopen?: (application: Application) => void;
+  onMove?: (application: Application, status: ApplicationStatus) => void;
   updatingApplicationId?: string;
   isDragActive?: boolean;
   isDropAllowed?: boolean;
@@ -32,6 +33,7 @@ export function BoardColumn({
   title,
   applications,
   onReopen,
+  onMove,
   updatingApplicationId,
   isDragActive = false,
   isDropAllowed = true,
@@ -104,6 +106,7 @@ export function BoardColumn({
                 key={application._id}
                 application={application}
                 onReopen={onReopen}
+                onMove={onMove}
                 isUpdating={updatingApplicationId === application._id}
               />
             ))}

@@ -5,24 +5,31 @@ import { Link } from "react-router";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { isTerminalStatus } from "@/features/board/board.constants";
+import { applicationStatusLabels } from "@/features/applications/application-display";
+import { boardColumns, canMoveApplication, isTerminalStatus } from "@/features/board/board.constants";
 
-import type { Application } from "@/types/application";
+import type { Application, ApplicationStatus } from "@/types/application";
 
 interface BoardCardProps {
   application: Application;
   onReopen?: (application: Application) => void;
+  onMove?: (application: Application, status: ApplicationStatus) => void;
   isUpdating?: boolean;
 }
 
 export function BoardCard({
   application,
   onReopen,
+  onMove,
   isUpdating = false,
 }: BoardCardProps) {
   const canReopen =
     application.status === "rejected" || application.status === "withdrawn";
   const isDragDisabled = isTerminalStatus(application.status);
+  const nextStatuses = boardColumns.filter(
+    (column) => column.status !== application.status &&
+      canMoveApplication(application.status, column.status),
+  );
 
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, isDragging } =
     useDraggable({
@@ -38,11 +45,20 @@ export function BoardCard({
     opacity: isDragging ? 0.25 : 1,
   };
 
-  // Pointer dragging starts on the whole card; the grip stays keyboard-accessible.
+  // Dragging starts on card content, while links and controls keep their normal actions.
+  const startsOnControl = (target: EventTarget) =>
+    target instanceof Element &&
+    Boolean(target.closest("a, input, select, textarea, button:not([data-drag-handle])"));
+
   return (
     <article
       ref={setNodeRef}
-      onPointerDown={(event) => listeners?.onPointerDown?.(event)}
+      onMouseDown={(event) => {
+        if (!startsOnControl(event.target)) listeners?.onMouseDown?.(event);
+      }}
+      onTouchStart={(event) => {
+        if (!startsOnControl(event.target)) listeners?.onTouchStart?.(event);
+      }}
       style={style}
       className={[
         "rounded-xl border bg-background p-4 shadow-sm transition-all",
@@ -71,11 +87,12 @@ export function BoardCard({
         <button
           ref={setActivatorNodeRef}
           type="button"
+          data-drag-handle
           onKeyDown={(event) => listeners?.onKeyDown?.(event)}
           {...(!isDragDisabled ? attributes : {})}
           disabled={isDragDisabled}
           className={[
-            "shrink-0 rounded-lg p-1.5 text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            "flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand [touch-action:none]",
             isDragDisabled
               ? "cursor-not-allowed opacity-35"
               : "cursor-grab hover:bg-muted hover:text-foreground active:cursor-grabbing",
@@ -117,12 +134,36 @@ export function BoardCard({
         </div>
       )}
 
+      {!isDragDisabled && onMove && (
+        <div className="mt-4">
+          <label className="sr-only" htmlFor={`move-${application._id}`}>
+            Move {application.position} at {application.company} to a stage
+          </label>
+          <select
+            id={`move-${application._id}`}
+            className="min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            defaultValue=""
+            disabled={isUpdating}
+            onChange={(event) => {
+              const status = event.target.value as ApplicationStatus;
+              event.target.value = "";
+              if (status) onMove(application, status);
+            }}
+          >
+            <option value="">Move to stage…</option>
+            {nextStatuses.map(({ status }) => (
+              <option key={status} value={status}>{applicationStatusLabels[status]}</option>
+            ))}
+          </select>
+        </div>
+      )}
+
       {canReopen && onReopen && (
         <Button
           type="button"
           variant="outline"
           size="sm"
-          className="mt-4 w-full"
+          className="mt-4 min-h-11 w-full"
           disabled={isUpdating}
           onClick={() => onReopen(application)}
         >
