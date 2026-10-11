@@ -794,6 +794,7 @@
   position: relative;
   isolation: isolate;
   overflow: visible;
+  min-height: 2.75rem;
 }
 
 .landing-demo-button::before,
@@ -810,6 +811,35 @@
 
 .landing-demo-button::after {
   animation-delay: 1.075s;
+}
+
+.landing-demo-button.landing-demo-button-dark::before,
+.landing-demo-button.landing-demo-button-dark::after {
+  border-color: #193e34;
+}
+
+.dark .landing-demo-button.landing-demo-button-dark::before,
+.dark .landing-demo-button.landing-demo-button-dark::after {
+  border-color: #b9ead1;
+}
+
+a:focus-visible,
+[role="region"][tabindex="0"]:focus-visible {
+  outline: 2px solid #236b53;
+  outline-offset: 3px;
+}
+
+.dark a:focus-visible,
+.dark [role="region"][tabindex="0"]:focus-visible {
+  outline-color: #b9ead1;
+}
+
+@media (pointer: coarse) {
+  [data-slot="button"],
+  input:not([type="checkbox"]):not([type="radio"]),
+  select {
+    min-height: 2.75rem;
+  }
 }
 
 .server-wake-track {
@@ -834,6 +864,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
   .landing-route-line,
   .landing-flow-dot,
   .landing-architecture-dot,

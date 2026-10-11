@@ -967,7 +967,7 @@ function GuidedTourSection() {
           <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
             Follow one example from the dashboard through an application to an interview plan. You can skip the tour at any point and keep exploring.
           </p>
-          <Button size="lg" className="landing-demo-button mt-7" render={<Link to={guidedTourLogin} />}>
+          <Button size="lg" className="landing-demo-button landing-demo-button-dark mt-7" render={<Link to={guidedTourLogin} />}>
             Start guided tour <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Button>
           <p className="mt-3 text-sm text-muted-foreground">Your demo workspace is separate from other visitors.</p>
@@ -1284,7 +1284,7 @@ export function LandingPage() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Button
                   size="lg"
-                  className="landing-demo-button"
+                  className="landing-demo-button landing-demo-button-dark"
                   render={<Link to="/login?demo=1" />}
                 >
                   Explore live demo

@@ -288,6 +288,18 @@ export const updateApplication = async (
       return;
     }
 
+    const nextAction = applicationUpdates.nextAction === null
+      ? undefined
+      : applicationUpdates.nextAction ?? currentApplication.nextAction;
+    const followUpDate = applicationUpdates.followUpDate === null
+      ? undefined
+      : applicationUpdates.followUpDate ?? currentApplication.followUpDate;
+
+    if (Boolean(nextAction) !== Boolean(followUpDate)) {
+      res.status(400).json({ message: "Add both a next action and a follow-up date" });
+      return;
+    }
+
     const fieldsToSet = Object.fromEntries(
       Object.entries(applicationUpdates).filter(([, value]) => value !== null),
     );

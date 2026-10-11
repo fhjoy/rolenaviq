@@ -28,7 +28,7 @@ export const getDashboardStats = async (
 
     const userId = new Types.ObjectId(req.userId);
 
-    const [statusCounts, monthlyCounts] = await Promise.all([
+    const [statusCounts, monthlyCounts, nextActions] = await Promise.all([
       Application.aggregate<StatusCount>([
         {
           $match: {
@@ -84,6 +84,10 @@ export const getDashboardStats = async (
           },
         },
       ]),
+      Application.find({ userId, nextAction: { $exists: true, $ne: "" }, followUpDate: { $exists: true } })
+        .sort({ followUpDate: 1, _id: 1 })
+        .limit(6)
+        .select("company position status nextAction followUpDate"),
     ]);
 
     const counts: Record<string, number> = {};
@@ -166,6 +170,8 @@ export const getDashboardStats = async (
       statusDistribution,
 
       monthlyActivity,
+
+      nextActions,
     });
   } catch (error) {
     console.error("Dashboard stats error:", error);

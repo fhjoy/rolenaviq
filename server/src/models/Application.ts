@@ -45,6 +45,8 @@ export interface IApplication {
 
   appliedAt?: Date;
   interviewDate?: Date;
+  nextAction?: string;
+  followUpDate?: Date;
 
   notes?: string;
 
@@ -136,6 +138,16 @@ const applicationSchema = new Schema<IApplication>(
       type: Date,
     },
 
+    nextAction: {
+      type: String,
+      trim: true,
+      maxlength: 200,
+    },
+
+    followUpDate: {
+      type: Date,
+    },
+
     notes: {
       type: String,
       trim: true,
@@ -153,6 +165,7 @@ applicationSchema.index({
   createdAt: -1,
 });
 applicationSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+applicationSchema.index({ userId: 1, followUpDate: 1 });
 
 const Application = model<IApplication>("Application", applicationSchema);
 

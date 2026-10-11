@@ -330,6 +330,45 @@ export function ApplicationForm({
 
       <Card className="border-border/70 bg-card shadow-sm">
         <CardHeader>
+          <CardTitle>Next action</CardTitle>
+          <CardDescription>
+            Give yourself a clear follow-up, separate from the interview date.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,12rem)]">
+          <div className="space-y-2">
+            <Label htmlFor="nextAction">What will you do next?</Label>
+            <Input
+              id="nextAction"
+              maxLength={200}
+              placeholder="Email the recruiter for an update"
+              aria-invalid={Boolean(errors.nextAction)}
+              {...register("nextAction")}
+            />
+            {errors.nextAction && (
+              <p role="alert" className="text-sm text-destructive">{errors.nextAction.message}</p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="followUpDate">Follow-up date</Label>
+            <Input
+              id="followUpDate"
+              type="date"
+              aria-invalid={Boolean(errors.followUpDate)}
+              {...register("followUpDate")}
+            />
+            {errors.followUpDate && (
+              <p role="alert" className="text-sm text-destructive">{errors.followUpDate.message}</p>
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground sm:col-span-2">
+            Add both fields to put this action on the dashboard and calendar. Clear both to remove it.
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card className="border-border/70 bg-card shadow-sm">
+        <CardHeader>
           <div className="flex items-start gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
               <CalendarDays className="h-5 w-5" aria-hidden="true" />

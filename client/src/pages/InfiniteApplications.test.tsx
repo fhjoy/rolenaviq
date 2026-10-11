@@ -176,6 +176,7 @@ describe("infinite applications", () => {
         stats: { total: 11, applied: 11, interviews: 0, offers: 0, rejected: 0, responseRate: 0 },
         statusDistribution: [],
         monthlyActivity: [],
+        nextActions: [],
       })),
       http.get(`${API_URL}/applications`, ({ request }) =>
         HttpResponse.json(pagedResponse(Number(new URL(request.url).searchParams.get("page")))),

@@ -39,6 +39,8 @@ function getDefaultValues(application: Application): ApplicationFormData {
     technologies: application.technologies.join(", "),
     appliedAt: application.appliedAt ? application.appliedAt.slice(0, 10) : "",
     interviewDate: toDateTimeLocal(application.interviewDate),
+    nextAction: application.nextAction ?? "",
+    followUpDate: application.followUpDate?.slice(0, 10) ?? "",
     notes: application.notes ?? "",
   };
 }
@@ -71,6 +73,8 @@ function EditForm({ application }: { application: Application }) {
         interviewDate: data.interviewDate
           ? new Date(data.interviewDate).toISOString()
           : null,
+        nextAction: data.nextAction?.trim() || null,
+        followUpDate: data.followUpDate || null,
         notes: data.notes || null,
         ...(reopen ? { reopen: true } : {}),
       });

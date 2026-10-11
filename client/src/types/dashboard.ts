@@ -23,4 +23,13 @@ export interface DashboardStatsResponse {
   statusDistribution: StatusDistributionItem[];
 
   monthlyActivity: MonthlyActivityItem[];
+
+  nextActions: {
+    _id: string;
+    company: string;
+    position: string;
+    status: import("./application").ApplicationStatus;
+    nextAction: string;
+    followUpDate: string;
+  }[];
 }

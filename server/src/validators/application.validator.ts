@@ -21,6 +21,8 @@ const httpUrlSchema = z
   .trim()
   .refine(isHttpUrl, "Please provide a valid HTTP or HTTPS URL");
 
+const dateOnlySchema = z.iso.date().transform((value) => new Date(`${value}T00:00:00.000Z`));
+
 const applicationFieldsSchema = z.object({
   company: z.string().trim().min(1, "Company is required").max(100),
 
@@ -50,11 +52,18 @@ const applicationFieldsSchema = z.object({
 
   interviewDate: z.coerce.date().optional(),
 
+  nextAction: z.string().trim().min(1).max(200).optional(),
+
+  followUpDate: dateOnlySchema.optional(),
+
   notes: z.string().trim().max(5000).optional(),
 });
 
 export const createApplicationSchema = applicationFieldsSchema.superRefine(
   (data, ctx) => {
+    if (Boolean(data.nextAction) !== Boolean(data.followUpDate)) {
+      ctx.addIssue({ code: "custom", path: [data.nextAction ? "followUpDate" : "nextAction"], message: "Add both a next action and a follow-up date" });
+    }
     const requiresInterviewDate =
       data.status === "interview" || data.status === "technical_interview";
 
@@ -84,6 +93,10 @@ export const updateApplicationSchema = applicationFieldsSchema
     appliedAt: z.union([z.null(), z.coerce.date()]).optional(),
 
     interviewDate: z.union([z.null(), z.coerce.date()]).optional(),
+
+    nextAction: z.string().trim().min(1).max(200).nullable().optional(),
+
+    followUpDate: dateOnlySchema.nullable().optional(),
 
     notes: z.string().trim().max(5000).nullable().optional(),
 

@@ -9,10 +9,11 @@ import {
   startOfMonth,
   startOfWeek,
 } from "date-fns";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, ListTodo } from "lucide-react";
 import { Link } from "react-router";
 
 import type { Application } from "@/types/application";
+import { localFollowUpDate } from "@/features/applications/follow-up-date";
 
 interface MonthlyCalendarProps {
   month: Date;
@@ -41,7 +42,7 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
   }
 
   return (
-    <div className="overflow-x-auto [scrollbar-width:thin]">
+    <div className="overflow-x-auto [scrollbar-width:thin]" role="region" aria-label="Monthly calendar, scroll horizontally to see all days" tabIndex={0}>
       <div className="min-w-175">
         <div className="grid grid-cols-7 border-b bg-muted/30">
           {weekDays.map((day) => (
@@ -60,6 +61,11 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
               (application) =>
                 application.interviewDate &&
                 isSameDay(new Date(application.interviewDate), day),
+            );
+            const dayFollowUps = applications.filter(
+              (application) =>
+                application.nextAction && application.followUpDate &&
+                isSameDay(localFollowUpDate(application.followUpDate), day),
             );
 
             const belongsToMonth = isSameMonth(day, month);
@@ -86,9 +92,9 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
                     {format(day, "d")}
                   </div>
 
-                  {dayApplications.length > 0 && (
+                  {dayApplications.length + dayFollowUps.length > 0 && (
                     <span className="text-[11px] font-medium text-muted-foreground">
-                      {dayApplications.length}
+                      {dayApplications.length + dayFollowUps.length}
                     </span>
                   )}
                 </div>
@@ -99,6 +105,7 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
                       key={application._id}
                       to={`/applications/${application._id}`}
                       className="group block rounded-lg border border-brand/20 bg-brand/8 px-2 py-1.5 text-xs transition-colors hover:border-brand/35 hover:bg-brand/12"
+                      aria-label={`Interview with ${application.company}, ${format(new Date(application.interviewDate!), "p")}, ${format(day, "PP")}`}
                     >
                       <span className="flex items-center gap-1.5 font-semibold text-brand">
                         <CalendarDays
@@ -115,6 +122,20 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
                       <span className="block truncate text-muted-foreground group-hover:text-foreground/70">
                         {application.position}
                       </span>
+                    </Link>
+                  ))}
+                  {dayFollowUps.map((application) => (
+                    <Link
+                      key={`follow-up-${application._id}`}
+                      to={`/applications/${application._id}`}
+                      className="group block rounded-lg border border-amber-500/35 bg-amber-500/10 px-2 py-1.5 text-xs transition-colors hover:bg-amber-500/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                      aria-label={`Follow up with ${application.company}: ${application.nextAction}, ${format(day, "PP")}`}
+                    >
+                      <span className="flex items-center gap-1.5 font-semibold">
+                        <ListTodo className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />Follow-up
+                      </span>
+                      <span className="mt-1 block truncate font-medium">{application.company}</span>
+                      <span className="block truncate text-muted-foreground">{application.nextAction}</span>
                     </Link>
                   ))}
                 </div>

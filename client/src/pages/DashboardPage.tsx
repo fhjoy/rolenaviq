@@ -21,6 +21,7 @@ import { useCurrentUser } from "@/features/auth/useCurrentUser";
 import { InfiniteApplicationsFooter } from "@/features/applications/InfiniteApplicationsFooter";
 import { useInfiniteApplications } from "@/features/applications/useInfiniteApplications";
 import { MonthlyActivityChart } from "@/features/dashboard/MonthlyActivityChart";
+import { NextActions } from "@/features/dashboard/NextActions";
 import { RecentApplications } from "@/features/dashboard/RecentApplications";
 import { StatsCard } from "@/features/dashboard/StatsCard";
 import { StatusChart } from "@/features/dashboard/StatusChart";
@@ -206,6 +207,8 @@ export function DashboardPage() {
               tone="violet"
             />
           </div>
+
+          <NextActions actions={data.nextActions} />
 
           <div className="workspace-next-step mt-6">
             <div className="workspace-next-icon"><BookOpenCheck className="h-6 w-6" aria-hidden="true" /></div>

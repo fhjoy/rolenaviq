@@ -74,6 +74,30 @@ describe("Applications API", () => {
     expect(response.body.errors.jobDescription).toBeDefined();
   });
 
+  it("saves a paired next action and date and clears both together", async () => {
+    const { agent } = await createAuthenticatedAgent();
+    const unpaired = await agent.post("/api/applications").send({
+      ...validApplication, nextAction: "Email recruiter",
+    });
+    expect(unpaired.status).toBe(400);
+    expect(unpaired.body.errors.followUpDate).toBeDefined();
+
+    const created = await agent.post("/api/applications").send({
+      ...validApplication, nextAction: "Email recruiter", followUpDate: "2026-10-22",
+    });
+    expect(created.status).toBe(201);
+    expect(created.body.application).toMatchObject({
+      nextAction: "Email recruiter", followUpDate: "2026-10-22T00:00:00.000Z",
+    });
+
+    const id = created.body.application._id;
+    expect((await agent.patch(`/api/applications/${id}`).send({ followUpDate: null })).status).toBe(400);
+    const cleared = await agent.patch(`/api/applications/${id}`).send({ nextAction: null, followUpDate: null });
+    expect(cleared.status).toBe(200);
+    expect(cleared.body.application).not.toHaveProperty("nextAction");
+    expect(cleared.body.application).not.toHaveProperty("followUpDate");
+  });
+
   it("ignores a client supplied userId and keeps ownership with the authenticated user", async () => {
     const { agent, userId } = await createAuthenticatedAgent();
     const maliciousUserId = new Types.ObjectId().toString();

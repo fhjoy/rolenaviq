@@ -1,7 +1,7 @@
 import {
   DndContext,
   KeyboardSensor,
-  PointerSensor,
+  MouseSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -25,39 +25,38 @@ const application: Application = {
   updatedAt: "2026-10-01T00:00:00.000Z",
 };
 
-function DraggableBoardCard({ onDragStart }: { onDragStart: () => void }) {
+function DraggableBoardCard({ onDragStart, onMove }: { onDragStart: () => void; onMove?: (status: string) => void }) {
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(MouseSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor),
   );
 
   return (
     <DndContext sensors={sensors} onDragStart={onDragStart}>
-      <BoardCard application={application} />
+      <BoardCard application={application} onMove={(_, status) => onMove?.(status)} />
     </DndContext>
   );
 }
 
 describe("BoardCard", () => {
-  it("starts a pointer drag from card content outside the grip", async () => {
+  it("starts a mouse drag from card content outside the grip", async () => {
     const onDragStart = vi.fn();
     renderWithProviders(<DraggableBoardCard onDragStart={onDragStart} />);
 
-    const pointerDown = new MouseEvent("pointerdown", {
+    const mouseDown = new MouseEvent("mousedown", {
       bubbles: true,
       button: 0,
       clientX: 10,
       clientY: 10,
     });
-    Object.defineProperty(pointerDown, "isPrimary", { value: true });
-    fireEvent(screen.getByText("Northstar Labs"), pointerDown);
-    fireEvent.pointerMove(document, {
+    fireEvent(screen.getByText("Northstar Labs"), mouseDown);
+    fireEvent.mouseMove(document, {
       clientX: 25,
       clientY: 10,
     });
 
     await waitFor(() => expect(onDragStart).toHaveBeenCalledOnce());
-    fireEvent.pointerUp(document);
+    fireEvent.mouseUp(document);
   });
 
   it("keeps the grip available for keyboard dragging", async () => {
@@ -85,5 +84,18 @@ describe("BoardCard", () => {
     await user.click(screen.getByRole("link", { name: "Frontend Engineer" }));
 
     expect(screen.getByText("Application details")).toBeInTheDocument();
+  });
+
+  it("offers only valid moves through a keyboard and touch friendly select", async () => {
+    const user = userEvent.setup();
+    const onDragStart = vi.fn();
+    const onMove = vi.fn();
+    renderWithProviders(<DraggableBoardCard onDragStart={onDragStart} onMove={onMove} />);
+    const select = screen.getByRole("combobox", { name: "Move Frontend Engineer at Northstar Labs to a stage" });
+    expect(screen.queryByRole("option", { name: "Saved" })).not.toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Interview" })).toBeInTheDocument();
+    await user.selectOptions(select, "screening");
+    expect(onMove).toHaveBeenCalledWith("screening");
+    expect(onDragStart).not.toHaveBeenCalled();
   });
 });

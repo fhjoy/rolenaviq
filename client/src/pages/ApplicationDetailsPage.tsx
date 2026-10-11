@@ -188,6 +188,18 @@ export function ApplicationDetailsPage() {
         </Card>
       </div>
 
+      {application.nextAction && application.followUpDate && (
+        <Card className="mt-6 border-brand/20 bg-card shadow-sm">
+          <CardHeader><CardTitle>Next action</CardTitle></CardHeader>
+          <CardContent>
+            <p className="font-medium">{application.nextAction}</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Follow up on {formatDate(`${application.followUpDate.slice(0, 10)}T00:00:00`)}
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
       {application.jobDescription && (
         <Card className="mt-6 border-border/70 bg-card shadow-sm">
           <CardHeader>
