@@ -9,8 +9,10 @@ describe("follow-up workflow on a small screen", () => {
 
     const due = new Date(Date.now() + 3 * 86_400_000).toISOString().slice(0, 10);
     cy.get("#new-action").focus().should("have.focus").type("Send portfolio link");
-    cy.get("#new-action-date").focus().should("have.focus").type(due);
-    cy.contains("button", "Add action").click();
+    cy.press(Cypress.Keyboard.Keys.TAB);
+    cy.get("#new-action-date").should("have.focus").type(due);
+    cy.contains("button", "Add action").focus();
+    cy.press(Cypress.Keyboard.Keys.ENTER);
     cy.contains("li", "Send portfolio link").should("be.visible");
     cy.document().then(document => expect(document.documentElement.scrollWidth).to.be.at.most(390));
 
