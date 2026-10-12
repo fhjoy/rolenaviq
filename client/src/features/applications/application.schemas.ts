@@ -57,20 +57,9 @@ export const applicationFormSchema = z
 
     interviewDate: z.string().optional(),
 
-    nextAction: z.string().trim().max(200).optional(),
-
-    followUpDate: z.string().optional(),
-
     notes: z.string().max(5000).optional(),
   })
   .superRefine((data, ctx) => {
-    if (Boolean(data.nextAction) !== Boolean(data.followUpDate)) {
-      ctx.addIssue({
-        code: "custom",
-        path: [data.nextAction ? "followUpDate" : "nextAction"],
-        message: "Add both a next action and a follow-up date",
-      });
-    }
     const requiresInterviewDate =
       data.status === "interview" || data.status === "technical_interview";
 

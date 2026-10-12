@@ -12,6 +12,7 @@ import { ApplicationCard } from "@/features/applications/ApplicationCard";
 import { ApplicationListSkeleton } from "@/features/applications/ApplicationListSkeleton";
 import { InfiniteApplicationsFooter } from "@/features/applications/InfiniteApplicationsFooter";
 import { useInfiniteApplications } from "@/features/applications/useInfiniteApplications";
+import { ApplicationTransfer } from "@/features/applications/ApplicationTransfer";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import type {
   ApplicationSort,
@@ -85,6 +86,8 @@ export function ApplicationsPage() {
           </Button>
         </>}
       />
+
+      <ApplicationTransfer />
 
       <section className="workspace-feature-panel mt-6 rounded-2xl border bg-card p-4 shadow-sm sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

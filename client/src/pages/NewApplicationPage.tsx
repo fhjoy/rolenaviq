@@ -19,8 +19,6 @@ const defaultValues: ApplicationFormData = {
   technologies: "",
   appliedAt: "",
   interviewDate: "",
-  nextAction: "",
-  followUpDate: "",
   notes: "",
 };
 
@@ -64,8 +62,6 @@ export function NewApplicationPage() {
       interviewDate: data.interviewDate
         ? new Date(data.interviewDate).toISOString()
         : undefined,
-      nextAction: data.nextAction?.trim() || undefined,
-      followUpDate: data.followUpDate || undefined,
       notes: data.notes || undefined,
       technologies,
     });

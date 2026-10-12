@@ -25,19 +25,19 @@ export function NextActions({ actions }: { actions: DashboardStatsResponse["next
       ) : (
         <ul className="mt-5 grid gap-3 md:grid-cols-2">
           {actions.map((action) => {
-            const day = localFollowUpDate(action.followUpDate);
+            const day = localFollowUpDate(action.dueDate);
             const daysAway = differenceInCalendarDays(day, new Date());
             const when = daysAway < 0 ? "Overdue" : daysAway === 0 ? "Today" : format(day, "d MMM");
 
             return (
               <li key={action._id}>
                 <Link
-                  to={`/applications/${action._id}`}
+                  to={`/applications/${action.applicationId._id}`}
                   className="group flex min-h-20 items-center justify-between gap-3 rounded-xl border border-border/70 p-4 transition-colors hover:border-brand/40 hover:bg-brand/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 >
                   <span className="min-w-0">
-                    <span className="block font-semibold">{action.nextAction}</span>
-                    <span className="mt-1 block text-sm text-muted-foreground">{action.company} · {action.position}</span>
+                    <span className="block font-semibold">{action.title}</span>
+                    <span className="mt-1 block text-sm text-muted-foreground">{action.applicationId.company} · {action.applicationId.position}</span>
                   </span>
                   <span className="flex shrink-0 items-center gap-2 text-sm font-medium text-brand">
                     {when}<ArrowRight className="h-4 w-4" aria-hidden="true" />

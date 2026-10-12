@@ -46,9 +46,6 @@ function formatDateTime(value?: string) {
 export function ApplicationCard({ application }: { application: Application }) {
   const appliedDate = formatDate(application.appliedAt);
   const interviewDate = formatDateTime(application.interviewDate);
-  const followUpDate = application.followUpDate
-    ? formatDate(`${application.followUpDate.slice(0, 10)}T00:00:00`)
-    : null;
 
   return (
     <article className="group rounded-2xl border border-border/70 bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
@@ -95,7 +92,7 @@ export function ApplicationCard({ application }: { application: Application }) {
         </div>
       )}
 
-      {(appliedDate || interviewDate || followUpDate) && (
+      {(appliedDate || interviewDate) && (
         <div className="mt-4 grid gap-2 rounded-xl bg-muted/35 p-3 text-sm sm:grid-cols-2">
           {appliedDate && (
             <div className="flex items-center gap-2 text-muted-foreground">
@@ -107,12 +104,6 @@ export function ApplicationCard({ application }: { application: Application }) {
             <div className="flex items-center gap-2 text-muted-foreground">
               <Clock3 className="h-4 w-4 text-brand" aria-hidden="true" />
               <span>Interview {interviewDate}</span>
-            </div>
-          )}
-          {application.nextAction && followUpDate && (
-            <div className="flex items-start gap-2 text-muted-foreground sm:col-span-2">
-              <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
-              <span>{application.nextAction} · {followUpDate}</span>
             </div>
           )}
         </div>
