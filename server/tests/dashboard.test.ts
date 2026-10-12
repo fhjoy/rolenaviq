@@ -2,6 +2,8 @@ import { Types } from "mongoose";
 import { describe, expect, it } from "vitest";
 
 import Application from "../src/models/Application.js";
+import Action from "../src/models/Action.js";
+import InterviewPrep from "../src/models/InterviewPrep.js";
 import { createAuthenticatedAgent } from "./helpers.js";
 
 describe("Dashboard API", () => {
@@ -92,9 +94,24 @@ describe("Dashboard API", () => {
       { userId: new Types.ObjectId(owner.userId), company: "Today", followUpDate: new Date("2026-10-11"), nextAction: "Send portfolio" },
       { userId: new Types.ObjectId(other.userId), company: "Private", followUpDate: new Date("2026-10-10"), nextAction: "Private task" },
     ];
-    await Application.insertMany(records.map((record) => ({ ...record, position: "Engineer", technologies: [] })));
+    const applications = await Application.insertMany(records.map((record) => ({ ...record, position: "Engineer", technologies: [] })));
+    await Action.insertMany(applications.map((application, index) => ({ userId: application.userId, applicationId: application._id, title: records[index]!.nextAction, dueDate: records[index]!.followUpDate })));
     const response = await owner.agent.get("/api/dashboard/stats");
     expect(response.status).toBe(200);
-    expect(response.body.nextActions.map((action: { company: string }) => action.company)).toEqual(["Today", "Tomorrow"]);
+    expect(response.body.nextActions.map((action: { applicationId: { company: string } }) => action.applicationId.company)).toEqual(["Today", "Tomorrow"]);
+  });
+
+  it("summarizes preparation for upcoming interviews only", async () => {
+    const owner = await createAuthenticatedAgent();
+    const other = await createAuthenticatedAgent();
+    const future = new Date(Date.now() + 86_400_000);
+    const [mine, theirs] = await Application.insertMany([
+      { userId: owner.userId, company: "My Interview", position: "Engineer", status: "interview", interviewDate: future },
+      { userId: other.userId, company: "Private Interview", position: "Engineer", status: "interview", interviewDate: future },
+    ]);
+    await InterviewPrep.create({ userId: owner.userId, applicationId: mine!._id, completedTasks: ["research"], practice: [{ questionId: "q1", answer: "Answer", practiced: true }], sessions: [{ completedAt: new Date(), results: [{ questionId: "q1", confidence: 3 }] }] });
+    await InterviewPrep.create({ userId: other.userId, applicationId: theirs!._id, completedTasks: ["private"] });
+    const response = await owner.agent.get("/api/dashboard/stats");
+    expect(response.body.interviewPrep).toMatchObject([{ company: "My Interview", completedTasks: 1, practicedQuestions: 1, sessions: 1 }]);
   });
 });

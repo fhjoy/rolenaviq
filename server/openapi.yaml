@@ -1,0 +1,521 @@
+openapi: 3.0.3
+info:
+  title: RoleNaviq API
+  version: 1.0.0
+  description: Contract shared by the React workspace, Angular Interview Prep and Express API. Future services should use this contract before integration.
+servers:
+  - url: /api
+security:
+  - cookieAuth: []
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+  responses:
+    Auth:
+      description: Authenticated user
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [user, message]
+            properties:
+              user: { $ref: '#/components/schemas/User' }
+              message: { type: string }
+    User:
+      description: Current user
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [user]
+            properties:
+              user: { $ref: '#/components/schemas/User' }
+    Application:
+      description: Application details
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [application]
+            properties:
+              application: { $ref: '#/components/schemas/Application' }
+              message: { type: string }
+    ActionCreated:
+      description: Saved action
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [action]
+            properties:
+              action: { $ref: '#/components/schemas/ActionRecord' }
+    PrepDetail:
+      description: Application and preparation state
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [application, prep]
+            properties:
+              application: { $ref: '#/components/schemas/PrepApplication' }
+              prep: { $ref: '#/components/schemas/PrepData' }
+  parameters:
+    applicationId:
+      in: path
+      name: id
+      required: true
+      schema: { type: string }
+    prepId:
+      in: path
+      name: applicationId
+      required: true
+      schema: { type: string }
+    actionId:
+      in: path
+      name: id
+      required: true
+      schema: { type: string }
+  schemas:
+    Error:
+      type: object
+      required: [message]
+      properties:
+        message: { type: string }
+        errors: { type: object }
+    User:
+      type: object
+      required: [id, firstName, lastName, email, isDemo]
+      properties:
+        id: { type: string }
+        firstName: { type: string }
+        lastName: { type: string }
+        email: { type: string, format: email }
+        isDemo: { type: boolean }
+    Application:
+      type: object
+      required: [_id, company, position, status, technologies, createdAt, updatedAt]
+      properties:
+        _id: { type: string }
+        company: { type: string }
+        position: { type: string }
+        status:
+          type: string
+          enum: [saved, applied, screening, interview, technical_interview, offer, rejected, withdrawn]
+        technologies: { type: array, items: { type: string } }
+        jobUrl: { type: string }
+        jobDescription: { type: string }
+        location: { type: string }
+        workplaceType: { type: string, enum: [remote, hybrid, onsite] }
+        employmentType: { type: string, enum: [full_time, part_time, contract, freelance, internship] }
+        salaryMin: { type: number }
+        salaryMax: { type: number }
+        currency: { type: string }
+        appliedAt: { type: string, format: date-time }
+        interviewDate: { type: string, format: date-time }
+        notes: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    ApplicationInput:
+      type: object
+      required: [company, position]
+      properties:
+        company: { type: string, maxLength: 100 }
+        position: { type: string, maxLength: 150 }
+        status: { type: string, enum: [saved, applied, screening, interview, technical_interview, offer, rejected, withdrawn] }
+        technologies: { type: array, items: { type: string } }
+        jobUrl: { type: string, format: uri }
+        jobDescription: { type: string, maxLength: 20000 }
+        location: { type: string }
+        workplaceType: { type: string, enum: [remote, hybrid, onsite] }
+        employmentType: { type: string, enum: [full_time, part_time, contract, freelance, internship] }
+        salaryMin: { type: number, minimum: 0 }
+        salaryMax: { type: number, minimum: 0 }
+        currency: { type: string }
+        appliedAt: { type: string, format: date-time }
+        interviewDate: { type: string, format: date-time }
+        notes: { type: string }
+    ApplicationLink:
+      type: object
+      required: [_id, company, position]
+      properties:
+        _id: { type: string }
+        company: { type: string }
+        position: { type: string }
+    Action:
+      type: object
+      required: [_id, applicationId, title, dueDate]
+      properties:
+        _id: { type: string }
+        applicationId: { $ref: '#/components/schemas/ApplicationLink' }
+        title: { type: string }
+        dueDate: { type: string, format: date-time }
+        completedAt: { type: string, format: date-time }
+    ActionRecord:
+      type: object
+      required: [_id, applicationId, title, dueDate]
+      properties:
+        _id: { type: string }
+        applicationId: { type: string }
+        title: { type: string }
+        dueDate: { type: string, format: date-time }
+        completedAt: { type: string, format: date-time }
+    ActionInput:
+      type: object
+      required: [applicationId, title, dueDate]
+      properties:
+        applicationId: { type: string }
+        title: { type: string, minLength: 1, maxLength: 200 }
+        dueDate: { type: string, format: date }
+    ActionChange:
+      type: object
+      properties:
+        title: { type: string, minLength: 1, maxLength: 200 }
+        dueDate: { type: string, format: date }
+        completed: { type: boolean }
+    Pagination:
+      type: object
+      required: [page, limit, total, hasNextPage]
+      properties:
+        page: { type: integer }
+        limit: { type: integer }
+        total: { type: integer }
+        totalPages: { type: integer }
+        hasNextPage: { type: boolean }
+        hasPreviousPage: { type: boolean }
+    PrepProgress:
+      type: object
+      required: [completedTasks, practicedQuestions, sessions]
+      properties:
+        completedTasks: { type: integer }
+        practicedQuestions: { type: integer }
+        sessions: { type: integer }
+    InterviewApplication:
+      type: object
+      required: [_id, company, position, status]
+      properties:
+        _id: { type: string }
+        company: { type: string }
+        position: { type: string }
+        status: { type: string, enum: [interview, technical_interview] }
+        interviewDate: { type: string, format: date-time }
+        progress: { $ref: '#/components/schemas/PrepProgress' }
+    PrepApplication:
+      type: object
+      required: [_id, company, position, status]
+      properties:
+        _id: { type: string }
+        company: { type: string }
+        position: { type: string }
+        status: { type: string, enum: [saved, applied, screening, interview, technical_interview, offer, rejected, withdrawn] }
+        interviewDate: { type: string, format: date-time }
+    PracticeAnswer:
+      type: object
+      required: [questionId, answer, practiced]
+      properties:
+        questionId: { type: string }
+        answer: { type: string }
+        practiced: { type: boolean }
+    PracticeSession:
+      type: object
+      required: [completedAt, results]
+      properties:
+        completedAt: { type: string, format: date-time }
+        results:
+          type: array
+          items:
+            type: object
+            required: [questionId, confidence]
+            properties:
+              questionId: { type: string }
+              confidence: { type: integer, enum: [1, 2, 3] }
+    PrepData:
+      type: object
+      required: [completedTasks, practice, notes, sessions]
+      properties:
+        completedTasks: { type: array, items: { type: string } }
+        practice: { type: array, items: { $ref: '#/components/schemas/PracticeAnswer' } }
+        notes: { type: string }
+        sessions: { type: array, items: { $ref: '#/components/schemas/PracticeSession' } }
+    DashboardResponse:
+      type: object
+      required: [stats, statusDistribution, monthlyActivity, nextActions, interviewPrep]
+      properties:
+        stats:
+          type: object
+          required: [total, applied, interviews, offers, rejected, responseRate]
+          properties:
+            total: { type: integer }
+            applied: { type: integer }
+            interviews: { type: integer }
+            offers: { type: integer }
+            rejected: { type: integer }
+            responseRate: { type: integer }
+        statusDistribution:
+          type: array
+          items:
+            type: object
+            required: [status, count]
+            properties:
+              status: { type: string }
+              count: { type: integer }
+        monthlyActivity:
+          type: array
+          items:
+            type: object
+            required: [month, count]
+            properties:
+              month: { type: string }
+              count: { type: integer }
+        nextActions: { type: array, items: { $ref: '#/components/schemas/Action' } }
+        interviewPrep:
+          type: array
+          items:
+            type: object
+            required: [applicationId, company, position, interviewDate, completedTasks, practicedQuestions, sessions]
+            properties:
+              applicationId: { type: string }
+              company: { type: string }
+              position: { type: string }
+              interviewDate: { type: string, format: date-time }
+              completedTasks: { type: integer }
+              practicedQuestions: { type: integer }
+              sessions: { type: integer }
+    ImportPreview:
+      type: object
+      required: [total, importable, duplicates, errors]
+      properties:
+        total: { type: integer }
+        importable: { type: integer }
+        duplicates: { type: array, items: { type: integer } }
+        errors:
+          type: array
+          items:
+            type: object
+            required: [row, message]
+            properties:
+              row: { type: integer }
+              message: { type: string }
+paths:
+  /health:
+    get:
+      security: []
+      responses:
+        '200':
+          description: API health
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, service]
+                properties:
+                  status: { type: string }
+                  service: { type: string }
+                  commit: { type: string, nullable: true }
+  /auth/register:
+    post:
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [firstName, lastName, email, password]
+              properties:
+                firstName: { type: string }
+                lastName: { type: string }
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '201': { $ref: '#/components/responses/Auth' }
+  /auth/login:
+    post:
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '200': { $ref: '#/components/responses/Auth' }
+  /auth/logout:
+    post:
+      responses:
+        '200': { description: Session cleared }
+  /auth/me:
+    get:
+      responses:
+        '200': { $ref: '#/components/responses/User' }
+  /auth/profile:
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName: { type: string }
+                lastName: { type: string }
+                email: { type: string, format: email }
+      responses:
+        '200': { $ref: '#/components/responses/User' }
+  /applications:
+    get:
+      parameters:
+        - { in: query, name: search, schema: { type: string } }
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: page, schema: { type: integer } }
+        - { in: query, name: limit, schema: { type: integer, maximum: 100 } }
+        - { in: query, name: sort, schema: { type: string } }
+      responses:
+        '200':
+          description: Paginated applications
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [applications, pagination]
+                properties:
+                  applications: { type: array, items: { $ref: '#/components/schemas/Application' } }
+                  pagination: { $ref: '#/components/schemas/Pagination' }
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json: { schema: { $ref: '#/components/schemas/ApplicationInput' } }
+      responses:
+        '201': { $ref: '#/components/responses/Application' }
+  /applications/export:
+    get:
+      responses:
+        '200':
+          description: CSV with application fields and actions JSON column
+          content:
+            text/csv: { schema: { type: string } }
+  /applications/import/preview:
+    post:
+      requestBody: { required: true, content: { text/csv: { schema: { type: string } } } }
+      responses:
+        '200':
+          description: Validation and duplicate preview; rows numbered from 2
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/ImportPreview' } }
+  /applications/import:
+    post:
+      requestBody: { required: true, content: { text/csv: { schema: { type: string } } } }
+      responses:
+        '201':
+          description: Imported valid rows, skipped duplicates
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [imported, duplicates]
+                properties:
+                  imported: { type: integer }
+                  duplicates: { type: array, items: { type: integer } }
+  /applications/{id}:
+    parameters:
+      - { $ref: '#/components/parameters/applicationId' }
+    get:
+      responses:
+        '200': { $ref: '#/components/responses/Application' }
+    patch:
+      requestBody: { content: { application/json: { schema: { $ref: '#/components/schemas/ApplicationInput' } } } }
+      responses:
+        '200': { $ref: '#/components/responses/Application' }
+    delete:
+      responses:
+        '200': { description: Application and linked action records deleted }
+  /actions:
+    get:
+      parameters:
+        - { in: query, name: applicationId, schema: { type: string } }
+        - { in: query, name: status, schema: { type: string, enum: [open, completed, all] } }
+        - { in: query, name: page, schema: { type: integer } }
+        - { in: query, name: limit, schema: { type: integer, maximum: 100 } }
+      responses:
+        '200':
+          description: Actions for the current user
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [actions, pagination]
+                properties:
+                  actions: { type: array, items: { $ref: '#/components/schemas/Action' } }
+                  pagination: { $ref: '#/components/schemas/Pagination' }
+    post:
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ActionInput' } } } }
+      responses:
+        '201': { $ref: '#/components/responses/ActionCreated' }
+  /actions/{id}:
+    parameters:
+      - { $ref: '#/components/parameters/actionId' }
+    patch:
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ActionChange' } } } }
+      responses:
+        '200': { $ref: '#/components/responses/ActionCreated' }
+    delete:
+      responses:
+        '200': { description: Action deleted }
+  /dashboard/stats:
+    get:
+      responses:
+        '200':
+          description: Workspace metrics and the next three interview plans
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/DashboardResponse' } }
+  /prep/interviews:
+    get:
+      responses:
+        '200':
+          description: Interview stage applications with preparation progress
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [applications]
+                properties:
+                  applications: { type: array, items: { $ref: '#/components/schemas/InterviewApplication' } }
+  /prep/interviews/{applicationId}:
+    parameters:
+      - { $ref: '#/components/parameters/prepId' }
+    get:
+      responses:
+        '200': { $ref: '#/components/responses/PrepDetail' }
+    put:
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PrepData' } } } }
+      responses:
+        '200': { $ref: '#/components/responses/PrepDetail' }
+  /prep/interviews/{applicationId}/sessions:
+    parameters:
+      - { $ref: '#/components/parameters/prepId' }
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [results]
+              properties:
+                results: { $ref: '#/components/schemas/PracticeSession/properties/results' }
+      responses:
+        '201':
+          description: Saved practice session
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [session]
+                properties:
+                  session: { $ref: '#/components/schemas/PracticeSession' }

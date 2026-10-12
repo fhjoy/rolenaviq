@@ -20,6 +20,7 @@ import { useInfiniteApplications } from "@/features/applications/useInfiniteAppl
 import { localFollowUpDate } from "@/features/applications/follow-up-date";
 import { InterviewCard } from "@/features/calendar/InterviewCard";
 import { MonthlyCalendar } from "@/features/calendar/MonthlyCalendar";
+import { useActions } from "@/features/actions/useActions";
 
 export function CalendarPage() {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
@@ -28,12 +29,18 @@ export function CalendarPage() {
     limit: 100,
     sort: "-createdAt",
   });
+  const followUpQuery = useActions();
+  const { hasNextPage: hasNextActionPage, isFetchingNextPage: isFetchingNextActionPage, isFetchNextPageError: isNextActionPageError, fetchNextPage: fetchNextActionPage } = followUpQuery;
 
   useEffect(() => {
     if (hasNextPage && !isFetchingNextPage && !isFetchNextPageError) {
       void fetchNextPage();
     }
   }, [hasNextPage, isFetchingNextPage, isFetchNextPageError, fetchNextPage]);
+
+  useEffect(() => {
+    if (hasNextActionPage && !isFetchingNextActionPage && !isNextActionPageError) void fetchNextActionPage();
+  }, [hasNextActionPage, isFetchingNextActionPage, isNextActionPageError, fetchNextActionPage]);
 
   if (isLoading) {
     return (
@@ -74,9 +81,7 @@ export function CalendarPage() {
   const pastInterviews = interviews
     .filter((application) => new Date(application.interviewDate!) < now)
     .reverse();
-  const followUps = applications
-    .filter((application) => application.nextAction && application.followUpDate)
-    .sort((a, b) => a.followUpDate!.localeCompare(b.followUpDate!));
+  const followUps = followUpQuery.data?.pages.flatMap(page => page.actions) ?? [];
 
   return (
     <div className="w-full">
@@ -159,25 +164,27 @@ export function CalendarPage() {
         </header>
 
         <p className="px-4 pt-3 text-xs text-muted-foreground sm:hidden">Scroll the calendar sideways to see the whole week.</p>
-        <MonthlyCalendar month={selectedMonth} applications={applications} />
+        <MonthlyCalendar month={selectedMonth} applications={applications} actions={followUps} />
       </section>
 
       <section className="mt-8" aria-labelledby="follow-ups-heading">
         <h2 id="follow-ups-heading" className="text-xl font-semibold">Follow-ups</h2>
-        {followUps.length === 0 ? (
+        {followUpQuery.isError && <p role="alert" className="mt-4 text-destructive">Could not load follow-ups. <Button variant="outline" onClick={() => void followUpQuery.refetch()}>Try again</Button></p>}
+        {followUpQuery.isFetchingNextPage && <p role="status">Loading more follow-ups...</p>}
+        {followUpQuery.isPending ? <p className="mt-4 text-sm" role="status">Loading follow-ups...</p> : followUps.length === 0 && !followUpQuery.isError ? (
           <p className="mt-4 rounded-xl border bg-card p-5 text-sm text-muted-foreground">
-            No follow-ups planned. Add a next action and date to an application.
+            No follow-ups planned. Open an application to add one.
           </p>
-        ) : (
+        ) : followUps.length > 0 && (
           <ul className="mt-4 grid gap-3 xl:grid-cols-2">
-            {followUps.map((application) => {
-              const day = localFollowUpDate(application.followUpDate!);
+            {followUps.map((action) => {
+              const day = localFollowUpDate(action.dueDate);
               const overdue = isBefore(day, startOfDay(now));
               return (
-                <li key={application._id}>
-                  <Link to={`/applications/${application._id}`} className="flex min-h-16 items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:border-brand/40 hover:bg-brand/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+                <li key={action._id}>
+                  <Link to={`/applications/${action.applicationId._id}`} className="flex min-h-16 items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:border-brand/40 hover:bg-brand/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
                     <ListTodo className="h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
-                    <span className="min-w-0 flex-1"><span className="block font-medium">{application.nextAction}</span><span className="text-sm text-muted-foreground">{application.company} · {application.position}</span></span>
+                    <span className="min-w-0 flex-1"><span className="block font-medium">{action.title}</span><span className="text-sm text-muted-foreground">{action.applicationId.company} · {action.applicationId.position}</span></span>
                     <span className="shrink-0 text-sm font-medium">{overdue ? "Overdue · " : ""}{format(day, "d MMM")}</span>
                   </Link>
                 </li>

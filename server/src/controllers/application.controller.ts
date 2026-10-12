@@ -3,6 +3,7 @@ import { type QueryFilter, isValidObjectId } from "mongoose";
 
 import Application, { type IApplication } from "../models/Application.js";
 import InterviewPrep from "../models/InterviewPrep.js";
+import Action from "../models/Action.js";
 import User from "../models/User.js";
 import {
   createApplicationSchema,
@@ -393,6 +394,7 @@ export const deleteApplication = async (
     }
 
     await InterviewPrep.deleteOne({ applicationId: application._id, userId: req.userId });
+    await Action.deleteMany({ applicationId: application._id, userId: req.userId });
 
     res.status(200).json({
       message: "Application deleted successfully",

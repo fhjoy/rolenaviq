@@ -30,6 +30,7 @@ import { PageError } from "@/components/common/PageError";
 import { DashboardSkeleton } from "@/features/dashboard/DashboardSkeleton";
 import { DemoTourCard } from "@/components/common/DemoTourCard";
 import { getApplications } from "@/features/applications/application.api";
+import { InterviewPrepSummary } from "@/features/dashboard/InterviewPrepSummary";
 
 function hasSeenDemoTour(userId: string) {
   try {
@@ -209,6 +210,7 @@ export function DashboardPage() {
           </div>
 
           <NextActions actions={data.nextActions} />
+          <InterviewPrepSummary interviews={data.interviewPrep} />
 
           <div className="workspace-next-step mt-6">
             <div className="workspace-next-icon"><BookOpenCheck className="h-6 w-6" aria-hidden="true" /></div>

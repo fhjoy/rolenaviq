@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.routes.js";
 import applicationRoutes from "./routes/application.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import interviewPrepRoutes from "./routes/interview-prep.routes.js";
+import actionRoutes from "./routes/action.routes.js";
 import { apiLimiter } from "./middleware/rate-limit.middleware.js";
 
 const app = express();
@@ -41,6 +42,7 @@ app.get("/api/health", (_req, res) => {
 app.use("/api", apiLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/applications", applicationRoutes);
+app.use("/api/actions", actionRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/prep", interviewPrepRoutes);
 

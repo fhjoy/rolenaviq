@@ -9,6 +9,8 @@ I built RoleNaviq to keep the moving parts of a job search in one place. Save op
 - Track applications from saved roles through interviews and offers.
 - Switch between a searchable list that loads as you scroll, a board, a calendar, and a dashboard.
 - Keep job links, technologies, salary details, notes, and interview dates together.
+- Plan several follow-ups per application, complete them, and see the next ones on the dashboard and calendar.
+- Export applications and actions to CSV, or preview and import a RoleNaviq CSV.
 - Prepare for interviews with a checklist, a question bank, saved notes, and practice sessions.
 - Use your own account or take a guided tour with the demo login. Each demo visitor gets a separate workspace that expires after seven days.
 
@@ -23,6 +25,10 @@ This is one repository with two frontends and one API:
 | Express API | `server/src/` | Authentication, application and prep data, dashboard stats | Render + MongoDB Atlas |
 
 The React site serves `/` and rewrites `/prep/` to Angular and `/api/` to Express. Both frontends use the same API and signed-in cookie. This is a **route-based micro-frontend** setup: React and Angular have separate builds and deployments, while sharing this repository and backend. There is no Module Federation or separate Python service today. Python/FastAPI job analysis and AI features are future work.
+
+The [OpenAPI contract](server/openapi.yaml) documents the current Express endpoints for both frontends and future services. CI validates the spec against the route inventory and checks real API responses against its schemas. The dashboard also shows progress from the Angular Interview Prep data saved in the shared API.
+
+CSV import expects the headers from RoleNaviq's export. It previews row errors and duplicate applications before import, then skips duplicates based on company, position, job URL and application date. The export includes follow-up actions. Interview Prep notes and practice sessions are outside this CSV.
 
 ## Tech
 
@@ -61,6 +67,7 @@ Run the last three commands in separate terminals, then open [http://localhost:5
 
 ```bash
 npm --prefix server test
+npm --prefix server run contract
 npm --prefix client test
 npm --prefix client/prep test -- --watch=false
 ```

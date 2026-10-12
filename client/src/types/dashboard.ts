@@ -24,12 +24,14 @@ export interface DashboardStatsResponse {
 
   monthlyActivity: MonthlyActivityItem[];
 
-  nextActions: {
-    _id: string;
+  nextActions: import("@/features/actions/actions.api").FollowUpAction[];
+  interviewPrep: {
+    applicationId: string;
     company: string;
     position: string;
-    status: import("./application").ApplicationStatus;
-    nextAction: string;
-    followUpDate: string;
+    interviewDate: string;
+    completedTasks: number;
+    practicedQuestions: number;
+    sessions: number;
   }[];
 }

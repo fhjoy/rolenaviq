@@ -13,16 +13,18 @@ import { CalendarDays, ListTodo } from "lucide-react";
 import { Link } from "react-router";
 
 import type { Application } from "@/types/application";
+import type { FollowUpAction } from "@/features/actions/actions.api";
 import { localFollowUpDate } from "@/features/applications/follow-up-date";
 
 interface MonthlyCalendarProps {
   month: Date;
   applications: Application[];
+  actions: FollowUpAction[];
 }
 
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
+export function MonthlyCalendar({ month, applications, actions }: MonthlyCalendarProps) {
   const monthStart = startOfMonth(month);
 
   const calendarStart = startOfWeek(monthStart, {
@@ -62,11 +64,7 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
                 application.interviewDate &&
                 isSameDay(new Date(application.interviewDate), day),
             );
-            const dayFollowUps = applications.filter(
-              (application) =>
-                application.nextAction && application.followUpDate &&
-                isSameDay(localFollowUpDate(application.followUpDate), day),
-            );
+            const dayFollowUps = actions.filter(action => isSameDay(localFollowUpDate(action.dueDate), day));
 
             const belongsToMonth = isSameMonth(day, month);
 
@@ -124,18 +122,18 @@ export function MonthlyCalendar({ month, applications }: MonthlyCalendarProps) {
                       </span>
                     </Link>
                   ))}
-                  {dayFollowUps.map((application) => (
+                  {dayFollowUps.map((action) => (
                     <Link
-                      key={`follow-up-${application._id}`}
-                      to={`/applications/${application._id}`}
+                      key={`follow-up-${action._id}`}
+                      to={`/applications/${action.applicationId._id}`}
                       className="group block rounded-lg border border-amber-500/35 bg-amber-500/10 px-2 py-1.5 text-xs transition-colors hover:bg-amber-500/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                      aria-label={`Follow up with ${application.company}: ${application.nextAction}, ${format(day, "PP")}`}
+                      aria-label={`Follow up with ${action.applicationId.company}: ${action.title}, ${format(day, "PP")}`}
                     >
                       <span className="flex items-center gap-1.5 font-semibold">
                         <ListTodo className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />Follow-up
                       </span>
-                      <span className="mt-1 block truncate font-medium">{application.company}</span>
-                      <span className="block truncate text-muted-foreground">{application.nextAction}</span>
+                      <span className="mt-1 block truncate font-medium">{action.applicationId.company}</span>
+                      <span className="block truncate text-muted-foreground">{action.title}</span>
                     </Link>
                   ))}
                 </div>

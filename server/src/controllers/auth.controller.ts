@@ -21,6 +21,8 @@ import {
   DEMO_SESSION_MS,
 } from "../config/demo.js";
 import { createDemoApplications } from "../utils/demo-data.js";
+import { migrateLegacyActions } from "../utils/migrate-actions.js";
+import Action from "../models/Action.js";
 
 function isDuplicateKeyError(error: unknown): boolean {
   return (
@@ -56,9 +58,11 @@ async function createDemoSession() {
     await Application.insertMany(
       createDemoApplications(user._id).map(application => ({ ...application, expiresAt })),
     );
+    await migrateLegacyActions(user._id.toString());
   } catch (error) {
     await User.deleteOne({ _id: user._id });
     await Application.deleteMany({ userId: user._id });
+    await Action.deleteMany({ userId: user._id });
     throw error;
   }
 
