@@ -12,6 +12,7 @@ import { RegisterPage } from "./RegisterPage";
 const API_URL = "http://localhost/api";
 
 function renderRegister() {
+  server.use(http.get(`${API_URL}/auth/providers`, () => HttpResponse.json({ google: false })));
   return renderWithProviders(
     <Routes>
       <Route path="/register" element={<RegisterPage />} />

@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/config/demo";
 import { loginUser } from "@/features/auth/auth.api";
+import { GoogleSignInLink } from "@/features/auth/GoogleSignInLink";
 import { loginSchema, type LoginFormData } from "@/features/auth/auth.schemas";
 import { ApiError } from "@/services/api";
 
@@ -29,6 +30,14 @@ export function LoginPage() {
   const registrationComplete = searchParams.get("registered") === "1";
   const sessionExpired = searchParams.get("expired") === "1";
   const returnTo = searchParams.get("returnTo");
+  const googleStatus = searchParams.get("google");
+  const googleMessage = googleStatus === "existing-account"
+    ? "This email already has a RoleNaviq account. Sign in with your password, then connect Google in Settings."
+    : googleStatus === "invalid"
+      ? "Google sign-in could not be verified. Please try again."
+      : googleStatus === "unavailable"
+        ? "Google sign-in is temporarily unavailable. You can use your password instead."
+        : null;
 
   const {
     register,
@@ -131,6 +140,12 @@ export function LoginPage() {
             </div>
           )}
 
+          {googleMessage && !isDemoLogin && (
+            <p className="mb-5 rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive" role="alert">
+              {googleMessage}
+            </p>
+          )}
+
           <form
             onSubmit={handleSubmit(handleLoginSubmit)}
             className="space-y-5"
@@ -218,6 +233,8 @@ export function LoginPage() {
                   : "Sign in"}
             </Button>
           </form>
+
+          {!isDemoLogin && <GoogleSignInLink returnTo={returnTo ?? undefined} />}
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Don't have an account?{" "}

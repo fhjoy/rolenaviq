@@ -17,7 +17,8 @@ function DashboardDestination() {
   return <div>Dashboard destination {search}</div>;
 }
 
-function renderLogin(route = "/login") {
+function renderLogin(route = "/login", google = false) {
+  server.use(http.get(`${API_URL}/auth/providers`, () => HttpResponse.json({ google })));
   return renderWithProviders(
     <Routes>
       <Route path="/login" element={<LoginPage />} />
@@ -30,6 +31,11 @@ function renderLogin(route = "/login") {
 }
 
 describe("LoginPage", () => {
+  it("offers Google sign-in only when configured", async () => {
+    renderLogin("/login?returnTo=%2Fprep%2F", true);
+    const link = await screen.findByRole("link", { name: "Continue with Google" });
+    expect(link).toHaveAttribute("href", "http://localhost/api/auth/google?returnTo=%2Fprep%2F");
+  });
   it("shows validation errors for invalid form input", async () => {
     const user = userEvent.setup();
 

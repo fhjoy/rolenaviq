@@ -13,6 +13,7 @@ I built RoleNaviq to keep the moving parts of a job search in one place. Save op
 - Export applications and actions to CSV, or preview and import a RoleNaviq CSV.
 - Prepare for interviews with a checklist, a question bank, saved notes, and practice sessions.
 - Use your own account or take a guided tour with the demo login. Each demo visitor gets a separate workspace that expires after seven days.
+- Optionally sign in with Google, or connect Google to an existing password account from Settings.
 
 ## Architecture
 
@@ -35,6 +36,7 @@ CSV import expects the headers from RoleNaviq's export. It previews row errors a
 - **React workspace:** React, TypeScript, Vite, React Router, Tailwind CSS, TanStack Query, React Hook Form and Zod.
 - **Interview Prep:** Angular, TypeScript, Angular Router and NgRx Store/Effects.
 - **API and data:** Node.js, Express, MongoDB Atlas, Mongoose, Zod and JWT in HttpOnly cookies.
+- **Optional sign-in:** Google OpenID Connect (OAuth 2.0 authorization code flow with PKCE).
 - **Tests and delivery:** Vitest, React Testing Library, Supertest, mongodb-memory-server, Cypress, Docker Compose, GitHub Actions, Vercel and Render.
 
 ## Run locally
@@ -62,6 +64,22 @@ npm --prefix client run dev:prep
 ```
 
 Run the last three commands in separate terminals, then open [http://localhost:5173](http://localhost:5173). Angular is served under `/prep/` through the React development server.
+
+### Optional Google sign-in
+
+RoleNaviq keeps password and demo sign-in available. To enable Google sign-in, create a **Web application** OAuth client in Google Cloud, configure its consent screen, and add the exact authorized redirect URI for the environment:
+
+| Environment | Authorized redirect URI |
+| --- | --- |
+| Local Node/Vite | `http://localhost:5173/api/auth/google/callback` |
+| Local Docker | `http://localhost:8080/api/auth/google/callback` |
+| Production | `https://rolenaviq.vercel.app/api/auth/google/callback` |
+
+Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `server/.env` for local Node, in the repository root `.env` for Docker Compose, and in the **Render backend** environment for production. Keep the secret out of Git, Vercel, and browser variables. The API builds the redirect URI from `CLIENT_URL`; in production the Vercel `/api/` rewrite sends the callback to Render and keeps the browser cookie on the Vercel origin. If you use another site URL, register that exact URL with Google and set `CLIENT_URL` to match.
+
+Keep `COOKIE_SAME_SITE=lax` so the browser includes the short-lived sign-in cookie on Google's return navigation.
+
+Only the `openid email profile` scopes are requested. RoleNaviq does not store Google access or refresh tokens. Google-only users have no RoleNaviq password. Existing password users must sign in with their password first, then use **Settings → Connect Google account** with the same verified email. A verified email by itself never links accounts automatically.
 
 ## Checks
 

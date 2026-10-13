@@ -8,6 +8,8 @@ process.env.JWT_SECRET =
 process.env.CLIENT_URL = "http://localhost:5173";
 process.env.COOKIE_SAME_SITE = "lax";
 process.env.PORT = "5001";
+process.env.GOOGLE_CLIENT_ID = "test-google-client";
+process.env.GOOGLE_CLIENT_SECRET = "test-google-secret";
 
 const mongoServer = await MongoMemoryServer.create();
 

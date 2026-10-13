@@ -87,13 +87,14 @@ components:
         errors: { type: object }
     User:
       type: object
-      required: [id, firstName, lastName, email, isDemo]
+      required: [id, firstName, lastName, email, isDemo, googleLinked]
       properties:
         id: { type: string }
         firstName: { type: string }
         lastName: { type: string }
         email: { type: string, format: email }
         isDemo: { type: boolean }
+        googleLinked: { type: boolean }
     Application:
       type: object
       required: [_id, company, position, status, technologies, createdAt, updatedAt]
@@ -346,6 +347,37 @@ paths:
                 password: { type: string }
       responses:
         '200': { $ref: '#/components/responses/Auth' }
+  /auth/providers:
+    get:
+      security: []
+      responses:
+        '200':
+          description: Available sign-in options
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [google]
+                properties:
+                  google: { type: boolean }
+  /auth/google:
+    get:
+      security: []
+      parameters:
+        - { in: query, name: returnTo, description: Optional same-origin Interview Prep path, schema: { type: string } }
+      responses:
+        '302': { description: "Redirect to Google with state, nonce and PKCE challenge" }
+        '503': { description: Google sign-in has not been configured }
+  /auth/google/link:
+    get:
+      responses:
+        '302': { description: Redirect an authenticated user to Google to connect the same email }
+        '403': { description: Demo or already connected account }
+  /auth/google/callback:
+    get:
+      security: []
+      responses:
+        '302': { description: "Redirect to dashboard, Interview Prep, Settings or login" }
   /auth/logout:
     post:
       responses:

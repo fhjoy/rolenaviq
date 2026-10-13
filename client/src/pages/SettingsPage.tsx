@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Save, Settings, ShieldCheck, UserRound } from "lucide-react";
+import { useSearchParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { PageError } from "@/components/common/PageError";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DEMO_EMAIL } from "@/config/demo";
-import { updateProfile } from "@/features/auth/auth.api";
+import { getAuthProviders, updateProfile } from "@/features/auth/auth.api";
 import { useCurrentUser } from "@/features/auth/useCurrentUser";
 import {
   profileSchema,
@@ -93,7 +94,8 @@ function ProfileForm({ user }: { user: User }) {
 
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" autoComplete="email" disabled={isDemoUser} {...register("email")} />
+        <Input id="email" type="email" autoComplete="email" disabled={isDemoUser || user.googleLinked} {...register("email")} />
+        {user.googleLinked && <p className="text-sm text-muted-foreground">This email belongs to your connected Google account.</p>}
         {errors.email && <p role="alert" className="text-sm text-destructive">{errors.email.message}</p>}
       </div>
 
@@ -108,7 +110,13 @@ function ProfileForm({ user }: { user: User }) {
 }
 
 export function SettingsPage() {
+  const [searchParams] = useSearchParams();
   const { data, isLoading, isError, refetch } = useCurrentUser();
+  const { data: providers } = useQuery({
+    queryKey: ["auth", "providers"],
+    queryFn: getAuthProviders,
+    retry: false,
+  });
 
   if (isLoading) {
     return (
@@ -160,6 +168,30 @@ export function SettingsPage() {
           <ProfileForm user={data.user} />
         </CardContent>
       </Card>
+
+      {(providers?.google || data.user.googleLinked) && !data.user.isDemo && data.user.email !== DEMO_EMAIL && (
+        <Card className="mt-6 border-border/70 bg-card shadow-sm">
+          <CardHeader>
+            <CardTitle>Google sign-in</CardTitle>
+            <CardDescription>Use your Google account to sign in to this workspace.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {searchParams.get("google") === "linked" && (
+              <p role="status" className="text-sm text-brand">Google is connected to your account.</p>
+            )}
+            {searchParams.get("google") === "conflict" && (
+              <p role="alert" className="text-sm text-destructive">Use the Google account with the same verified email as this profile. An account already using Google cannot be linked again.</p>
+            )}
+            {data.user.googleLinked ? (
+              <p className="text-sm text-muted-foreground">Connected. You can sign in with Google next time.</p>
+            ) : (
+              <a href={`${import.meta.env.VITE_API_URL}/auth/google/link`} className={buttonVariants({ variant: "outline" })}>
+                Connect Google account
+              </a>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

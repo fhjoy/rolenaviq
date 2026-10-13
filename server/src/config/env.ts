@@ -18,7 +18,13 @@ const envSchema = z.object({
   CLIENT_URL: z.string().url("CLIENT_URL must be a valid URL"),
 
   COOKIE_SAME_SITE: z.enum(["lax", "strict", "none"]).default("lax"),
-});
+
+  GOOGLE_CLIENT_ID: z.preprocess(value => value === "" ? undefined : value, z.string().min(1).optional()),
+  GOOGLE_CLIENT_SECRET: z.preprocess(value => value === "" ? undefined : value, z.string().min(1).optional()),
+}).refine(
+  value => Boolean(value.GOOGLE_CLIENT_ID) === Boolean(value.GOOGLE_CLIENT_SECRET),
+  { message: "Set both Google OAuth credentials, or neither" },
+);
 
 const result = envSchema.safeParse(process.env);
 

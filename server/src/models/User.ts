@@ -4,7 +4,8 @@ export interface IUser {
   firstName: string;
   lastName: string;
   email: string;
-  passwordHash: string;
+  passwordHash?: string;
+  googleSub?: string;
   isDemo: boolean;
   expiresAt?: Date;
   createdAt: Date;
@@ -35,9 +36,9 @@ const userSchema = new Schema<IUser>(
 
     passwordHash: {
       type: String,
-      required: true,
       select: false,
     },
+    googleSub: { type: String, unique: true, sparse: true },
     isDemo: { type: Boolean, default: false },
     expiresAt: { type: Date },
   },
@@ -45,6 +46,12 @@ const userSchema = new Schema<IUser>(
     timestamps: true,
   },
 );
+
+userSchema.pre("validate", function () {
+  if (!this.passwordHash && !this.googleSub) {
+    this.invalidate("passwordHash", "An account needs a password or Google sign-in");
+  }
+});
 
 userSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
