@@ -29,6 +29,10 @@ export function getCurrentUser(): Promise<CurrentUserResponse> {
   return apiRequest<CurrentUserResponse>("/auth/me");
 }
 
+export function getAuthProviders(): Promise<{ google: boolean }> {
+  return apiRequest<{ google: boolean }>("/auth/providers");
+}
+
 export function logoutUser(): Promise<{ message: string }> {
   return apiRequest<{ message: string }>("/auth/logout", {
     method: "POST",

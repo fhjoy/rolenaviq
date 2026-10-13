@@ -29,7 +29,7 @@ app.use(
   }),
 );
 
-app.use(cookieParser());
+app.use(cookieParser(env.JWT_SECRET));
 
 app.get("/api/health", (_req, res) => {
   res.status(200).json({

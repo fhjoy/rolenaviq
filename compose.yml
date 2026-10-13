@@ -21,6 +21,8 @@ services:
       JWT_SECRET: ${JWT_SECRET:-rolenaviq-local-docker-secret-change-me-2026}
       CLIENT_URL: http://localhost:8080
       COOKIE_SAME_SITE: lax
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
     depends_on:
       mongo:
         condition: service_healthy

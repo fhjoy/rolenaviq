@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { registerUser } from "@/features/auth/auth.api";
+import { GoogleSignInLink } from "@/features/auth/GoogleSignInLink";
 import {
   registerSchema,
   type RegisterFormData,
@@ -91,6 +92,8 @@ export function RegisterPage() {
               {registerMutation.isPending ? "Creating account..." : "Create account"}
             </Button>
           </form>
+
+          <GoogleSignInLink />
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Already have an account?{" "}

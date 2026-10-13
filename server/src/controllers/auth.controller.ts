@@ -40,6 +40,7 @@ function publicUser(user: IUser & { _id: unknown }) {
     lastName: user.lastName,
     email: user.isDemo ? DEMO_EMAIL : user.email,
     isDemo: user.isDemo,
+    googleLinked: Boolean(user.googleSub),
   };
 }
 
@@ -160,7 +161,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const passwordMatches = await bcrypt.compare(password, user.passwordHash);
+    const passwordMatches = user.passwordHash && await bcrypt.compare(password, user.passwordHash);
 
     if (!passwordMatches) {
       res.status(401).json({ message: "Invalid email or password" });
@@ -233,6 +234,11 @@ export const updateProfile = async (
 
     const { firstName, lastName, email } = result.data;
     const normalizedEmail = email.toLowerCase();
+
+    if (currentUser.googleSub && normalizedEmail !== currentUser.email) {
+      res.status(400).json({ message: "The email on a Google-connected account cannot be changed" });
+      return;
+    }
 
     if (normalizedEmail === DEMO_EMAIL) {
       res.status(409).json({
