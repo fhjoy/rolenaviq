@@ -89,7 +89,7 @@ export function ApplicationsPage() {
 
       <ApplicationTransfer />
 
-      <section className="workspace-feature-panel mt-6 rounded-2xl border bg-card p-4 shadow-sm sm:p-5">
+      <section className="workspace-feature-panel workspace-panel-soft mt-6 rounded-2xl border p-4 shadow-sm sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
             <SlidersHorizontal className="h-4 w-4 text-brand" aria-hidden="true" />

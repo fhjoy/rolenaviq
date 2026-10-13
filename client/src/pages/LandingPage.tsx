@@ -830,7 +830,7 @@ function InterviewPrepSection() {
             checklist, practice answers and notes together for each role.
           </p>
           <Button
-            className="landing-demo-button mt-7"
+            className="landing-demo-button landing-demo-button-dark mt-7"
             render={<Link to="/login?demo=1&returnTo=%2Fprep%2F" />}
           >
             Try interview prep

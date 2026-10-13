@@ -466,16 +466,16 @@
 
 @keyframes landing-demo-ripple {
   0% {
-    transform: scaleX(1.02) scaleY(1.05);
-    opacity: 0.56;
+    transform: scaleX(1) scaleY(1);
+    opacity: 0;
   }
 
-  72% {
-    opacity: 0.14;
+  12% {
+    opacity: 0.42;
   }
 
   100% {
-    transform: scaleX(1.62) scaleY(1.9);
+    transform: scaleX(1.35) scaleY(1.6);
     opacity: 0;
   }
 }
@@ -802,20 +802,21 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  border: 2px solid color-mix(in oklch, var(--brand) 68%, transparent);
+  border: 1px solid color-mix(in oklch, var(--brand) 68%, transparent);
   border-radius: inherit;
   content: "";
+  opacity: 0;
   pointer-events: none;
-  animation: landing-demo-ripple 2.15s ease-out infinite;
+  animation: landing-demo-ripple 3.2s ease-out infinite;
 }
 
 .landing-demo-button::after {
-  animation-delay: 1.075s;
+  animation-delay: 1.6s;
 }
 
 .landing-demo-button.landing-demo-button-dark::before,
 .landing-demo-button.landing-demo-button-dark::after {
-  border-color: #193e34;
+  border-color: #171717;
 }
 
 .dark .landing-demo-button.landing-demo-button-dark::before,

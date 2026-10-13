@@ -75,7 +75,7 @@ export function ApplicationTransfer() {
     finally { setBusy(false); }
   }
 
-  return <section aria-labelledby="transfer-heading" className="workspace-feature-panel mt-6 rounded-2xl border bg-card p-4 shadow-sm sm:p-5">
+  return <section aria-labelledby="transfer-heading" className="workspace-feature-panel workspace-panel-soft mt-6 rounded-2xl border p-4 shadow-sm sm:p-5">
     <h2 id="transfer-heading" className="font-semibold">Your application data</h2>
     <p className="mt-1 text-sm text-muted-foreground">Export applications and their follow-up actions as CSV. Import the same format here. Interview Prep notes and sessions are not included.</p>
     <div className="mt-4 flex flex-wrap items-end gap-4">
