@@ -147,6 +147,26 @@ describe("LoginPage", () => {
     ).toBeInTheDocument();
   });
 
+  it("offers to resend the link when verification is pending", async () => {
+    server.use(
+      http.post(`${API_URL}/auth/login`, () => HttpResponse.json(
+        { message: "Verify your email before signing in" }, { status: 403 },
+      )),
+      http.post(`${API_URL}/auth/resend-verification`, () => HttpResponse.json(
+        { message: "If this address needs verification, a new link will arrive shortly." }, { status: 202 },
+      )),
+    );
+    renderLogin();
+    const user = userEvent.setup();
+    await user.type(screen.getByLabelText("Email"), "user@example.com");
+    await user.type(screen.getByLabelText("Password"), "StrongPass123!");
+    await user.click(screen.getByRole("button", { name: "Sign in" }));
+    expect(await screen.findByText("Need a new verification link?")).toBeInTheDocument();
+    await user.type(screen.getByLabelText("Account email"), "user@example.com");
+    await user.click(screen.getByRole("button", { name: "Send new link" }));
+    expect(await screen.findByText(/a new link will arrive shortly/i)).toBeInTheDocument();
+  });
+
   it("prefills the public demo credentials", () => {
     renderLogin("/login?demo=1");
 

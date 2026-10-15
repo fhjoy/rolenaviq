@@ -6,6 +6,12 @@ export interface IUser {
   email: string;
   passwordHash?: string;
   googleSub?: string;
+  // Null means a new password account is pending verification; missing means a legacy account.
+  emailVerifiedAt?: Date | null;
+  verificationTokenHash?: string;
+  verificationExpiresAt?: Date;
+  verificationSentAt?: Date;
+  unverifiedExpiresAt?: Date;
   isDemo: boolean;
   expiresAt?: Date;
   createdAt: Date;
@@ -39,6 +45,11 @@ const userSchema = new Schema<IUser>(
       select: false,
     },
     googleSub: { type: String, unique: true, sparse: true },
+    emailVerifiedAt: { type: Date },
+    verificationTokenHash: { type: String, select: false },
+    verificationExpiresAt: { type: Date, select: false },
+    verificationSentAt: { type: Date },
+    unverifiedExpiresAt: { type: Date },
     isDemo: { type: Boolean, default: false },
     expiresAt: { type: Date },
   },
@@ -54,6 +65,7 @@ userSchema.pre("validate", function () {
 });
 
 userSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+userSchema.index({ unverifiedExpiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const User = model<IUser>("User", userSchema);
 

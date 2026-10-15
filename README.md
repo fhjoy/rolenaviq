@@ -14,6 +14,7 @@ I built RoleNaviq to keep the moving parts of a job search in one place. Save op
 - Prepare for interviews with a checklist, a question bank, saved notes, and practice sessions.
 - Use your own account or take a guided tour with the demo login. Each demo visitor gets a separate workspace that expires after seven days.
 - Optionally sign in with Google, or connect Google to an existing password account from Settings.
+- Verify new password accounts by email when transactional email is configured.
 
 ## Architecture
 
@@ -37,6 +38,7 @@ CSV import expects the headers from RoleNaviq's export. It previews row errors a
 - **Interview Prep:** Angular, TypeScript, Angular Router and NgRx Store/Effects.
 - **API and data:** Node.js, Express, MongoDB Atlas, Mongoose, Zod and JWT in HttpOnly cookies.
 - **Optional sign-in:** Google OpenID Connect (OAuth 2.0 authorization code flow with PKCE).
+- **Email verification:** Brevo transactional API over HTTPS; one-use hashed tokens.
 - **Tests and delivery:** Vitest, React Testing Library, Supertest, mongodb-memory-server, Cypress, Docker Compose, GitHub Actions, Vercel and Render.
 
 ## Run locally
@@ -80,6 +82,14 @@ Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `server/.env` for local Nod
 Keep `COOKIE_SAME_SITE=lax` so the browser includes the short-lived sign-in cookie on Google's return navigation.
 
 Only the `openid email profile` scopes are requested. RoleNaviq does not store Google access or refresh tokens. Google-only users have no RoleNaviq password. Existing password users must sign in with their password first, then use **Settings → Connect Google account** with the same verified email. A verified email by itself never links accounts automatically.
+
+### Email verification
+
+To enable verification, verify a sender address in Brevo and set **both** `BREVO_API_KEY` and `EMAIL_FROM` on the **Render backend**. `EMAIL_FROM` must be that verified sender. Do not put the API key in Vercel or any `VITE_` variable. Render sends mail over Brevo's HTTPS API, so it does not need outbound SMTP ports. After changing Render environment variables, redeploy the backend.
+
+For local Docker, put the same two variables in a repository root `.env` file, then run `docker compose up --build`. For local Node, put them in `server/.env`. Without both values, password registration keeps the earlier flow; Google and demo sign-in work either way. Set the two values before asking real users to register, then create a test account and confirm the email actually arrives.
+
+New password accounts cannot sign in until the user opens the emailed link. Links expire after 30 minutes and work once; resend has a one-minute cooldown. Unverified accounts expire after seven days. Existing accounts stay usable. While verification is enabled, changing an account email in Settings is paused until a separate verify-new-address flow exists. Brevo receives the destination address and verification email content; check its transactional log retention settings as part of the privacy setup.
 
 ## Checks
 

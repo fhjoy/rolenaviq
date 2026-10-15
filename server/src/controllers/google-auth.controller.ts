@@ -8,6 +8,7 @@ import { DEMO_EMAIL } from "../config/demo.js";
 import { env } from "../config/env.js";
 import User from "../models/User.js";
 import { generateToken } from "../utils/token.js";
+import { emailVerificationEnabled } from "../services/verification-email.js";
 
 const transactionCookie = "google_oidc";
 const callbackPath = "/api/auth/google/callback";
@@ -80,7 +81,7 @@ function fail(res: Response, code: string): void {
 }
 
 export const getAuthProviders = (_req: Request, res: Response): void => {
-  res.json({ google: googleIsConfigured() });
+  res.json({ google: googleIsConfigured(), emailVerification: emailVerificationEnabled() });
 };
 
 async function beginGoogle(req: Request, res: Response, intent: "sign-in" | "link") {
@@ -243,6 +244,7 @@ export const googleCallback = async (req: Request, res: Response): Promise<void>
           ? claims.family_name.trim().slice(0, 50) : "User",
         email,
         googleSub: claims.sub,
+        emailVerifiedAt: new Date(),
       });
     }
 

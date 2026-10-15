@@ -34,7 +34,7 @@ export function RegisterPage() {
 
   const registerMutation = useMutation({
     mutationFn: registerUser,
-    onSuccess: () => navigate("/login?registered=1"),
+    onSuccess: (data) => navigate(data.verificationRequired ? "/login?verification=pending" : "/login?registered=1"),
   });
 
   return (
@@ -91,6 +91,10 @@ export function RegisterPage() {
             <Button type="submit" size="lg" className="w-full" disabled={registerMutation.isPending}>
               {registerMutation.isPending ? "Creating account..." : "Create account"}
             </Button>
+            <p className="text-xs leading-5 text-muted-foreground">
+              We store your name, email, a password hash, and the job-search details you add.
+              When email verification is enabled, Brevo receives your address to deliver the link.
+            </p>
           </form>
 
           <GoogleSignInLink />

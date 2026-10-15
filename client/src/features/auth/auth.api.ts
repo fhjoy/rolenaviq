@@ -29,8 +29,22 @@ export function getCurrentUser(): Promise<CurrentUserResponse> {
   return apiRequest<CurrentUserResponse>("/auth/me");
 }
 
-export function getAuthProviders(): Promise<{ google: boolean }> {
-  return apiRequest<{ google: boolean }>("/auth/providers");
+export function getAuthProviders(): Promise<{ google: boolean; emailVerification: boolean }> {
+  return apiRequest<{ google: boolean; emailVerification: boolean }>("/auth/providers");
+}
+
+export function verifyEmail(token: string): Promise<{ message: string }> {
+  return apiRequest<{ message: string }>("/auth/verify-email", {
+    method: "POST",
+    body: JSON.stringify({ token }),
+  });
+}
+
+export function resendVerification(email: string): Promise<{ message: string }> {
+  return apiRequest<{ message: string }>("/auth/resend-verification", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
 }
 
 export function logoutUser(): Promise<{ message: string }> {

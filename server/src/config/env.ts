@@ -21,9 +21,14 @@ const envSchema = z.object({
 
   GOOGLE_CLIENT_ID: z.preprocess(value => value === "" ? undefined : value, z.string().min(1).optional()),
   GOOGLE_CLIENT_SECRET: z.preprocess(value => value === "" ? undefined : value, z.string().min(1).optional()),
+  BREVO_API_KEY: z.preprocess(value => value === "" ? undefined : value, z.string().min(1).optional()),
+  EMAIL_FROM: z.preprocess(value => value === "" ? undefined : value, z.email().optional()),
 }).refine(
   value => Boolean(value.GOOGLE_CLIENT_ID) === Boolean(value.GOOGLE_CLIENT_SECRET),
   { message: "Set both Google OAuth credentials, or neither" },
+).refine(
+  value => Boolean(value.BREVO_API_KEY) === Boolean(value.EMAIL_FROM),
+  { message: "Set both Brevo email credentials, or neither" },
 );
 
 const result = envSchema.safeParse(process.env);
