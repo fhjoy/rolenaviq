@@ -107,6 +107,20 @@ describe("RegisterPage", () => {
     ).toBeInTheDocument();
   });
 
+  it("sends a new user to the pending verification screen", async () => {
+    server.use(http.post(`${API_URL}/auth/register`, () => HttpResponse.json({
+      message: "Check your email",
+      verificationRequired: true,
+      user: { id: "user-1" },
+    }, { status: 201 })));
+
+    renderRegister();
+    const user = userEvent.setup();
+    await fillRegistrationForm(user);
+    await user.click(screen.getByRole("button", { name: "Create account" }));
+    expect(await screen.findByText("Login destination")).toBeInTheDocument();
+  });
+
   it("shows API registration errors", async () => {
     server.use(
       http.post(`${API_URL}/auth/register`, () =>

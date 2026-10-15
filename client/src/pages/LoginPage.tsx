@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/config/demo";
 import { loginUser } from "@/features/auth/auth.api";
 import { GoogleSignInLink } from "@/features/auth/GoogleSignInLink";
+import { ResendVerificationForm } from "@/features/auth/ResendVerificationForm";
 import { loginSchema, type LoginFormData } from "@/features/auth/auth.schemas";
 import { ApiError } from "@/services/api";
 
@@ -28,6 +29,7 @@ export function LoginPage() {
   const [searchParams] = useSearchParams();
   const isDemoLogin = searchParams.get("demo") === "1";
   const registrationComplete = searchParams.get("registered") === "1";
+  const verificationPending = searchParams.get("verification") === "pending";
   const sessionExpired = searchParams.get("expired") === "1";
   const returnTo = searchParams.get("returnTo");
   const googleStatus = searchParams.get("google");
@@ -128,6 +130,13 @@ export function LoginPage() {
                   You can sign in with your new account now.
                 </p>
               </div>
+            </div>
+          )}
+
+          {verificationPending && !isDemoLogin && (
+            <div role="status" className="mb-5 rounded-xl border border-brand/20 bg-brand/8 p-4 text-sm">
+              <p className="font-medium">Check your inbox</p>
+              <p className="mt-1 text-muted-foreground">We sent a link to verify your email. It expires in 30 minutes. Then you can sign in.</p>
             </div>
           )}
 
@@ -233,6 +242,10 @@ export function LoginPage() {
                   : "Sign in"}
             </Button>
           </form>
+
+          {(verificationPending || (loginMutation.isError && loginMutation.error instanceof ApiError && loginMutation.error.status === 403)) && (
+            <ResendVerificationForm />
+          )}
 
           {!isDemoLogin && <GoogleSignInLink returnTo={returnTo ?? undefined} />}
 

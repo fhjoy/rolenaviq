@@ -31,6 +31,9 @@ const RegisterPage = lazy(() =>
     default: module.RegisterPage,
   })),
 );
+const VerifyEmailPage = lazy(() =>
+  import("@/pages/VerifyEmailPage").then((module) => ({ default: module.VerifyEmailPage })),
+);
 const SettingsPage = lazy(() =>
   import("@/pages/SettingsPage").then((module) => ({
     default: module.SettingsPage,
@@ -100,6 +103,7 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={publicLazyRoute(<LoginPage />)} />
       <Route path="/register" element={publicLazyRoute(<RegisterPage />)} />
+      <Route path="/verify-email" element={publicLazyRoute(<VerifyEmailPage />)} />
 
       {/* Protected */}
       <Route element={<ProtectedRoute />}>

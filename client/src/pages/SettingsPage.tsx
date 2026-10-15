@@ -26,7 +26,7 @@ import {
 } from "@/features/settings/profile.schemas";
 import type { User } from "@/types/auth";
 
-function ProfileForm({ user }: { user: User }) {
+function ProfileForm({ user, emailVerificationEnabled }: { user: User; emailVerificationEnabled: boolean }) {
   const queryClient = useQueryClient();
   const isDemoUser = user.isDemo || user.email === DEMO_EMAIL;
 
@@ -94,8 +94,9 @@ function ProfileForm({ user }: { user: User }) {
 
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" autoComplete="email" disabled={isDemoUser || user.googleLinked} {...register("email")} />
+        <Input id="email" type="email" autoComplete="email" disabled={isDemoUser || user.googleLinked || emailVerificationEnabled} {...register("email")} />
         {user.googleLinked && <p className="text-sm text-muted-foreground">This email belongs to your connected Google account.</p>}
+        {!user.googleLinked && emailVerificationEnabled && !isDemoUser && <p className="text-sm text-muted-foreground">Email changes are paused until we can verify the new address. You can still update your name.</p>}
         {errors.email && <p role="alert" className="text-sm text-destructive">{errors.email.message}</p>}
       </div>
 
@@ -165,7 +166,7 @@ export function SettingsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <ProfileForm user={data.user} />
+          <ProfileForm user={data.user} emailVerificationEnabled={Boolean(providers?.emailVerification)} />
         </CardContent>
       </Card>
 

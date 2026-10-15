@@ -23,6 +23,16 @@ import {
 import { createDemoApplications } from "../utils/demo-data.js";
 import { migrateLegacyActions } from "../utils/migrate-actions.js";
 import Action from "../models/Action.js";
+import { z } from "zod";
+import {
+  emailVerificationEnabled,
+  hashVerificationToken,
+  newVerificationToken,
+  sendVerificationEmail,
+  UNVERIFIED_ACCOUNT_MS,
+  VERIFICATION_LINK_MS,
+  VERIFICATION_RESEND_MS,
+} from "../services/verification-email.js";
 
 function isDuplicateKeyError(error: unknown): boolean {
   return (
@@ -103,16 +113,38 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const passwordHash = await bcrypt.hash(password, 12);
 
+    const verificationRequired = emailVerificationEnabled();
+    const now = new Date();
+    const verification = verificationRequired ? newVerificationToken() : null;
     const user = await User.create({
       firstName,
       lastName,
       email: normalizedEmail,
       passwordHash,
+      ...(verification && {
+        emailVerifiedAt: null,
+        verificationTokenHash: verification.hash,
+        verificationSentAt: now,
+        verificationExpiresAt: new Date(now.getTime() + VERIFICATION_LINK_MS),
+        unverifiedExpiresAt: new Date(now.getTime() + UNVERIFIED_ACCOUNT_MS),
+      }),
     });
 
+    if (verification) {
+      try {
+        await sendVerificationEmail(normalizedEmail, verification.token);
+      } catch {
+        // Failed delivery should not leave the address reserved by an unusable account.
+        await User.deleteOne({ _id: user._id, emailVerifiedAt: null, verificationTokenHash: verification.hash });
+        res.status(503).json({ message: "Could not send a verification email. Please try again shortly." });
+        return;
+      }
+    }
+
     res.status(201).json({
-      message: "User registered successfully",
+      message: verificationRequired ? "Check your email to verify your account" : "User registered successfully",
       user: publicUser(user),
+      verificationRequired,
     });
   } catch (error) {
     if (isDuplicateKeyError(error)) {
@@ -168,6 +200,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    if (user.emailVerifiedAt === null) {
+      res.status(403).json({ message: "Verify your email before signing in. You can request a new link below." });
+      return;
+    }
+
     const token = generateToken(user._id.toString());
     res.cookie("token", token, authCookieOptions);
     res.status(200).json({
@@ -187,7 +224,7 @@ export const getCurrentUser = async (
   try {
     const user = await User.findById(req.userId);
 
-    if (!user || (user.expiresAt && user.expiresAt <= new Date())) {
+    if (!user || user.emailVerifiedAt === null || (user.expiresAt && user.expiresAt <= new Date())) {
       res.status(401).json({ message: "Session expired" });
       return;
     }
@@ -240,6 +277,11 @@ export const updateProfile = async (
       return;
     }
 
+    if (emailVerificationEnabled() && normalizedEmail !== currentUser.email) {
+      res.status(400).json({ message: "Email changes are paused until we can verify the new address." });
+      return;
+    }
+
     if (normalizedEmail === DEMO_EMAIL) {
       res.status(409).json({
         message: "This email is reserved for the RoleNaviq demo account",
@@ -288,4 +330,103 @@ export const updateProfile = async (
 export const logout = (_req: Request, res: Response): void => {
   res.clearCookie("token", clearAuthCookieOptions);
   res.status(200).json({ message: "Logout successful" });
+};
+
+const tokenSchema = z.object({ token: z.string().regex(/^[0-9a-f]{64}$/) });
+const resendSchema = z.object({ email: z.email() });
+
+export const verifyEmail = async (req: Request, res: Response): Promise<void> => {
+  if (!emailVerificationEnabled()) {
+    res.status(503).json({ message: "Email verification is unavailable" });
+    return;
+  }
+
+  const parsed = tokenSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ message: "Invalid or expired verification link" });
+    return;
+  }
+
+  try {
+    // The conditional update consumes the token exactly once, even across parallel requests.
+    const verified = await User.findOneAndUpdate(
+      {
+        emailVerifiedAt: null,
+        verificationTokenHash: hashVerificationToken(parsed.data.token),
+        verificationExpiresAt: { $gt: new Date() },
+        unverifiedExpiresAt: { $gt: new Date() },
+      },
+      {
+        $set: { emailVerifiedAt: new Date() },
+        $unset: {
+          verificationTokenHash: 1,
+          verificationExpiresAt: 1,
+          verificationSentAt: 1,
+          unverifiedExpiresAt: 1,
+        },
+      },
+      { returnDocument: "after" },
+    );
+
+    if (!verified) {
+      res.status(400).json({ message: "Invalid or expired verification link" });
+      return;
+    }
+
+    res.status(200).json({ message: "Email verified. You can sign in now." });
+  } catch {
+    console.error("Email verification failed");
+    res.status(500).json({ message: "Unable to verify your email right now" });
+  }
+};
+
+export const resendVerification = async (req: Request, res: Response): Promise<void> => {
+  if (!emailVerificationEnabled()) {
+    res.status(503).json({ message: "Email verification is unavailable" });
+    return;
+  }
+
+  const parsed = resendSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ message: "Please enter a valid email address" });
+    return;
+  }
+
+  try {
+    const now = new Date();
+    const verification = newVerificationToken();
+    const user = await User.findOneAndUpdate(
+      {
+        email: parsed.data.email.trim().toLowerCase(),
+        emailVerifiedAt: null,
+        unverifiedExpiresAt: { $gt: now },
+        $or: [
+          { verificationSentAt: { $lte: new Date(now.getTime() - VERIFICATION_RESEND_MS) } },
+          { verificationSentAt: { $exists: false } },
+        ],
+      },
+      {
+        $set: {
+          verificationTokenHash: verification.hash,
+          verificationSentAt: now,
+          verificationExpiresAt: new Date(now.getTime() + VERIFICATION_LINK_MS),
+        },
+      },
+      { returnDocument: "after" },
+    );
+
+    if (user) {
+      try {
+        await sendVerificationEmail(user.email, verification.token);
+      } catch {
+        // Keep the same public response for unknown addresses and delivery failures.
+        console.error("Verification email delivery failed");
+      }
+    }
+
+    res.status(202).json({ message: "If this address needs verification, a new link will arrive shortly." });
+  } catch {
+    console.error("Verification resend failed");
+    res.status(500).json({ message: "Unable to request a new link right now" });
+  }
 };
